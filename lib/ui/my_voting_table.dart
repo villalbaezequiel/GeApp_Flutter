@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unicorndial/unicorndial.dart';
 import '../model/person.dart';
-import 'global/constant.dart';
 import 'global/widgets/custom_app_bar.dart';
 
 class MyVotingTableList extends StatefulWidget {
@@ -76,7 +75,6 @@ class MyVotingTableState extends State<MyVotingTableList> {
   Widget build(BuildContext context) {
     final floatingAction = UnicornDialer(
       parentHeroTag: 'vote',
-      parentButtonBackground: Constant.ascent,
       orientation: UnicornOrientation.VERTICAL,
       parentButton: Icon(
         Icons.add,
