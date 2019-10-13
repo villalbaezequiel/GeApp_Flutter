@@ -74,6 +74,15 @@ class FriendsListState extends State<FriendsList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar.getAppBar('Mis Amigos ', context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.of(context).pushNamed('/add_friend'),
+        tooltip: 'Agregar Amigo',
+        child: Icon(
+          Icons.person_add,
+          color: Colors.white,
+        ),
+        heroTag: 'add_friend',
+      ),
       body: ListView.builder(
         itemCount: friends.length,
         itemBuilder: (context, position) {

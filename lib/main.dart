@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:voting_app/ui/global/widgets/navigation_drawer.dart';
 
 import 'model/drawer_item.dart';
@@ -22,7 +21,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Chubut al Frente',
-//      home: Home(),
       theme: ThemeData(
         primaryColor: Constant.primary,
         accentColor: Constant.ascent,

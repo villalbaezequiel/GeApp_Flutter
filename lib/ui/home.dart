@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:unicorndial/unicorndial.dart';
-import 'package:voting_app/ui/global/constant.dart';
 
+import 'global/constant.dart';
 import 'global/widgets/custom_app_bar.dart';
 
 class Home extends StatefulWidget {
@@ -11,16 +10,6 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    final floatingAction = UnicornDialer(
-      parentButtonBackground: Constant.ascent,
-      orientation: UnicornOrientation.VERTICAL,
-      parentButton: Icon(
-        Icons.add,
-        color: Colors.white,
-      ),
-      childButtons: _getProfileMenu(),
-    );
-
     return new Scaffold(
       appBar: CustomAppBar.getAppBar('Inicio', context),
       backgroundColor: Colors.white,
@@ -77,130 +66,5 @@ class HomeState extends State<Home> {
         ),
       ),
     );
-  }
-
-  List<UnicornButton> _getProfileMenu() {
-    List<UnicornButton> children = [];
-
-    // Add Children here
-    children.add(
-      _profileOption(
-        txt: 'Voto',
-        iconData: Icons.email,
-        onPressed: () {
-          _asyncInputDialogVote(context);
-        },
-      ),
-    );
-    children.add(
-      _profileOption(
-        txt: 'Reposición',
-        iconData: Icons.library_books,
-        onPressed: () {
-          _asyncInputDialog(context);
-        },
-      ),
-    );
-
-    return children;
-  }
-
-  Future<String> _asyncInputDialogVote(BuildContext context) async {
-    String teamName = '';
-    return showDialog<String>(
-      context: context,
-      barrierDismissible:
-          false, // dialog is dismissible with a tap on the barrier
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Voto'),
-          content: new Row(
-            children: <Widget>[
-              new Expanded(
-                  child: new TextField(
-                autofocus: true,
-                decoration: new InputDecoration(
-                    labelText: 'Ingrese el número de orden',
-                    hintText: 'ejemplo 154'),
-                onChanged: (value) {
-                  teamName = value;
-                },
-              ))
-            ],
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop(teamName);
-              },
-            ),
-            FlatButton(
-              child: Text('Cancelar'),
-              onPressed: () {
-                Navigator.of(context).pop(teamName);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<String> _asyncInputDialog(BuildContext context) async {
-    String teamName = '';
-    return showDialog<String>(
-      context: context,
-      barrierDismissible:
-          false, // dialog is dismissible with a tap on the barrier
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Reposición de boletas'),
-          content: new Row(
-            children: <Widget>[
-              new Expanded(
-                  child: new TextField(
-                autofocus: true,
-                decoration: new InputDecoration(
-                    labelText: 'Cantidad boletas repuestas',
-                    hintText: 'ejemplo 25'),
-                onChanged: (value) {
-                  teamName = value;
-                },
-              ))
-            ],
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop(teamName);
-              },
-            ),
-            FlatButton(
-              child: Text('Cancelar'),
-              onPressed: () {
-                Navigator.of(context).pop(teamName);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _profileOption({String txt, IconData iconData, Function onPressed}) {
-    return UnicornButton(
-        labelText: txt,
-        labelHasShadow: true,
-        labelColor: Theme.of(context).accentColor,
-        hasLabel: true,
-        currentButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).accentColor,
-          foregroundColor: Colors.white,
-          mini: true,
-          child: Icon(iconData),
-          onPressed: onPressed,
-        ));
   }
 }
