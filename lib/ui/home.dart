@@ -1,144 +1,106 @@
 import 'package:flutter/material.dart';
 import 'package:unicorndial/unicorndial.dart';
+import 'package:voting_app/ui/global/constant.dart';
 
-import 'add_friend.dart';
-import 'friends_list.dart';
-import 'help.dart';
-import 'my_voting_table.dart';
-import 'sign_up.dart';
-import 'supervise.dart';
+import 'global/widgets/custom_app_bar.dart';
 
 class Home extends StatefulWidget {
   HomeState createState() => HomeState();
 }
 
 class HomeState extends State<Home> {
-  int _selectDrawerItem = 0;
-  String _title = 'Adherir';
-
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      title: Text(_title),
-      actions: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Icon(Icons.search),
-        )
-      ],
-    );
-
-    final myDrawer = Drawer(
-      child: ListView(
-        padding: EdgeInsets.all(0),
-        children: <Widget>[
-          UserAccountsDrawerHeader(
-            accountName: Text('Pedro Gonzalez'),
-            accountEmail: Text('DNI: 30123456'),
-            currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.blue,
-                child: Text(
-                  'P',
-                  style: TextStyle(fontSize: 40.0),
-                )),
-          ),
-          ListTile(
-              title: Text('Amigos'),
-              leading: Icon(Icons.people),
-              selected: (1 == _selectDrawerItem),
-              onTap: () {
-                _onSelectItem(1, 'Amigos (24)');
-              }),
-          ListTile(
-              title: Text('Mi Mesa'),
-              leading: Icon(Icons.format_list_bulleted),
-              selected: (2 == _selectDrawerItem),
-              onTap: () {
-                _onSelectItem(2, 'Mi Mesa (17/254)');
-              }),
-          ListTile(
-              title: Text('Escrutinio'),
-              leading: Icon(Icons.email),
-              selected: (3 == _selectDrawerItem),
-              onTap: () {
-                _onSelectItem(3, 'Escrutinio');
-              }),
-          ListTile(
-              title: Text('Asistencia'),
-              leading: Icon(Icons.help),
-              selected: (4 == _selectDrawerItem),
-              onTap: () {
-                _onSelectItem(4, 'Asistencia');
-              }),
-          Divider(),
-          ListTile(
-              title: Text('Salir'),
-              leading: Icon(Icons.exit_to_app),
-              selected: (5 == _selectDrawerItem),
-              onTap: () {
-                _onSelectItem(5, '');
-              }),
-        ],
-      ),
-    );
-
     final floatingAction = UnicornDialer(
-      parentButtonBackground: Theme.of(context).accentColor,
+      parentButtonBackground: Constant.ascent,
       orientation: UnicornOrientation.VERTICAL,
-      parentButton: Icon(Icons.add),
+      parentButton: Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
       childButtons: _getProfileMenu(),
     );
 
     return new Scaffold(
-      appBar: appBar,
-      drawer: myDrawer,
-      body: _getDrawerItemWidget(_selectDrawerItem),
-      floatingActionButton: floatingAction,
+      appBar: CustomAppBar.getAppBar('Inicio', context),
+      backgroundColor: Colors.white,
+      // floatingActionButton: floatingAction,
+      body: ListView(
+        children: <Widget>[
+          Image.asset(
+            'assets/images/logo2.png',
+            height: 150,
+          ),
+          SizedBox(height: 30),
+          homeButton('Agregar amigo', '/add_friend', Icons.person_add),
+          homeButton('Mis amigos', '/friends_list', Icons.group),
+          homeButton('Ver mi mesa', '/my_voting_table_list', Icons.list),
+          homeButton('Escrutinio', '/escrutinio', Icons.check_circle),
+          homeButton('Ayuda', '/help', Icons.help_outline),
+          SizedBox(height: 30),
+        ],
+      ),
     );
   }
 
-  _getDrawerItemWidget(int pos) {
-    switch (pos) {
-      case 0:
-        return AddFriend();
-      case 1:
-        return FriendsList();
-      case 2:
-        return MyVotingTableList();
-      case 3:
-        return Supervise();
-      case 4:
-        return Help();
-      case 5:
-        //return Login();
-        return SignUp();
-    }
-  }
-
-  _onSelectItem(int pos, String title) {
-    Navigator.pop(context);
-    setState(() {
-      _selectDrawerItem = pos;
-      _title = title;
-    });
+  Container homeButton(String title, String path, IconData icon) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+      decoration: BoxDecoration(
+        gradient: Constant.gradient,
+        borderRadius: BorderRadius.circular(2),
+      ),
+      child: FlatButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed(path);
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 12),
+          child: Row(
+            children: <Widget>[
+              Icon(
+                icon,
+                color: Colors.white,
+                size: 20,
+              ),
+              SizedBox(width: 10),
+              Text(
+                title.toUpperCase(),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   List<UnicornButton> _getProfileMenu() {
     List<UnicornButton> children = [];
 
     // Add Children here
-    children.add(_profileOption(
+    children.add(
+      _profileOption(
         txt: 'Voto',
         iconData: Icons.email,
         onPressed: () {
           _asyncInputDialogVote(context);
-        }));
-    children.add(_profileOption(
+        },
+      ),
+    );
+    children.add(
+      _profileOption(
         txt: 'Reposición',
         iconData: Icons.library_books,
         onPressed: () {
           _asyncInputDialog(context);
-        }));
+        },
+      ),
+    );
 
     return children;
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../model/person.dart';
+import 'global/widgets/custom_app_bar.dart';
 
 class FriendsList extends StatefulWidget {
   FriendsListState createState() => FriendsListState();
@@ -71,11 +72,15 @@ class FriendsListState extends State<FriendsList> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return Scaffold(
+      appBar: CustomAppBar.getAppBar('Mis Amigos ', context),
+      body: ListView.builder(
         itemCount: friends.length,
         itemBuilder: (context, position) {
           return FriendListItem(friends[position]);
-        });
+        },
+      ),
+    );
   }
 }
 

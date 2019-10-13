@@ -10,7 +10,7 @@ class SignUpState extends State<SignUp> {
   String _nationalId; //mandatory
   String _phone; //optional
   String _email; //optional
-  String _password;  //mandatory
+  String _password; //mandatory
   String _rePassword; //mandatory
 
   void _submit() {
@@ -23,19 +23,28 @@ class SignUpState extends State<SignUp> {
   }
 
   void performSubmit() {
-    print('DNI $_nationalId , Password: $_password , Re-Password: $_rePassword , Phone: $_phone , Email: $_email');
+    print(
+        'DNI $_nationalId , Password: $_password , Re-Password: $_rePassword , Phone: $_phone , Email: $_email');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10.0),
-      child: ListView(
-        children: <Widget>[
-          Container(height: 150.0, width: 150.0,child: Image.asset('assets/logo.png')),
-          Container(
-            padding: const EdgeInsets.all(10.0),
-            child: Form(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Container(
+        padding: const EdgeInsets.all(10.0),
+        child: ListView(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 20),
+              height: 150.0,
+              width: 150.0,
+              child: Image.asset('assets/images/logo2.png'),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10.0),
+              margin: EdgeInsets.only(top: 10),
+              child: Form(
                 key: formKey,
                 child: Column(
                   children: <Widget>[
@@ -44,7 +53,9 @@ class SignUpState extends State<SignUp> {
                         hintText: "Ejemplo: 30123456",
                         labelText: "DNI",
                       ),
-                      validator: (val) => !val.contains(RegExp('[0-9]*')) ? 'Sólo números para el DNI.' : null,
+                      validator: (val) => !val.contains(RegExp('[0-9]*'))
+                          ? 'Sólo números para el DNI.'
+                          : null,
                       onSaved: (val) => _nationalId = val,
                     ),
                     TextFormField(
@@ -72,13 +83,16 @@ class SignUpState extends State<SignUp> {
                       color: Theme.of(context).accentColor,
                       textColor: Colors.white,
                       child: Text('REGISTRARSE'),
-                      onPressed: /*_submit*/ (){_asyncInputDialog(context);},
+                      onPressed: /*_submit*/ () {
+                        _asyncInputDialog(context);
+                      },
                     ),
-
                   ],
-                )),
-          ),
-        ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -87,15 +101,17 @@ class SignUpState extends State<SignUp> {
     String teamName = '';
     return showDialog<String>(
       context: context,
-      barrierDismissible: false, // dialog is dismissible with a tap on the barrier
+      barrierDismissible:
+          false, // dialog is dismissible with a tap on the barrier
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Usuario creado correctamente'),
           content: new Row(
             children: <Widget>[
               new Expanded(
-                  child: Text('Se deberá aprobar el usuario para poder comenzar a usar la aplicación.'),
-                  )
+                child: Text(
+                    'Se deberá aprobar el usuario para poder comenzar a usar la aplicación.'),
+              )
             ],
           ),
           actions: <Widget>[
