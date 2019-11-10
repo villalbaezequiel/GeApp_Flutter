@@ -6,7 +6,12 @@ class Escrutinio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar.getAppBar('Escrutinio', context),
+      appBar: CustomAppBar.getAppBar(
+        context,
+        Row(
+          children: <Widget>[Text('Escrutinio')],
+        ),
+      ),
       body: Center(
         child: Text('Escrutinio'),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:unicorndial/unicorndial.dart';
 import '../model/person.dart';
 import 'global/widgets/custom_app_bar.dart';
@@ -84,7 +85,12 @@ class MyVotingTableState extends State<MyVotingTableList> {
     );
 
     return Scaffold(
-      appBar: CustomAppBar.getAppBar('Ver Mi Mesa', context),
+      appBar: CustomAppBar.getAppBar(
+        context,
+        Row(
+          children: <Widget>[Text('Ver Mi Mesa')],
+        ),
+      ),
       floatingActionButton: floatingAction,
       body: ListView.separated(
         separatorBuilder: (context, index) => Divider(
@@ -133,18 +139,24 @@ class MyVotingTableState extends State<MyVotingTableList> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Voto'),
-          content: new Row(
+          content: Row(
             children: <Widget>[
-              new Expanded(
-                  child: new TextField(
-                autofocus: true,
-                decoration: new InputDecoration(
+              Expanded(
+                child: TextField(
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    WhitelistingTextInputFormatter.digitsOnly
+                  ],
+                  autofocus: true,
+                  decoration: InputDecoration(
                     labelText: 'Ingrese el número de orden',
-                    hintText: 'ejemplo 154'),
-                onChanged: (value) {
-                  teamName = value;
-                },
-              ))
+                    hintText: 'ejemplo 154',
+                  ),
+                  onChanged: (value) {
+                    teamName = value;
+                  },
+                ),
+              )
             ],
           ),
           actions: <Widget>[
@@ -175,18 +187,23 @@ class MyVotingTableState extends State<MyVotingTableList> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Reposición de boletas'),
-          content: new Row(
+          content: Row(
             children: <Widget>[
-              new Expanded(
-                  child: new TextField(
-                autofocus: true,
-                decoration: new InputDecoration(
-                    labelText: 'Cantidad boletas repuestas',
-                    hintText: 'ejemplo 25'),
-                onChanged: (value) {
-                  teamName = value;
-                },
-              ))
+              Expanded(
+                child: TextField(
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    WhitelistingTextInputFormatter.digitsOnly
+                  ],
+                  autofocus: true,
+                  decoration: InputDecoration(
+                      labelText: 'Cantidad boletas repuestas',
+                      hintText: 'ejemplo 25'),
+                  onChanged: (value) {
+                    teamName = value;
+                  },
+                ),
+              )
             ],
           ),
           actions: <Widget>[
@@ -210,18 +227,19 @@ class MyVotingTableState extends State<MyVotingTableList> {
 
   Widget _profileOption({String txt, IconData iconData, Function onPressed}) {
     return UnicornButton(
-        labelText: txt,
-        labelHasShadow: true,
-        labelColor: Theme.of(context).accentColor,
-        hasLabel: true,
-        currentButton: FloatingActionButton(
-          heroTag: txt,
-          backgroundColor: Theme.of(context).accentColor,
-          foregroundColor: Colors.white,
-          mini: true,
-          child: Icon(iconData),
-          onPressed: onPressed,
-        ));
+      labelText: txt,
+      labelHasShadow: true,
+      labelColor: Theme.of(context).accentColor,
+      hasLabel: true,
+      currentButton: FloatingActionButton(
+        heroTag: txt,
+        backgroundColor: Theme.of(context).accentColor,
+        foregroundColor: Colors.white,
+        mini: true,
+        child: Icon(iconData),
+        onPressed: onPressed,
+      ),
+    );
   }
 }
 
@@ -232,19 +250,17 @@ class MyVotingTableListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ListTile(
+      title: Text(
+          '${_person.name} ${_person.lastname}' /*, style: TextStyle(color: (_person.orderId==24)?Colors.red:Colors.black),*/),
+      subtitle: Text('DNI: ${_person.nationalId}'),
+      trailing: Text(
+          '${_person.orderId}' /*, style: TextStyle(color: (_person.orderId==24)?Colors.red:Colors.black)*/),
+      isThreeLine: false,
+      dense: false,
       onTap: () {
         print('${_person.name}');
       },
-      child: ListTile(
-        title: Text(
-            '${_person.name} ${_person.lastname}' /*, style: TextStyle(color: (_person.orderId==24)?Colors.red:Colors.black),*/),
-        subtitle: Text('DNI: ${_person.nationalId}'),
-        trailing: Text(
-            '${_person.orderId}' /*, style: TextStyle(color: (_person.orderId==24)?Colors.red:Colors.black)*/),
-        isThreeLine: false,
-        dense: false,
-      ),
     );
   }
 }

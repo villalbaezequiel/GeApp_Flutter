@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:voting_app/ui/global/widgets/navigation_drawer.dart';
 
 import 'model/drawer_item.dart';
@@ -13,7 +14,11 @@ import 'ui/my_voting_table.dart';
 import 'ui/person.dart';
 import 'ui/sign_up.dart';
 
-void main() => runApp(MyApp());
+Future main() async {
+  await SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -78,6 +83,7 @@ class _ShareDrawerState extends State<ShareDrawer> {
         drawerItems: widget.drawerItems,
         selectedIndex: _selectedIndex,
         headerView: UserAccountsDrawerHeader(
+          decoration: BoxDecoration(gradient: Constant.appBarGradient),
           accountName: Text('Pedro Gonzalez'),
           accountEmail: Text('DNI: 30123456'),
           currentAccountPicture: CircleAvatar(

@@ -6,7 +6,12 @@ class Help extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar.getAppBar('Ayuda', context),
+      appBar: CustomAppBar.getAppBar(
+        context,
+        Row(
+          children: <Widget>[Text('Ayuda')],
+        ),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

@@ -6,7 +6,11 @@ class PersonDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar.getAppBar('Me', context),
+      appBar: CustomAppBar.getAppBar(
+          context,
+          Row(
+            children: <Widget>[Text('Me')],
+          )),
       body: ListView(
         children: <Widget>[
           ListTile(

@@ -30,7 +30,12 @@ class AddFriendState extends State<AddFriend> {
   Widget build(BuildContext context) {
     //return Center(child: Text('AddFriend'),);
     return Scaffold(
-      appBar: CustomAppBar.getAppBar('Agregar Amigo', context),
+      appBar: CustomAppBar.getAppBar(
+        context,
+        Row(
+          children: <Widget>[Text('Agregar Amigo')],
+        ),
+      ),
       body: Container(
         padding: const EdgeInsets.all(10.0),
         child: ListView(

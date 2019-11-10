@@ -5,9 +5,9 @@ import '../constant.dart';
 import 'root_scaffold.dart';
 
 class CustomAppBar {
-  static getAppBar(String title, BuildContext context) {
+  static getAppBar(BuildContext context, Widget titleWidget) {
     return GradientAppBar(
-      title: Text(title),
+      title: titleWidget,
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,

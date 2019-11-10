@@ -11,7 +11,12 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: CustomAppBar.getAppBar('Inicio', context),
+      appBar: CustomAppBar.getAppBar(
+        context,
+        Row(
+          children: <Widget>[Text('Inicio')],
+        ),
+      ),
       backgroundColor: Colors.white,
       // floatingActionButton: floatingAction,
       body: ListView(
