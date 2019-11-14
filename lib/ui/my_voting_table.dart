@@ -11,64 +11,64 @@ class MyVotingTableList extends StatefulWidget {
 class MyVotingTableState extends State<MyVotingTableList> {
   List<Person> people = [
     Person(
-        orderId: 124,
-        name: 'Rodrigo Martin',
-        lastname: 'Weisntein',
+        id: 124,
+        firstName: 'Rodrigo Martin',
+        lastName: 'Weisntein',
         nationalId: '10.252.154'),
     Person(
-        orderId: 212,
-        name: 'Fernando',
-        lastname: 'Mercado',
+        id: 212,
+        firstName: 'Fernando',
+        lastName: 'Mercado',
         nationalId: '12.242.451'),
     Person(
-        orderId: 24,
-        name: 'Elias Nicolas',
-        lastname: 'Jones',
+        id: 24,
+        firstName: 'Elias Nicolas',
+        lastName: 'Jones',
         nationalId: '11.252.854'),
     Person(
-        orderId: 5,
-        name: 'Geraldine',
-        lastname: 'Noel Abadie',
+        id: 5,
+        firstName: 'Geraldine',
+        lastName: 'Noel Abadie',
         nationalId: '30.972.154'),
     Person(
-        orderId: 54,
-        name: 'Fernando',
-        lastname: 'Cambareri',
+        id: 54,
+        firstName: 'Fernando',
+        lastName: 'Cambareri',
         nationalId: '10.223.782'),
     Person(
-        orderId: 87,
-        name: 'Gerardo',
-        lastname: 'Aguilera',
+        id: 87,
+        firstName: 'Gerardo',
+        lastName: 'Aguilera',
         nationalId: '20.212.161'),
     Person(
-        orderId: 244,
-        name: 'Julio',
-        lastname: 'Mijoc',
+        id: 244,
+        firstName: 'Julio',
+        lastName: 'Mijoc',
         nationalId: '33.212.256'),
     Person(
-        orderId: 213,
-        name: 'Rafael',
-        lastname: 'Fortunato Cambareri',
+        id: 213,
+        firstName: 'Rafael',
+        lastName: 'Fortunato Cambareri',
         nationalId: '22.263.164'),
     Person(
-        orderId: 522,
-        name: 'Carlos',
-        lastname: 'Gonzalez',
+        id: 522,
+        firstName: 'Carlos',
+        lastName: 'Gonzalez',
         nationalId: '2.252.144'),
     Person(
-        orderId: 553,
-        name: 'Arturo',
-        lastname: 'Perez',
+        id: 553,
+        firstName: 'Arturo',
+        lastName: 'Perez',
         nationalId: '31.252.154'),
     Person(
-        orderId: 424,
-        name: 'Mariano',
-        lastname: 'Moreno',
+        id: 424,
+        firstName: 'Mariano',
+        lastName: 'Moreno',
         nationalId: '10.522.162'),
     Person(
-        orderId: 3,
-        name: 'Santiago',
-        lastname: 'Scarcella',
+        id: 3,
+        firstName: 'Santiago',
+        lastName: 'Scarcella',
         nationalId: '05.732.262')
   ];
 
@@ -252,14 +252,14 @@ class MyVotingTableListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-          '${_person.name} ${_person.lastname}' /*, style: TextStyle(color: (_person.orderId==24)?Colors.red:Colors.black),*/),
+          '${_person.firstName} ${_person.lastName}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black),*/),
       subtitle: Text('DNI: ${_person.nationalId}'),
       trailing: Text(
-          '${_person.orderId}' /*, style: TextStyle(color: (_person.orderId==24)?Colors.red:Colors.black)*/),
+          '${_person.id}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black)*/),
       isThreeLine: false,
       dense: false,
       onTap: () {
-        print('${_person.name}');
+        print('${_person.firstName}');
       },
     );
   }

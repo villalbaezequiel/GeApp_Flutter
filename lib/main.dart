@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:voting_app/ui/global/widgets/navigation_drawer.dart';
+import 'package:voting_app/ui/splash_screen.dart';
 
 import 'model/drawer_item.dart';
 import 'ui/add_friend.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => Home(),
+        '/home': (context) => Home(),
         '/add_friend': (context) => AddFriend(),
         '/friends_list': (context) => FriendsList(),
         '/my_voting_table_list': (context) => MyVotingTableList(),
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         '/help': (context) => Help(),
         '/login': (context) => Login(),
         '/sign_up': (context) => SignUp(),
+        '/': (context) => SplashScreen(),
       },
       builder: (context, child) {
         // 2
@@ -58,7 +60,7 @@ class ShareDrawer extends StatefulWidget {
   final GlobalKey<NavigatorState> navigator;
   final Widget child;
   final List<DrawerItem> drawerItems = [
-    DrawerItem("Inicio", Icons.dashboard, '/'),
+    DrawerItem("Inicio", Icons.dashboard, '/home'),
     DrawerItem("Agregar Amigo", Icons.person_add, '/add_friend'),
     DrawerItem("Amigos", Icons.group, '/friends_list'),
     DrawerItem("Mi Mesa", Icons.list, '/my_voting_table_list'),
