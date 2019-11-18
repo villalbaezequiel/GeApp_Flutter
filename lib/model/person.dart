@@ -1,3 +1,5 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 class Person {
   int id;
   String nationalId;
@@ -55,4 +57,9 @@ class Person {
         'firstName': 'firstName',
         'lastName': 'lastName',
       };
+
+  savePersonToSharedPref(String userData) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("user", userData);
+  }
 }

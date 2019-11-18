@@ -15,4 +15,9 @@ class Constant {
     stops: [0.5, 1.0],
     colors: [Constant.primary, Constant.ascent],
   );
+
+  // API Endpoints base url
+  static const String baseUrl = 'http://18.231.45.56:3000/api/';
+  static const String login = 'user/login';
+  static const String createUser = 'user/';
 }
