@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:voting_app/model/error.dart';
-import 'package:voting_app/model/person.dart';
 
 import 'global/constant.dart';
 import 'global/widgets/common_widgets.dart';
