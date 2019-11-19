@@ -48,14 +48,14 @@ class Person {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': 'id',
-        'nationalId': 'nationalId',
-        'token': 'token',
-        'role': 'role',
-        'approved': 'approved',
-        'isOwner': 'isOwner',
-        'firstName': 'firstName',
-        'lastName': 'lastName',
+        'id': id,
+        'nationalId': nationalId,
+        'token': token,
+        'role': role,
+        'approved': approved,
+        'isOwner': isOwner,
+        'firstName': firstName,
+        'lastName': lastName,
       };
 
   savePersonToSharedPref(String userData) async {

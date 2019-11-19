@@ -1,8 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_app/model/error.dart';
 import 'package:voting_app/model/person.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
@@ -26,7 +26,6 @@ class LoginState extends State<Login> {
   void _submit() {
     final form = formKey.currentState;
     if (form.validate()) {
-      print('VALID');
       form.save();
       performSubmit();
     }
@@ -65,7 +64,11 @@ class LoginState extends State<Login> {
           commonWidgests.showToast(errors.message);
       }
     } catch (e) {
-      commonWidgests.showToast(e.message);
+      if (e is SocketException) {
+        commonWidgests.showToast('Sin conexión, por favor intente luego');
+      } else {
+        commonWidgests.showToast(e.message);
+      }
       Navigator.pop(context);
     }
   }

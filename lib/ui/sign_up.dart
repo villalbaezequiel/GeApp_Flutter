@@ -1,4 +1,14 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:voting_app/model/error.dart';
+import 'package:voting_app/model/person.dart';
+
+import 'global/constant.dart';
+import 'global/widgets/common_widgets.dart';
 
 class SignUp extends StatefulWidget {
   SignUpState createState() => SignUpState();
@@ -11,20 +21,53 @@ class SignUpState extends State<SignUp> {
   String _phone; //optional
   String _email; //optional
   String _password; //mandatory
-  String _rePassword; //mandatory
+  CommonWidgest commonWidgests = CommonWidgest();
 
   void _submit() {
     final form = formKey.currentState;
     if (form.validate()) {
-      print('VALID');
       form.save();
       performSubmit();
     }
   }
 
-  void performSubmit() {
-    print(
-        'DNI $_nationalId , Password: $_password , Re-Password: $_rePassword , Phone: $_phone , Email: $_email');
+  Future performSubmit() async {
+    commonWidgests.progressDialog(context);
+    try {
+      var params = {
+        "nationalId": _nationalId,
+        "email": _email,
+        "phone": _phone,
+        "password": _password,
+      };
+
+      var body = json.encode(params);
+      final res = await http
+          .post(Constant.baseUrl + Constant.login, body: body, headers: {
+        'Content-Type': 'application/json',
+        "Accept": "application/json",
+      });
+
+      Navigator.of(context).pop();
+
+      switch (res.statusCode) {
+        case 200:
+          commonWidgests.showToast("User successsfully created");
+          Navigator.of(context).pop();
+          break;
+        default:
+          Map<String, dynamic> mapResponse = json.decode(res.body);
+          Errors errors = new Errors.fromJson(mapResponse['errors']);
+          commonWidgests.showToast(errors.message);
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        commonWidgests.showToast('Sin conexión, por favor intente luego');
+      } else {
+        commonWidgests.showToast(e.message);
+      }
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -49,6 +92,10 @@ class SignUpState extends State<SignUp> {
                 child: Column(
                   children: <Widget>[
                     TextFormField(
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        WhitelistingTextInputFormatter.digitsOnly
+                      ],
                       decoration: InputDecoration(
                         hintText: "Ejemplo: 30123456",
                         labelText: "DNI",
@@ -59,24 +106,41 @@ class SignUpState extends State<SignUp> {
                       onSaved: (val) => _nationalId = val,
                     ),
                     TextFormField(
+                      keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
-                          hintText: "", labelText: "Teléfono celular"),
+                        hintText: "",
+                        labelText: "Teléfono celular",
+                      ),
                       onSaved: (val) => _phone = val,
                     ),
                     TextFormField(
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                          hintText: "", labelText: "Correo electrónico"),
+                        hintText: "",
+                        labelText: "Correo electrónico",
+                      ),
                       onSaved: (val) => _email = val,
                     ),
                     TextFormField(
+                      obscureText: true,
                       decoration: InputDecoration(
-                          hintText: "", labelText: "Contraseña"),
+                        hintText: "",
+                        labelText: "Contraseña",
+                      ),
+                      onChanged: (val) => _password = val,
                       onSaved: (val) => _password = val,
                     ),
                     TextFormField(
+                      obscureText: true,
                       decoration: InputDecoration(
-                          hintText: "", labelText: "Reingrese contraseña"),
-                      onSaved: (val) => _rePassword = val,
+                        hintText: "",
+                        labelText: "Reingrese contraseña",
+                      ),
+                      validator: (value) {
+                        return (value != _password)
+                            ? "La contraseña no coincide"
+                            : null;
+                      },
                     ),
                     Padding(padding: const EdgeInsets.only(top: 20.0)),
                     RaisedButton(
@@ -84,7 +148,8 @@ class SignUpState extends State<SignUp> {
                       textColor: Colors.white,
                       child: Text('REGISTRARSE'),
                       onPressed: /*_submit*/ () {
-                        _asyncInputDialog(context);
+                        // _asyncInputDialog(context);
+                        _submit();
                       },
                     ),
                   ],
@@ -94,36 +159,6 @@ class SignUpState extends State<SignUp> {
           ],
         ),
       ),
-    );
-  }
-
-  Future<String> _asyncInputDialog(BuildContext context) async {
-    String teamName = '';
-    return showDialog<String>(
-      context: context,
-      barrierDismissible:
-          false, // dialog is dismissible with a tap on the barrier
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Usuario creado correctamente'),
-          content: new Row(
-            children: <Widget>[
-              new Expanded(
-                child: Text(
-                    'Se deberá aprobar el usuario para poder comenzar a usar la aplicación.'),
-              )
-            ],
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop(teamName);
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

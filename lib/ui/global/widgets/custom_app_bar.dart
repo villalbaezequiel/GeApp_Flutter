@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
-import 'package:voting_app/model/person.dart';
 
 import '../constant.dart';
 import 'root_scaffold.dart';

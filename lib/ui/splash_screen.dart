@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_app/model/person.dart';
+import 'package:voting_app/ui/home.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -60,8 +61,8 @@ class _SplashScreenState extends State<SplashScreen> {
   _goToHome(Person user) {
     Timer(
       Duration(seconds: 5),
-      () => Navigator.of(context).pushNamedAndRemoveUntil(
-        '/Home',
+      () => Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (BuildContext context) => Home(user: user)),
         (Route<dynamic> route) => false,
       ),
     );
