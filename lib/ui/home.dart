@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:voting_app/services/main_model.dart';
+import 'package:voting_app/ui/global/widgets/navigation_drawer.dart';
 
 import 'global/constant.dart';
 import 'global/widgets/custom_app_bar.dart';
@@ -20,6 +21,7 @@ class HomeState extends State<Home> {
           children: <Widget>[Text('Inicio')],
         ),
       ),
+      drawer: NavigationDrawer(),
       backgroundColor: Colors.white,
       // floatingActionButton: floatingAction,
       body: ListView(

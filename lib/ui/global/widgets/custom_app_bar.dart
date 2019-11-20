@@ -13,12 +13,6 @@ class CustomAppBar {
         stops: [0.5, 1.0],
         colors: [Constant.primary, Constant.ascent],
       ),
-      leading: IconButton(
-        icon: Icon(Icons.menu),
-        onPressed: () {
-          // RootScaffold.openDrawer(context);
-        },
-      ),
     );
   }
 }

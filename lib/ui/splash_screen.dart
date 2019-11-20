@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:voting_app/model/person.dart';
-import 'package:voting_app/services/main_model.dart';
-import 'package:voting_app/ui/home.dart';
+
+import '../services/main_model.dart';
+import '../model/person.dart';
 
 class SplashScreen extends StatefulWidget {
   final MainModel model;
@@ -73,12 +73,8 @@ class _SplashScreenState extends State<SplashScreen> {
   _goToHome() {
     Timer(
       Duration(seconds: 5),
-      () => Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (BuildContext context) => Home(widget.model),
-        ),
-        (Route<dynamic> route) => false,
-      ),
+      () => Navigator.of(context)
+          .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false),
     );
   }
 }

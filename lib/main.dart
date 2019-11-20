@@ -15,9 +15,9 @@ import 'ui/my_voting_table.dart';
 import 'ui/person.dart';
 import 'ui/sign_up.dart';
 
-void main() {
-  // await SystemChrome.setPreferredOrientations(
-  //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+Future main() async {
+  await SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp());
 }
 
