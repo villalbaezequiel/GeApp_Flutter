@@ -1,12 +1,15 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/person.dart';
+import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/home.dart';
 
 class SplashScreen extends StatefulWidget {
+  final MainModel model;
+
+  SplashScreen(this.model);
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -18,33 +21,42 @@ class _SplashScreenState extends State<SplashScreen> {
     checkLoggedIn();
   }
 
+  Future loadData() async {
+    widget.model.loadUsesr();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/fondo.png'),
-            fit: BoxFit.cover,
+    return ScopedModelDescendant<MainModel>(
+      builder: (context, child, model) {
+        return Scaffold(
+          body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/fondo.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Center(
+              child: Image.asset(
+                'assets/images/logo.png',
+                height: 120,
+                width: 150,
+              ),
+            ),
           ),
-        ),
-        child: Center(
-          child: Image.asset(
-            'assets/images/logo.png',
-            height: 120,
-            width: 150,
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   checkLoggedIn() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userString = prefs.getString('user');
-    if (userString != null) {
-      Person user = Person.fromString(json.decode(userString));
-      _goToHome(user);
+    Person user = widget.model.getUser();
+    if (user == null) {
+      await loadData();
+      user = widget.model.getUser();
+
+      (user != null) ? _goToHome() : _goToLogin();
     } else {
       Timer(
         Duration(seconds: 3),
@@ -58,11 +70,13 @@ class _SplashScreenState extends State<SplashScreen> {
         .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
   }
 
-  _goToHome(Person user) {
+  _goToHome() {
     Timer(
       Duration(seconds: 5),
       () => Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (BuildContext context) => Home(user: user)),
+        MaterialPageRoute(
+          builder: (BuildContext context) => Home(widget.model),
+        ),
         (Route<dynamic> route) => false,
       ),
     );

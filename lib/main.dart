@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:voting_app/ui/global/widgets/navigation_drawer.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/ui/splash_screen.dart';
 
-import 'model/drawer_item.dart';
+import 'services/main_model.dart';
 import 'ui/add_friend.dart';
 import 'ui/escrutinio.dart';
 import 'ui/friends_list.dart';
@@ -15,103 +15,46 @@ import 'ui/my_voting_table.dart';
 import 'ui/person.dart';
 import 'ui/sign_up.dart';
 
-Future main() async {
-  await SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+void main() {
+  // await SystemChrome.setPreferredOrientations(
+  //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Chubut al Frente',
-      theme: ThemeData(
-        primaryColor: Constant.primary,
-        accentColor: Constant.ascent,
-        scaffoldBackgroundColor: Constant.bgColor,
-      ),
-      initialRoute: '/',
-      routes: {
-        '/home': (context) => Home(),
-        '/add_friend': (context) => AddFriend(),
-        '/friends_list': (context) => FriendsList(),
-        '/my_voting_table_list': (context) => MyVotingTableList(),
-        '/person_details': (context) => PersonDetails(),
-        '/escrutinio': (context) => Escrutinio(),
-        '/help': (context) => Help(),
-        '/login': (context) => Login(),
-        '/sign_up': (context) => SignUp(),
-        '/': (context) => SplashScreen(),
-      },
-      builder: (context, child) {
-        // 2
-        return ShareDrawer(
-          navigator: (child.key as GlobalKey<NavigatorState>),
-          child: child,
-        );
-      },
-    );
-  }
+  _MyAppState createState() => _MyAppState();
 }
 
-class ShareDrawer extends StatefulWidget {
-  final GlobalKey<NavigatorState> navigator;
-  final Widget child;
-  final List<DrawerItem> drawerItems = [
-    DrawerItem("Inicio", Icons.dashboard, '/home'),
-    DrawerItem("Agregar Amigo", Icons.person_add, '/add_friend'),
-    DrawerItem("Amigos", Icons.group, '/friends_list'),
-    DrawerItem("Mi Mesa", Icons.list, '/my_voting_table_list'),
-    DrawerItem("Escrutinio", Icons.check_circle, '/escrutinio'),
-    DrawerItem("Ayuda", Icons.help, '/help'),
-    DrawerItem("Salir", Icons.exit_to_app, '/login'),
-  ];
-
-  ShareDrawer({Key key, this.navigator, this.child}) : super(key: key);
-
-  @override
-  _ShareDrawerState createState() => _ShareDrawerState();
-}
-
-class _ShareDrawerState extends State<ShareDrawer> {
-  var _selectedIndex = 0;
-
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: NavigationDrawer(
-        drawerItems: widget.drawerItems,
-        selectedIndex: _selectedIndex,
-        headerView: UserAccountsDrawerHeader(
-          decoration: BoxDecoration(gradient: Constant.appBarGradient),
-          accountName: Text('Pedro Gonzalez'),
-          accountEmail: Text('DNI: 30123456'),
-          currentAccountPicture: CircleAvatar(
-            backgroundColor: Colors.blue,
-            child: Text(
-              'P',
-              style: TextStyle(fontSize: 40.0),
-            ),
-          ),
+    MainModel model = MainModel();
+
+    return ScopedModel(
+      model: model,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Chubut al Frente',
+        theme: ThemeData(
+          primaryColor: Constant.primary,
+          accentColor: Constant.ascent,
+          scaffoldBackgroundColor: Constant.bgColor,
         ),
-        onNavigationItemSelect: (index) {
-          String route = widget.drawerItems[index].route;
-          if (_selectedIndex == index) return true;
-          (index == 0 || index == (widget.drawerItems.length - 1))
-              ? widget.navigator.currentState.pushNamedAndRemoveUntil(
-                  route,
-                  (Route<dynamic> route) => false,
-                )
-              : widget.navigator.currentState.pushNamed(route);
-          setState(() {
-            _selectedIndex = index;
-          });
-          return true; // true means that drawer must close and false is Vice versa
+        home: SplashScreen(model),
+        routes: <String, WidgetBuilder>{
+          '/home': (context) => Home(model),
+          '/add_friend': (context) => AddFriend(model),
+          '/friends_list': (context) => FriendsList(model),
+          '/my_voting_table_list': (context) => MyVotingTableList(model),
+          '/person_details': (context) => PersonDetails(model),
+          '/escrutinio': (context) => Escrutinio(model),
+          '/help': (context) => Help(),
+          '/login': (context) => Login(model),
+          '/sign_up': (context) => SignUp(model),
+          '/splash_screen': (context) => SplashScreen(model),
         },
       ),
-      body: widget.child,
     );
   }
 }

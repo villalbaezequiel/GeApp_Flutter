@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:voting_app/services/main_model.dart';
 
 import 'global/widgets/custom_app_bar.dart';
 
-class PersonDetails extends StatelessWidget {
+class PersonDetails extends StatefulWidget {
+  final MainModel model;
+  PersonDetails(this.model);
+
+  @override
+  _PersonDetailsState createState() => _PersonDetailsState();
+}
+
+class _PersonDetailsState extends State<PersonDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -4,12 +4,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/error.dart';
+import 'package:voting_app/services/main_model.dart';
 
 import 'global/constant.dart';
 import 'global/widgets/common_widgets.dart';
 
 class SignUp extends StatefulWidget {
+  final MainModel model;
+
+  SignUp(this.model);
   SignUpState createState() => SignUpState();
 }
 
@@ -71,93 +76,97 @@ class SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Container(
-        padding: const EdgeInsets.all(10.0),
-        child: ListView(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 20),
-              height: 150.0,
-              width: 150.0,
-              child: Image.asset('assets/images/logo2.png'),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              margin: EdgeInsets.only(top: 10),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  children: <Widget>[
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly
-                      ],
-                      decoration: InputDecoration(
-                        hintText: "Ejemplo: 30123456",
-                        labelText: "DNI",
-                      ),
-                      validator: (val) => !val.contains(RegExp('[0-9]*'))
-                          ? 'Sólo números para el DNI.'
-                          : null,
-                      onSaved: (val) => _nationalId = val,
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        hintText: "",
-                        labelText: "Teléfono celular",
-                      ),
-                      onSaved: (val) => _phone = val,
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        hintText: "",
-                        labelText: "Correo electrónico",
-                      ),
-                      onSaved: (val) => _email = val,
-                    ),
-                    TextFormField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: "",
-                        labelText: "Contraseña",
-                      ),
-                      onChanged: (val) => _password = val,
-                      onSaved: (val) => _password = val,
-                    ),
-                    TextFormField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: "",
-                        labelText: "Reingrese contraseña",
-                      ),
-                      validator: (value) {
-                        return (value != _password)
-                            ? "La contraseña no coincide"
-                            : null;
-                      },
-                    ),
-                    Padding(padding: const EdgeInsets.only(top: 20.0)),
-                    RaisedButton(
-                      color: Theme.of(context).accentColor,
-                      textColor: Colors.white,
-                      child: Text('REGISTRARSE'),
-                      onPressed: /*_submit*/ () {
-                        // _asyncInputDialog(context);
-                        _submit();
-                      },
-                    ),
-                  ],
+    return ScopedModelDescendant<MainModel>(
+      builder: (context, child, model) {
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: Container(
+            padding: const EdgeInsets.all(10.0),
+            child: ListView(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 20),
+                  height: 150.0,
+                  width: 150.0,
+                  child: Image.asset('assets/images/logo2.png'),
                 ),
-              ),
+                Container(
+                  padding: const EdgeInsets.all(10.0),
+                  margin: EdgeInsets.only(top: 10),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      children: <Widget>[
+                        TextFormField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            WhitelistingTextInputFormatter.digitsOnly
+                          ],
+                          decoration: InputDecoration(
+                            hintText: "Ejemplo: 30123456",
+                            labelText: "DNI",
+                          ),
+                          validator: (val) => !val.contains(RegExp('[0-9]*'))
+                              ? 'Sólo números para el DNI.'
+                              : null,
+                          onSaved: (val) => _nationalId = val,
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.phone,
+                          decoration: InputDecoration(
+                            hintText: "",
+                            labelText: "Teléfono celular",
+                          ),
+                          onSaved: (val) => _phone = val,
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            hintText: "",
+                            labelText: "Correo electrónico",
+                          ),
+                          onSaved: (val) => _email = val,
+                        ),
+                        TextFormField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            hintText: "",
+                            labelText: "Contraseña",
+                          ),
+                          onChanged: (val) => _password = val,
+                          onSaved: (val) => _password = val,
+                        ),
+                        TextFormField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            hintText: "",
+                            labelText: "Reingrese contraseña",
+                          ),
+                          validator: (value) {
+                            return (value != _password)
+                                ? "La contraseña no coincide"
+                                : null;
+                          },
+                        ),
+                        Padding(padding: const EdgeInsets.only(top: 20.0)),
+                        RaisedButton(
+                          color: Theme.of(context).accentColor,
+                          textColor: Colors.white,
+                          child: Text('REGISTRARSE'),
+                          onPressed: /*_submit*/ () {
+                            // _asyncInputDialog(context);
+                            _submit();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

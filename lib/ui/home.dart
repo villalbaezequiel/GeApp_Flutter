@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:voting_app/model/person.dart';
+import 'package:voting_app/services/main_model.dart';
 
 import 'global/constant.dart';
 import 'global/widgets/custom_app_bar.dart';
 
 class Home extends StatefulWidget {
-  final Person user;
-  Home({this.user});
+  final MainModel model;
+  Home(this.model);
   HomeState createState() => HomeState();
 }
 

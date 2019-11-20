@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 
 import '../constant.dart';
-import 'root_scaffold.dart';
 
 class CustomAppBar {
   static getAppBar(BuildContext context, Widget titleWidget) {
@@ -17,7 +16,7 @@ class CustomAppBar {
       leading: IconButton(
         icon: Icon(Icons.menu),
         onPressed: () {
-          RootScaffold.openDrawer(context);
+          // RootScaffold.openDrawer(context);
         },
       ),
     );

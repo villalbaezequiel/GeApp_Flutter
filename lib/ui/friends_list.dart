@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:voting_app/services/main_model.dart';
 import '../model/person.dart';
 import 'global/widgets/custom_app_bar.dart';
 
 class FriendsList extends StatefulWidget {
+  final MainModel model;
+  FriendsList(this.model);
+
   FriendsListState createState() => FriendsListState();
 }
 

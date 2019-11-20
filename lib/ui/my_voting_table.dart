@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:unicorndial/unicorndial.dart';
+import 'package:voting_app/services/main_model.dart';
 import '../model/person.dart';
 import 'global/widgets/custom_app_bar.dart';
 
 class MyVotingTableList extends StatefulWidget {
+  final MainModel model;
+  MyVotingTableList(this.model);
+
   MyVotingTableState createState() => MyVotingTableState();
 }
 

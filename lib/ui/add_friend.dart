@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:voting_app/services/main_model.dart';
 
 import 'global/widgets/custom_app_bar.dart';
 
 class AddFriend extends StatefulWidget {
+  final MainModel model;
+  AddFriend(this.model);
+
   AddFriendState createState() => AddFriendState();
 }
 
