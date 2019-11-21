@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:unicorndial/unicorndial.dart';
 import 'package:voting_app/services/main_model.dart';
 import '../model/person.dart';
-import 'global/widgets/custom_app_bar.dart';
+import 'global/constant.dart';
+import 'global/widgets/navigation_drawer.dart';
 
 class MyVotingTableList extends StatefulWidget {
   final MainModel model;
@@ -89,12 +91,11 @@ class MyVotingTableState extends State<MyVotingTableList> {
     );
 
     return Scaffold(
-      appBar: CustomAppBar.getAppBar(
-        context,
-        Row(
-          children: <Widget>[Text('Ver Mi Mesa')],
-        ),
+      appBar: GradientAppBar(
+        title: Text('Ver Mi Mesa'),
+        gradient: Constant.appBarGradient,
       ),
+      drawer: NavigationDrawer(model: widget.model),
       floatingActionButton: floatingAction,
       body: ListView.separated(
         separatorBuilder: (context, index) => Divider(

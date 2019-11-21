@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/widgets/navigation_drawer.dart';
 
 import 'global/constant.dart';
-import 'global/widgets/custom_app_bar.dart';
 
 class Home extends StatefulWidget {
   final MainModel model;
@@ -15,13 +15,11 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: CustomAppBar.getAppBar(
-        context,
-        Row(
-          children: <Widget>[Text('Inicio')],
-        ),
+      appBar: GradientAppBar(
+        title: Text('Inicio'),
+        gradient: Constant.appBarGradient,
       ),
-      drawer: NavigationDrawer(),
+      drawer: NavigationDrawer(model: widget.model),
       backgroundColor: Colors.white,
       // floatingActionButton: floatingAction,
       body: ListView(

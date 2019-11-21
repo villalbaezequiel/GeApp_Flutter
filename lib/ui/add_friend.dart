@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:voting_app/services/main_model.dart';
 
-import 'global/widgets/custom_app_bar.dart';
+import 'global/constant.dart';
+import 'global/widgets/navigation_drawer.dart';
 
 class AddFriend extends StatefulWidget {
   final MainModel model;
@@ -34,12 +36,11 @@ class AddFriendState extends State<AddFriend> {
   Widget build(BuildContext context) {
     //return Center(child: Text('AddFriend'),);
     return Scaffold(
-      appBar: CustomAppBar.getAppBar(
-        context,
-        Row(
-          children: <Widget>[Text('Agregar Amigo')],
-        ),
+      appBar: GradientAppBar(
+        title: Text('Agregar Amigo'),
+        gradient: Constant.appBarGradient,
       ),
+      drawer: NavigationDrawer(model: widget.model),
       body: Container(
         padding: const EdgeInsets.all(10.0),
         child: ListView(

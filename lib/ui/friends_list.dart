@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:voting_app/services/main_model.dart';
 import '../model/person.dart';
-import 'global/widgets/custom_app_bar.dart';
+import 'global/constant.dart';
+import 'global/widgets/navigation_drawer.dart';
 
 class FriendsList extends StatefulWidget {
   final MainModel model;
@@ -77,12 +79,11 @@ class FriendsListState extends State<FriendsList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar.getAppBar(
-        context,
-        Row(
-          children: <Widget>[Text('Mis Amigos ')],
-        ),
+      appBar: GradientAppBar(
+        title: Text('Mis Amigos '),
+        gradient: Constant.appBarGradient,
       ),
+      drawer: NavigationDrawer(model: widget.model),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.of(context).pushNamed('/add_friend'),
         tooltip: 'Agregar Amigo',

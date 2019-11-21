@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:voting_app/services/main_model.dart';
 
-import 'global/widgets/custom_app_bar.dart';
+import 'global/constant.dart';
+import 'global/widgets/navigation_drawer.dart';
 
 class PersonDetails extends StatefulWidget {
   final MainModel model;
@@ -15,11 +17,11 @@ class _PersonDetailsState extends State<PersonDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar.getAppBar(
-          context,
-          Row(
-            children: <Widget>[Text('Me')],
-          )),
+      appBar: GradientAppBar(
+        title: Text('Me'),
+        gradient: Constant.appBarGradient,
+      ),
+      drawer: NavigationDrawer(model: widget.model),
       body: ListView(
         children: <Widget>[
           ListTile(

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 
-import 'global/widgets/custom_app_bar.dart';
+import 'global/constant.dart';
+import 'global/widgets/navigation_drawer.dart';
 
 class Help extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar.getAppBar(
-        context,
-        Row(
-          children: <Widget>[Text('Ayuda')],
-        ),
+      appBar: GradientAppBar(
+        title: Text('Ayuda'),
+        gradient: Constant.appBarGradient,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
