@@ -7,9 +7,7 @@ import 'package:voting_app/model/person.dart';
 mixin MeService on Model {
   Person _me;
 
-  Person getUser() {
-    return _me;
-  }
+  Person get user => _me;
 
   loadUsesr() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -17,6 +15,11 @@ mixin MeService on Model {
     if (userString != null) {
       _me = Person.fromString(json.decode(userString));
     }
+    notifyListeners();
+  }
+
+  setUser(Person user) {
+    _me = user;
     notifyListeners();
   }
 }

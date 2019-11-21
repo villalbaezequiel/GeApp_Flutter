@@ -11,7 +11,6 @@ import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 import 'package:http/http.dart' as http;
 
 import 'global/constant.dart';
-import 'home.dart';
 
 class Login extends StatefulWidget {
   final MainModel model;
@@ -59,7 +58,8 @@ class LoginState extends State<Login> {
           Map<String, dynamic> mapResponse = json.decode(res.body);
           Person user = Person.fromJson(mapResponse);
           await user.savePersonToSharedPref(json.encode(user));
-          _goToHome(user);
+          widget.model.setUser(user);
+          _goToHome();
           break;
         case 401:
           commonWidgests.showToast("DNI o contraseña invalida");
@@ -153,17 +153,9 @@ class LoginState extends State<Login> {
     );
   }
 
-  void _goToHome(Person user) {
+  void _goToHome() {
     commonWidgests.showToast("Sucessfully logged in");
     Navigator.of(context)
         .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => Home(
-            widget.model,
-          ),
-        ),
-        (Route<dynamic> route) => false);
   }
 }

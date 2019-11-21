@@ -56,7 +56,7 @@ class SignUpState extends State<SignUp> {
 
       switch (res.statusCode) {
         case 200:
-          commonWidgests.showToast("User successsfully created");
+          commonWidgests.showToast("Usuario creado satisfactoriamente ");
           Navigator.of(context).pop();
           break;
         default:

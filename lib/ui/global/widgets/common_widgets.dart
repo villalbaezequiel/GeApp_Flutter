@@ -14,8 +14,7 @@ class CommonWidgest {
             padding: EdgeInsets.all(10.0),
             child: Column(
               children: <Widget>[
-                // TODO need to change to spanish
-                Text("Processing your request"),
+                Text("Procesando el pedido"),
                 SizedBox(
                   height: 20.0,
                 ),

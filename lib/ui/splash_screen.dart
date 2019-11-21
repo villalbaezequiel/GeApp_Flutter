@@ -51,10 +51,10 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   checkLoggedIn() async {
-    Person user = widget.model.getUser();
+    Person user = widget.model.user;
     if (user == null) {
       await loadData();
-      user = widget.model.getUser();
+      user = widget.model.user;
 
       (user != null) ? _goToHome() : _goToLogin();
     } else {
