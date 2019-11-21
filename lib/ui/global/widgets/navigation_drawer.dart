@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/drawer_item.dart';
 import 'package:voting_app/services/main_model.dart';
 
@@ -20,7 +21,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   }
 
   Future fetchData() async {
-    widget.model.loadUsesr();
+    widget.model.loadUser();
   }
 
   @override
@@ -45,9 +46,11 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                 " " +
                 widget.model.user.lastName.toString()),
       ),
-      accountEmail: Text((widget.model.user == null)
-          ? "DNI: 1234567890"
-          : "DNI: ${widget.model.user.nationalId.toString()}"),
+      accountEmail: Text(
+        (widget.model.user == null)
+            ? "DNI: 1234567890"
+            : "DNI: ${widget.model.user.nationalId.toString()}",
+      ),
       currentAccountPicture: CircleAvatar(
         backgroundColor: Colors.blue,
         child: Text(
@@ -59,25 +62,52 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       ),
     );
     drawerOptions.add(headerView);
-    for (var i = 0; i < drawerItems.length; i++) {
-      var d = drawerItems[i];
-      if (i == drawerItems.length - 1) {
+    for (var index = 0; index < drawerItems.length; index++) {
+      var currentDrawerItem = drawerItems[index];
+      if (index == drawerItems.length - 1) {
         drawerOptions.add(Divider());
       }
       drawerOptions.add(
         ListTile(
-          leading: Icon(d.icon),
+          leading: Icon(currentDrawerItem.icon),
           title: Text(
-            d.title,
+            currentDrawerItem.title,
             style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w400),
           ),
-          selected: i == widget.model.getCuttentIndex(),
-          onTap: () {},
+          selected: (currentDrawerItem.route == widget.model.currentRoute),
+          onTap: () {
+            Navigator.of(context).pop();
+            if (currentDrawerItem.route == widget.model.currentRoute)
+              return true;
+
+            switch (currentDrawerItem.route) {
+              case "/home":
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    currentDrawerItem.route, (Route<dynamic> route) => false);
+                break;
+
+              case "/login":
+                widget.model.logout();
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    currentDrawerItem.route, (Route<dynamic> route) => false);
+                break;
+
+              default:
+                Navigator.of(context).pushNamed(currentDrawerItem.route);
+            }
+            widget.model.setRouteAndIndex(currentDrawerItem.route);
+            return true;
+          },
         ),
       );
     }
-    return Drawer(
-      child: ListView(padding: EdgeInsets.zero, children: drawerOptions),
+
+    return ScopedModelDescendant<MainModel>(
+      builder: (context, child, model) {
+        return Drawer(
+          child: ListView(padding: EdgeInsets.zero, children: drawerOptions),
+        );
+      },
     );
   }
 }

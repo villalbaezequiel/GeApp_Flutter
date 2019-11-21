@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/widgets/navigation_drawer.dart';
 
@@ -14,29 +15,33 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: GradientAppBar(
-        title: Text('Inicio'),
-        gradient: Constant.appBarGradient,
-      ),
-      drawer: NavigationDrawer(model: widget.model),
-      backgroundColor: Colors.white,
-      // floatingActionButton: floatingAction,
-      body: ListView(
-        children: <Widget>[
-          Image.asset(
-            'assets/images/logo2.png',
-            height: 150,
+    return ScopedModelDescendant<MainModel>(
+      builder: (context, child, model) {
+        return new Scaffold(
+          appBar: GradientAppBar(
+            title: Text('Inicio'),
+            gradient: Constant.appBarGradient,
           ),
-          SizedBox(height: 30),
-          homeButton('Agregar amigo', '/add_friend', Icons.person_add),
-          homeButton('Mis amigos', '/friends_list', Icons.group),
-          homeButton('Ver mi mesa', '/my_voting_table_list', Icons.list),
-          homeButton('Escrutinio', '/escrutinio', Icons.check_circle),
-          homeButton('Ayuda', '/help', Icons.help_outline),
-          SizedBox(height: 30),
-        ],
-      ),
+          drawer: NavigationDrawer(model: widget.model),
+          backgroundColor: Colors.white,
+          // floatingActionButton: floatingAction,
+          body: ListView(
+            children: <Widget>[
+              Image.asset(
+                'assets/images/logo2.png',
+                height: 150,
+              ),
+              SizedBox(height: 30),
+              homeButton('Agregar amigo', '/add_friend', Icons.person_add),
+              homeButton('Mis amigos', '/friends_list', Icons.group),
+              homeButton('Ver mi mesa', '/my_voting_table_list', Icons.list),
+              homeButton('Escrutinio', '/escrutinio', Icons.check_circle),
+              homeButton('Ayuda', '/help', Icons.help_outline),
+              SizedBox(height: 30),
+            ],
+          ),
+        );
+      },
     );
   }
 

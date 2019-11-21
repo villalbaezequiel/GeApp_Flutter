@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-import '../services/main_model.dart';
 import '../model/person.dart';
+import '../services/main_model.dart';
 
 class SplashScreen extends StatefulWidget {
   final MainModel model;
@@ -19,10 +19,6 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     checkLoggedIn();
-  }
-
-  Future loadData() async {
-    widget.model.loadUsesr();
   }
 
   @override
@@ -53,14 +49,14 @@ class _SplashScreenState extends State<SplashScreen> {
   checkLoggedIn() async {
     Person user = widget.model.user;
     if (user == null) {
-      await loadData();
+      await widget.model.loadUser();
       user = widget.model.user;
 
       (user != null) ? _goToHome() : _goToLogin();
     } else {
       Timer(
         Duration(seconds: 3),
-        _goToLogin(),
+        _goToHome(),
       );
     }
   }

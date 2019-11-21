@@ -9,7 +9,7 @@ mixin MeService on Model {
 
   Person get user => _me;
 
-  loadUsesr() async {
+  loadUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userString = prefs.getString('user');
     if (userString != null) {
@@ -20,6 +20,12 @@ mixin MeService on Model {
 
   setUser(Person user) {
     _me = user;
+    notifyListeners();
+  }
+
+  logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
     notifyListeners();
   }
 }
