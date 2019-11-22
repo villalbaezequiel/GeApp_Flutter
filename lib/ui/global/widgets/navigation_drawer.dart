@@ -62,6 +62,18 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       ),
     );
     drawerOptions.add(headerView);
+
+    String currentRoute(context) {
+      String currentRoute = '';
+      Navigator.popUntil(context, (route) {
+        currentRoute = route.settings.name;
+        return true;
+      });
+      return currentRoute;
+    }
+
+    ;
+
     for (var index = 0; index < drawerItems.length; index++) {
       var currentDrawerItem = drawerItems[index];
       if (index == drawerItems.length - 1) {
@@ -74,11 +86,10 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
             currentDrawerItem.title,
             style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w400),
           ),
-          selected: (currentDrawerItem.route == widget.model.currentRoute),
+          selected: (currentDrawerItem.route == currentRoute(context)),
           onTap: () {
             Navigator.of(context).pop();
-            if (currentDrawerItem.route == widget.model.currentRoute)
-              return true;
+            if (currentDrawerItem.route == currentRoute(context)) return true;
 
             switch (currentDrawerItem.route) {
               case "/home":
@@ -95,7 +106,6 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
               default:
                 Navigator.of(context).pushNamed(currentDrawerItem.route);
             }
-            widget.model.setRouteAndIndex(currentDrawerItem.route);
             return true;
           },
         ),

@@ -16,8 +16,19 @@ class Constant {
     colors: [Constant.primary, Constant.ascent],
   );
 
+  // headers
+  static Map<String, String> headers = {
+    'Content-Type': 'application/json',
+    "Accept": "application/json",
+  };
+
   // API Endpoints base url
   static const String baseUrl = 'http://18.231.45.56:3000/api/';
+
+  // user endpoints
   static const String login = 'user/login';
   static const String createUser = 'user/';
+
+// friends endpoints
+  static const String friends = "friend/";
 }

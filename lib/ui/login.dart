@@ -3,12 +3,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/error.dart';
 import 'package:voting_app/model/person.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
-import 'package:http/http.dart' as http;
 
 import 'global/constant.dart';
 
@@ -45,11 +45,8 @@ class LoginState extends State<Login> {
       };
 
       var body = json.encode(params);
-      final res = await http
-          .post(Constant.baseUrl + Constant.login, body: body, headers: {
-        'Content-Type': 'application/json',
-        "Accept": "application/json",
-      });
+      final res = await http.post(Constant.baseUrl + Constant.login,
+          body: body, headers: Constant.headers);
 
       Navigator.of(context).pop();
 
