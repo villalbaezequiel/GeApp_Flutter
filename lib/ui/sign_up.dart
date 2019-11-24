@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/error.dart';
 import 'package:voting_app/services/main_model.dart';
+import 'package:voting_app/ui/global/utils/text_style_utils.dart';
 
 import 'global/constant.dart';
 import 'global/widgets/common_widgets.dart';
@@ -47,7 +48,7 @@ class SignUpState extends State<SignUp> {
 
       var body = json.encode(params);
       final res = await http
-          .post(Constant.baseUrl + Constant.login, body: body, headers: {
+          .post(Constant.baseUrl + Constant.createUser, body: body, headers: {
         'Content-Type': 'application/json',
         "Accept": "application/json",
       });
@@ -152,7 +153,10 @@ class SignUpState extends State<SignUp> {
                         RaisedButton(
                           color: Theme.of(context).accentColor,
                           textColor: Colors.white,
-                          child: Text('REGISTRARSE'),
+                          child: Text(
+                            'REGISTRARSE',
+                            style: TextStyleUtils.bottonAndAppBarStyle,
+                          ),
                           onPressed: /*_submit*/ () {
                             // _asyncInputDialog(context);
                             _submit();

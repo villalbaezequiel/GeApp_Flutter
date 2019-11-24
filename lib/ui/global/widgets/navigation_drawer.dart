@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/drawer_item.dart';
 import 'package:voting_app/services/main_model.dart';
+import 'package:voting_app/ui/global/utils/text_style_utils.dart';
 
 import '../constant.dart';
 
@@ -84,7 +85,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           leading: Icon(currentDrawerItem.icon),
           title: Text(
             currentDrawerItem.title,
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w400),
+            style: TextStyleUtils.drawerTextStyle,
           ),
           selected: (currentDrawerItem.route == currentRoute(context)),
           onTap: () {

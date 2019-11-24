@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/services/main_model.dart';
+import 'package:voting_app/ui/global/utils/text_style_utils.dart';
 import 'package:voting_app/ui/global/widgets/navigation_drawer.dart';
 
 import 'global/constant.dart';
@@ -68,11 +69,7 @@ class HomeState extends State<Home> {
               SizedBox(width: 10),
               Text(
                 title.toUpperCase(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: TextStyleUtils.bottonAndAppBarStyle,
               ),
             ],
           ),

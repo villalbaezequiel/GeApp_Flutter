@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:voting_app/ui/global/utils/text_style_utils.dart';
 import 'package:voting_app/ui/splash_screen.dart';
 
 import 'services/main_model.dart';
@@ -40,6 +41,12 @@ class _MyAppState extends State<MyApp> {
           primaryColor: Constant.primary,
           accentColor: Constant.ascent,
           scaffoldBackgroundColor: Constant.bgColor,
+          appBarTheme: AppBarTheme(
+            textTheme: TextTheme(
+              title: TextStyleUtils.bottonAndAppBarStyle,
+            ),
+          ),
+          fontFamily: 'Helvetica',
         ),
         home: SplashScreen(model),
         routes: <String, WidgetBuilder>{

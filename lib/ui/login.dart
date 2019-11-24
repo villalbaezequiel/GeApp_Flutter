@@ -8,6 +8,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/error.dart';
 import 'package:voting_app/model/person.dart';
 import 'package:voting_app/services/main_model.dart';
+import 'package:voting_app/ui/global/utils/text_style_utils.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 
 import 'global/constant.dart';
@@ -54,7 +55,7 @@ class LoginState extends State<Login> {
         case 200:
           Map<String, dynamic> mapResponse = json.decode(res.body);
           Person user = Person.fromJson(mapResponse);
-          await user.savePersonToSharedPref(json.encode(user));
+          await widget.model.savePersonToSharedPref(json.encode(user));
           widget.model.setUser(user);
           _goToHome();
           break;
@@ -118,7 +119,7 @@ class LoginState extends State<Login> {
                           obscureText: true,
                           decoration: InputDecoration(
                             hintText: "",
-                            labelText: "Password",
+                            labelText: "Contraseña",
                           ),
                           onSaved: (val) => _password = val,
                         ),
@@ -126,7 +127,10 @@ class LoginState extends State<Login> {
                         RaisedButton(
                           color: Theme.of(context).accentColor,
                           textColor: Colors.white,
-                          child: Text('INGRESAR'),
+                          child: Text(
+                            'INGRESAR',
+                            style: TextStyleUtils.bottonAndAppBarStyle,
+                          ),
                           onPressed: _submit,
                         ),
                       ],
@@ -136,7 +140,10 @@ class LoginState extends State<Login> {
                 FlatButton(
                   child: Text(
                     'Registrarse',
-                    style: TextStyle(color: Colors.black54),
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontFamily: 'Dosis',
+                    ),
                   ),
                   onPressed: () {
                     Navigator.pushNamed(context, "/sign_up");

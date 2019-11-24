@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:voting_app/services/main_model.dart';
+import 'package:voting_app/ui/global/utils/text_style_utils.dart';
 
 import 'global/constant.dart';
 import 'global/widgets/navigation_drawer.dart';
@@ -27,9 +28,12 @@ class AddFriendState extends State<AddFriend> {
     }
   }
 
-  void performSubmit() {
+  void performSubmit() async {
     //final snackbar = SnackBar(content: Text('Email $_nationalId , Nro: $_phoneNumber'),);
-    print('Email $_nationalId , Nro: $_phoneNumber');
+    // print('Email $_nationalId , Nro: $_phoneNumber');
+
+    await widget.model
+        .addFriend(widget.model, _nationalId, _email, _phoneNumber);
   }
 
   @override
@@ -84,7 +88,10 @@ class AddFriendState extends State<AddFriend> {
                       RaisedButton(
                         color: Theme.of(context).accentColor,
                         textColor: Colors.white,
-                        child: Text('AGREGAR'),
+                        child: Text(
+                          'AGREGAR',
+                          style: TextStyleUtils.bottonAndAppBarStyle,
+                        ),
                         onPressed: _submit,
                       )
                     ],

@@ -28,4 +28,9 @@ mixin MeService on Model {
     await prefs.clear();
     notifyListeners();
   }
+
+  savePersonToSharedPref(String userData) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("user", userData);
+  }
 }

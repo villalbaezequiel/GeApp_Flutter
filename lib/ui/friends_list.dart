@@ -5,6 +5,7 @@ import 'package:voting_app/services/main_model.dart';
 
 import '../model/person.dart';
 import 'global/constant.dart';
+import 'global/utils/text_style_utils.dart';
 import 'global/widgets/navigation_drawer.dart';
 
 class FriendsList extends StatefulWidget {
@@ -46,21 +47,38 @@ class FriendsListState extends State<FriendsList> {
             ),
             heroTag: 'add_friend',
           ),
-          body: Container(
-            child: model.isLoadingFriends
-                ? Center(child: CircularProgressIndicator())
-                : (model.friendsList.length > 0)
-                    ? RefreshIndicator(
-                        onRefresh: () => model.fetchFriends(model),
-                        child: ListView.builder(
-                          itemCount: model.friendsCount,
-                          itemBuilder: (context, index) {
-                            var friend = model.friendsList[index];
-                            return FriendListItem(friend);
-                          },
-                        ),
-                      )
-                    : Center(child: Text("There are no friends in your list.")),
+          body: Column(
+            children: <Widget>[
+              Expanded(
+                child: model.isLoadingFriends
+                    ? Center(child: CircularProgressIndicator())
+                    : (model.friendsList.length > 0)
+                        ? RefreshIndicator(
+                            onRefresh: () => model.fetchFriends(model),
+                            child: ListView.builder(
+                              itemCount: model.friendsCount,
+                              itemBuilder: (context, index) {
+                                var friend = model.friendsList[index];
+                                return friendListItem(friend);
+                              },
+                            ),
+                          )
+                        : Center(
+                            child: Text("There are no friends in your list.")),
+              ),
+              Container(
+                padding: EdgeInsets.all(10),
+                color: Colors.grey[200],
+                child: Center(
+                  child: Text(
+                    "Última actualización: 23:15 24/05/19",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyleUtils.bottomTimeBar,
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },
@@ -70,18 +88,11 @@ class FriendsListState extends State<FriendsList> {
   Widget titleForFriendList() {
     int friendsCount = widget.model.friendsCount;
     return (friendsCount > 0)
-        ? Text("Mis Amigos (${friendsCount})")
+        ? Text("Mis Amigos ($friendsCount)")
         : Text("Mis Amigos");
   }
-}
 
-class FriendListItem extends StatelessWidget {
-  final Person _person;
-
-  FriendListItem(this._person);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget friendListItem(Person person) {
     return Container(
       decoration: BoxDecoration(
           border: Border(
@@ -89,14 +100,14 @@ class FriendListItem extends StatelessWidget {
       )),
       child: ListTile(
         title: Text(
-            '${_person.firstName} ${_person.lastName}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black),*/),
-        subtitle: Text('DNI: ${_person.nationalId}'),
+            '${person.firstName} ${person.lastName}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black),*/),
+        subtitle: Text('DNI: ${person.nationalId}'),
         // trailing: Text(
         //     '${_person.id}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black)*/),
         isThreeLine: false,
         dense: false,
         onTap: () {
-          print('${_person.firstName}');
+          print('${person.firstName}');
         },
       ),
     );

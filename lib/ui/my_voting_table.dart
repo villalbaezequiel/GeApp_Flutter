@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:unicorndial/unicorndial.dart';
 import 'package:voting_app/services/main_model.dart';
+import 'package:voting_app/ui/global/utils/text_style_utils.dart';
 import '../model/person.dart';
 import 'global/constant.dart';
 import 'global/widgets/navigation_drawer.dart';
@@ -166,13 +167,19 @@ class MyVotingTableState extends State<MyVotingTableList> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Ok'),
+              child: Text(
+                'Ok',
+                style: TextStyleUtils.bottonAndAppBarStyle,
+              ),
               onPressed: () {
                 Navigator.of(context).pop(teamName);
               },
             ),
             FlatButton(
-              child: Text('Cancelar'),
+              child: Text(
+                'Cancelar',
+                style: TextStyleUtils.bottonAndAppBarStyle,
+              ),
               onPressed: () {
                 Navigator.of(context).pop(teamName);
               },
