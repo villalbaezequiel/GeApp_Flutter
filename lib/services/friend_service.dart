@@ -87,7 +87,7 @@ mixin FriendService on Model {
       if (response.statusCode == 200) {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         Person user = Person.fromJson(mapResponse);
-        addToList(user);
+        addToFriendsList(user);
         _isLoadingFriends = false;
         notifyListeners();
         return true;
@@ -121,7 +121,7 @@ mixin FriendService on Model {
           });
 
       if (response.statusCode == 200) {
-        removeFromList(person);
+        removeFromFriendsList(person);
         _isLoadingFriends = false;
         notifyListeners();
         return true;
@@ -150,7 +150,7 @@ mixin FriendService on Model {
     notifyListeners();
   }
 
-  addToList(Person person) {
+  addToFriendsList(Person person) {
     var existingItem = _friendsList.firstWhere(
         (itemToCheck) => (itemToCheck.id == person.id),
         orElse: () => null);
@@ -160,7 +160,7 @@ mixin FriendService on Model {
   }
 
   /// Remove the entry and save to disk.
-  removeFromList(Person person) {
+  removeFromFriendsList(Person person) {
     var existingItem = _friendsList.firstWhere(
         (itemToCheck) => (itemToCheck.id == person.id),
         orElse: () => null);

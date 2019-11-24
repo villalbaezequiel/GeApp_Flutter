@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/text_style_utils.dart';
+import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 
 import 'global/constant.dart';
 import 'global/widgets/navigation_drawer.dart';
@@ -20,6 +21,8 @@ class AddFriendState extends State<AddFriend> {
   String _email;
   String _phoneNumber;
 
+  CommonWidgest commonWidgest = CommonWidgest();
+
   void _submit() {
     final form = formKey.currentState;
     if (form.validate()) {
@@ -29,16 +32,14 @@ class AddFriendState extends State<AddFriend> {
   }
 
   void performSubmit() async {
-    //final snackbar = SnackBar(content: Text('Email $_nationalId , Nro: $_phoneNumber'),);
-    // print('Email $_nationalId , Nro: $_phoneNumber');
-
+    commonWidgest.progressDialog(context);
     await widget.model
         .addFriend(widget.model, _nationalId, _email, _phoneNumber);
+    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    //return Center(child: Text('AddFriend'),);
     return Scaffold(
       appBar: GradientAppBar(
         title: Text('Agregar Amigo'),
