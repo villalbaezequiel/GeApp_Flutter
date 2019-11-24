@@ -36,12 +36,16 @@ class FriendsListState extends State<FriendsList> {
             gradient: Constant.appBarGradient,
           ),
           drawer: NavigationDrawer(model: model),
-          floatingActionButton: FloatingActionButton(
+          floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
               Navigator.of(context).pushNamed('/add_friend');
             },
             tooltip: 'Agregar Amigo',
-            child: Icon(
+            label: Text(
+              'Fiscalizar',
+              style: TextStyleUtils.bottonAndAppBarStyle,
+            ),
+            icon: Icon(
               Icons.person_add,
               color: Colors.white,
             ),
@@ -50,22 +54,15 @@ class FriendsListState extends State<FriendsList> {
           body: Column(
             children: <Widget>[
               Expanded(
-                child: model.isLoadingFriends
-                    ? Center(child: CircularProgressIndicator())
-                    : (model.friendsList.length > 0)
-                        ? RefreshIndicator(
-                            onRefresh: () => model.fetchFriends(model),
-                            child: ListView.builder(
-                              itemCount: model.friendsCount,
-                              itemBuilder: (context, index) {
-                                var friend = model.friendsList[index];
-                                return friendListItem(friend);
-                              },
-                            ),
-                          )
-                        : Center(
-                            child: Text("There are no friends in your list.")),
-              ),
+                  child: ListView(
+                children: <Widget>[
+                  friendListItem(Person(
+                      id: 213,
+                      firstName: 'Rafael',
+                      lastName: 'Fortunato Cambareri',
+                      nationalId: '22.263.164'))
+                ],
+              )),
               Container(
                 padding: EdgeInsets.all(10),
                 color: Colors.grey[200],
@@ -102,8 +99,7 @@ class FriendsListState extends State<FriendsList> {
         title: Text(
             '${person.firstName} ${person.lastName}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black),*/),
         subtitle: Text('DNI: ${person.nationalId}'),
-        // trailing: Text(
-        //     '${_person.id}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black)*/),
+        trailing: Text(person.id.toString()),
         isThreeLine: false,
         dense: false,
         onTap: () {

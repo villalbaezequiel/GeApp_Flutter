@@ -107,7 +107,7 @@ mixin FriendService on Model {
     }
   }
 
-  Future deleteFriend(MainModel model, Person person) async {
+  Future<bool> deleteFriend(MainModel model, Person person) async {
     try {
       _isLoadingFriends = true;
       notifyListeners();
@@ -124,6 +124,7 @@ mixin FriendService on Model {
         removeFromList(person);
         _isLoadingFriends = false;
         notifyListeners();
+        return true;
       } else {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         Errors errors = new Errors.fromJson(mapResponse['errors']);
@@ -131,10 +132,12 @@ mixin FriendService on Model {
         _isLoadingFriends = false;
         notifyListeners();
         // throw Exception('failed to load data');
+        return false;
       }
     } catch (error) {
       _isLoadingFriends = false;
       catchExceptions(error);
+      return false;
     }
   }
 

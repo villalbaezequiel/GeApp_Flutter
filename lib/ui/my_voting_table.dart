@@ -93,7 +93,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
 
     return Scaffold(
       appBar: GradientAppBar(
-        title: Text('Ver Mi Mesa'),
+        title: Text('Mi Mesa'),
         gradient: Constant.appBarGradient,
       ),
       drawer: NavigationDrawer(model: widget.model),

@@ -35,7 +35,7 @@ class HomeState extends State<Home> {
               SizedBox(height: 30),
               homeButton('Agregar amigo', '/add_friend', Icons.person_add),
               homeButton('Mis amigos', '/friends_list', Icons.group),
-              homeButton('Ver mi mesa', '/my_voting_table_list', Icons.list),
+              homeButton('Mi mesa', '/my_voting_table_list', Icons.list),
               homeButton('Escrutinio', '/escrutinio', Icons.check_circle),
               homeButton('Ayuda', '/help', Icons.help_outline),
               SizedBox(height: 30),
