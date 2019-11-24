@@ -90,6 +90,7 @@ mixin FriendService on Model {
         addToFriendsList(user);
         _isLoadingFriends = false;
         notifyListeners();
+        commonWidgests.showToast("Con éxito amigo añadido.");
         return true;
       } else {
         Map<String, dynamic> mapResponse = json.decode(response.body);
