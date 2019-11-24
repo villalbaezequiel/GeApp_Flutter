@@ -65,7 +65,7 @@ mixin FriendService on Model {
     }
   }
 
-  Future<Person> addFriend(MainModel model, String nationalId, String email,
+  Future<bool> addFriend(MainModel model, String nationalId, String email,
       String phoneNumber) async {
     try {
       var params = {
@@ -90,20 +90,20 @@ mixin FriendService on Model {
         addToList(user);
         _isLoadingFriends = false;
         notifyListeners();
+        return true;
       } else {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         Errors errors = new Errors.fromJson(mapResponse['errors']);
         commonWidgests.showToast(errors.message);
         _isLoadingFriends = false;
         notifyListeners();
-        // throw Exception('failed to load data');
+        return false;
       }
-      return null;
     } catch (error) {
       _isLoadingFriends = false;
 
       catchExceptions(error);
-      return null;
+      return false;
     }
   }
 

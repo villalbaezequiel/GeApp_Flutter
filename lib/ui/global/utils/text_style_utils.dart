@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class TextStyleUtils {
   static TextStyle bottomTimeBar = TextStyle(
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
+    fontSize: 10,
     // fontSize: SizeUtils.twenty,
   );
 

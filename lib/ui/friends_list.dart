@@ -54,17 +54,32 @@ class FriendsListState extends State<FriendsList> {
           body: Column(
             children: <Widget>[
               Expanded(
-                  child: ListView(
-                children: <Widget>[
-                  friendListItem(Person(
-                      id: 213,
-                      firstName: 'Rafael',
-                      lastName: 'Fortunato Cambareri',
-                      nationalId: '22.263.164'))
-                ],
-              )),
+                // child: ListView(
+                //   children: <Widget>[
+                //     friendListItem(Person(
+                //         id: 213,
+                //         firstName: 'Rafael',
+                //         lastName: 'Fortunato Cambareri',
+                //         nationalId: '22.263.164'))
+                //   ],
+                // ),
+                child: model.isLoadingFriends
+                    ? Center(child: CircularProgressIndicator())
+                    : (model.friendsList.length > 0)
+                        ? RefreshIndicator(
+                            onRefresh: () => model.fetchFriends(model),
+                            child: ListView.builder(
+                              itemCount: model.friendsCount,
+                              itemBuilder: (context, index) {
+                                var friend = model.friendsList[index];
+                                return friendListItem(friend);
+                              },
+                            ),
+                          )
+                        : Center(child: Text("No hay amigos en tu lista.")),
+              ),
               Container(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(5),
                 color: Colors.grey[200],
                 child: Center(
                   child: Text(

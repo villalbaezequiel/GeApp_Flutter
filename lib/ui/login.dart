@@ -158,7 +158,7 @@ class LoginState extends State<Login> {
   }
 
   void _goToHome() {
-    commonWidgests.showToast("Sucessfully logged in");
+    commonWidgests.showToast("Sesión iniciada");
     Navigator.of(context)
         .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
   }
