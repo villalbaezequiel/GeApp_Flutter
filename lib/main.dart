@@ -47,6 +47,8 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           fontFamily: 'Helvetica',
+          floatingActionButtonTheme:
+              FloatingActionButtonThemeData(foregroundColor: Colors.white),
         ),
         home: SplashScreen(model),
         routes: <String, WidgetBuilder>{

@@ -1,0 +1,53 @@
+import 'citizen.dart';
+
+class Voter {
+  int id;
+  String order;
+  bool voted;
+  bool isOwner;
+  String createdAt;
+  String updatedAt;
+  int citizenId;
+  int votingtableId;
+  Citizen citizen;
+
+  Voter(
+      {this.id,
+      this.order,
+      this.voted,
+      this.isOwner,
+      this.createdAt,
+      this.updatedAt,
+      this.citizenId,
+      this.votingtableId,
+      this.citizen});
+
+  Voter.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    order = json['order'];
+    voted = json['voted'];
+    isOwner = json['isOwner'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    citizenId = json['citizenId'];
+    votingtableId = json['votingtableId'];
+    citizen =
+        json['citizen'] != null ? new Citizen.fromJson(json['citizen']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['order'] = this.order;
+    data['voted'] = this.voted;
+    data['isOwner'] = this.isOwner;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    data['citizenId'] = this.citizenId;
+    data['votingtableId'] = this.votingtableId;
+    if (this.citizen != null) {
+      data['citizen'] = this.citizen.toJson();
+    }
+    return data;
+  }
+}

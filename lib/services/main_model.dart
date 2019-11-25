@@ -1,6 +1,7 @@
 import 'package:scoped_model/scoped_model.dart';
+import 'package:voting_app/services/voting_service.dart';
 
 import 'friend_service.dart';
 import 'me_service.dart';
 
-class MainModel extends Model with MeService, FriendService {}
+class MainModel extends Model with MeService, FriendService, VotingService {}

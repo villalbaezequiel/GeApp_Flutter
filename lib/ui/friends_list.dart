@@ -36,16 +36,12 @@ class FriendsListState extends State<FriendsList> {
             gradient: Constant.appBarGradient,
           ),
           drawer: NavigationDrawer(model: model),
-          floatingActionButton: FloatingActionButton.extended(
+          floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.of(context).pushNamed('/add_friend');
             },
             tooltip: 'Agregar Amigo',
-            label: Text(
-              'Fiscalizar',
-              style: TextStyleUtils.bottonAndAppBarStyle,
-            ),
-            icon: Icon(
+            child: Icon(
               Icons.person_add,
               color: Colors.white,
             ),

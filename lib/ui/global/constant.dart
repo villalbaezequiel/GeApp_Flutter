@@ -29,6 +29,9 @@ class Constant {
   static const String login = 'user/login';
   static const String createUser = 'user/';
 
-// friends endpoints
+  // friends endpoints
   static const String friends = "friend/";
+
+  // voting table
+  static const String votingTable = "voting-table/";
 }

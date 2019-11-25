@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:unicorndial/unicorndial.dart';
+import 'package:voting_app/model/voter.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/text_style_utils.dart';
-import '../model/person.dart';
 import 'global/constant.dart';
 import 'global/widgets/navigation_drawer.dart';
 
@@ -16,106 +17,88 @@ class MyVotingTableList extends StatefulWidget {
 }
 
 class MyVotingTableState extends State<MyVotingTableList> {
-  List<Person> people = [
-    Person(
-        id: 124,
-        firstName: 'Rodrigo Martin',
-        lastName: 'Weisntein',
-        nationalId: '10.252.154'),
-    Person(
-        id: 212,
-        firstName: 'Fernando',
-        lastName: 'Mercado',
-        nationalId: '12.242.451'),
-    Person(
-        id: 24,
-        firstName: 'Elias Nicolas',
-        lastName: 'Jones',
-        nationalId: '11.252.854'),
-    Person(
-        id: 5,
-        firstName: 'Geraldine',
-        lastName: 'Noel Abadie',
-        nationalId: '30.972.154'),
-    Person(
-        id: 54,
-        firstName: 'Fernando',
-        lastName: 'Cambareri',
-        nationalId: '10.223.782'),
-    Person(
-        id: 87,
-        firstName: 'Gerardo',
-        lastName: 'Aguilera',
-        nationalId: '20.212.161'),
-    Person(
-        id: 244,
-        firstName: 'Julio',
-        lastName: 'Mijoc',
-        nationalId: '33.212.256'),
-    Person(
-        id: 213,
-        firstName: 'Rafael',
-        lastName: 'Fortunato Cambareri',
-        nationalId: '22.263.164'),
-    Person(
-        id: 522,
-        firstName: 'Carlos',
-        lastName: 'Gonzalez',
-        nationalId: '2.252.144'),
-    Person(
-        id: 553,
-        firstName: 'Arturo',
-        lastName: 'Perez',
-        nationalId: '31.252.154'),
-    Person(
-        id: 424,
-        firstName: 'Mariano',
-        lastName: 'Moreno',
-        nationalId: '10.522.162'),
-    Person(
-        id: 3,
-        firstName: 'Santiago',
-        lastName: 'Scarcella',
-        nationalId: '05.732.262')
-  ];
+  @override
+  void initState() {
+    super.initState();
+    if (widget.model.votingTable == null) loadVotingTable();
+  }
+
+  Future loadVotingTable() async {
+    widget.model.fetchVotingTable(widget.model);
+  }
 
   @override
   Widget build(BuildContext context) {
     final floatingAction = UnicornDialer(
-      parentHeroTag: 'vote',
+      parentHeroTag: 'vote_parent',
       orientation: UnicornOrientation.VERTICAL,
-      parentButton: Icon(
-        Icons.add,
-        color: Colors.white,
-      ),
-      childButtons: _getProfileMenu(),
+      parentButton: Icon(Icons.add),
+      childButtons: _getFloatingButtons(),
     );
 
-    return Scaffold(
-      appBar: GradientAppBar(
-        title: Text('Mi Mesa'),
-        gradient: Constant.appBarGradient,
-      ),
-      drawer: NavigationDrawer(model: widget.model),
-      floatingActionButton: floatingAction,
-      body: ListView.separated(
-        separatorBuilder: (context, index) => Divider(
-          color: Colors.grey,
-        ),
-        itemCount: people.length,
-        itemBuilder: (context, position) {
-          return MyVotingTableListItem(people[position]);
-        },
-      ),
+    return ScopedModelDescendant<MainModel>(
+      builder: (context, child, model) {
+        return Scaffold(
+          appBar: GradientAppBar(
+            title: titleForVotingTable(),
+            gradient: Constant.appBarGradient,
+          ),
+          drawer: NavigationDrawer(model: widget.model),
+          floatingActionButton: floatingAction,
+          // body: ListView.separated(
+          //   separatorBuilder: (context, index) => Divider(
+          //     color: Colors.grey,
+          //   ),
+          //   itemCount: people.length,
+          //   itemBuilder: (context, position) {
+          //     return MyVotingTableListItem(people[position]);
+          //   },
+          // ),
+          body: Column(
+            children: <Widget>[
+              Expanded(
+                child: widget.model.isloadingVotingTable
+                    ? Center(child: CircularProgressIndicator())
+                    : (widget.model.votingTable.voters.length > 0)
+                        ? RefreshIndicator(
+                            onRefresh: () =>
+                                widget.model.fetchVotingTable(widget.model),
+                            child: ListView.builder(
+                              itemCount: widget.model.votingTable.voters.length,
+                              itemBuilder: (context, index) {
+                                var voter =
+                                    widget.model.votingTable.voters[index];
+                                return voterListItem(voter);
+                              },
+                            ),
+                          )
+                        : Center(child: Text("No votes")),
+              ),
+              Container(
+                padding: EdgeInsets.all(5),
+                color: Colors.grey[200],
+                child: Center(
+                  child: Text(
+                    "Última actualización: 23:15 24/05/19",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyleUtils.bottomTimeBar,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  List<UnicornButton> _getProfileMenu() {
+  List<UnicornButton> _getFloatingButtons() {
     List<UnicornButton> children = [];
 
     // Add Children here
     children.add(
-      _profileOption(
+      _floatingButtons(
         txt: 'Voto',
         iconData: Icons.email,
         onPressed: () {
@@ -124,7 +107,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
       ),
     );
     children.add(
-      _profileOption(
+      _floatingButtons(
         txt: 'Reposición',
         iconData: Icons.library_books,
         onPressed: () {
@@ -237,7 +220,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
     );
   }
 
-  Widget _profileOption({String txt, IconData iconData, Function onPressed}) {
+  Widget _floatingButtons({String txt, IconData iconData, Function onPressed}) {
     return UnicornButton(
       labelText: txt,
       labelHasShadow: true,
@@ -253,26 +236,35 @@ class MyVotingTableState extends State<MyVotingTableList> {
       ),
     );
   }
-}
 
-class MyVotingTableListItem extends StatelessWidget {
-  final Person _person;
+  Widget titleForVotingTable() {
+    if (widget.model.votingTable != null) {
+      return Text("Mi Mesa (${widget.model.votingTable.sumVotes})");
+    } else {
+      return Text("Mi Mesa");
+    }
+  }
 
-  MyVotingTableListItem(this._person);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
-          '${_person.firstName} ${_person.lastName}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black),*/),
-      subtitle: Text('DNI: ${_person.nationalId}'),
-      trailing: Text(
-          '${_person.id}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black)*/),
-      isThreeLine: false,
-      dense: false,
-      onTap: () {
-        print('${_person.firstName}');
-      },
+  Widget voterListItem(Voter voter) {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border(
+        bottom: BorderSide(width: 1.0, color: Colors.grey.shade300),
+      )),
+      child: ListTile(
+        title: Text(
+            '${voter.citizen.first} ${voter.citizen.last}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black),*/),
+        subtitle: Text('DNI: ${voter.citizen.nationalId}'),
+        trailing: Text(voter.order.toString()),
+        isThreeLine: false,
+        dense: false,
+        leading: (voter.voted)
+            ? Icon(Icons.brightness_1, color: Colors.green, size: 14)
+            : Icon(Icons.brightness_low, color: Colors.transparent, size: 14),
+        onTap: () {
+          print('${voter.citizen.first}');
+        },
+      ),
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../constant.dart';
+
 class CommonWidgest {
   Future progressDialog(BuildContext context) {
     return showDialog(
@@ -38,7 +40,7 @@ class CommonWidgest {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIos: 1,
-      backgroundColor: Colors.black,
+      backgroundColor: Constant.ascent,
       textColor: Colors.white,
       fontSize: 16.0,
     );
