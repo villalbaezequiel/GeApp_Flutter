@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
@@ -48,15 +50,6 @@ class MyVotingTableState extends State<MyVotingTableList> {
           ),
           drawer: NavigationDrawer(model: widget.model),
           floatingActionButton: floatingAction,
-          // body: ListView.separated(
-          //   separatorBuilder: (context, index) => Divider(
-          //     color: Colors.grey,
-          //   ),
-          //   itemCount: people.length,
-          //   itemBuilder: (context, position) {
-          //     return MyVotingTableListItem(people[position]);
-          //   },
-          // ),
           body: Column(
             children: <Widget>[
               Expanded(
@@ -66,17 +59,11 @@ class MyVotingTableState extends State<MyVotingTableList> {
                         ? RefreshIndicator(
                             onRefresh: () =>
                                 widget.model.fetchVotingTable(widget.model),
-                            child: ListView.builder(
-                              itemCount: widget.model.votingTable.voters.length,
-                              itemBuilder: (context, index) {
-                                var voter =
-                                    widget.model.votingTable.voters[index];
-                                return voterListItem(voter);
-                              },
-                            ),
+                            child: buildVoters(),
                           )
                         : Center(child: Text("No voters")),
               ),
+              SizedBox(height: 50),
               Container(
                 padding: EdgeInsets.all(5),
                 color: Colors.grey[200],
@@ -256,19 +243,41 @@ class MyVotingTableState extends State<MyVotingTableList> {
           border: Border(
         bottom: BorderSide(width: 1.0, color: Colors.grey.shade300),
       )),
-      child: ListTile(
-        title: Text(
-            '${voter.citizen.first} ${voter.citizen.last}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black),*/),
-        subtitle: Text('DNI: ${voter.citizen.nationalId}'),
-        trailing: Text(voter.order.toString()),
-        isThreeLine: false,
-        dense: false,
-        leading: (voter.voted)
-            ? Icon(Icons.brightness_1, color: Colors.green, size: 14)
-            : Icon(Icons.brightness_low, color: Colors.transparent, size: 14),
-        onTap: () {
-          print('${voter.citizen.first}');
-        },
+      child: Row(
+        // mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(10),
+            child: (voter.voted)
+                ? Icon(Icons.brightness_1, color: Colors.green, size: 14)
+                : Icon(Icons.brightness_low,
+                    color: Colors.transparent, size: 14),
+          ),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    '${voter.citizen.first} ${voter.citizen.last}',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(height: 10),
+                  Text("DNI: " + voter.citizen.nationalId.toString())
+                ],
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Center(
+              child: Text(voter.order.toString()),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -280,7 +289,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
           false, // dialog is dismissible with a tap on the barrier
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Reposición de boletas'),
+          title: Text('Confirmar voto'),
           content: Container(
             child: Text(
               "¿Votó ${voter.citizen.first.toString()} ${voter.citizen.last.toString()} , nro de orden: ${voter.order}?",
@@ -316,5 +325,16 @@ class MyVotingTableState extends State<MyVotingTableList> {
     commonWidgest.progressDialog(context);
     await widget.model.vote(widget.model, voter);
     Navigator.popUntil(context, ModalRoute.withName('/my_voting_table_list'));
+    buildVoters();
+  }
+
+  Widget buildVoters() {
+    return ListView.builder(
+      itemCount: widget.model.votingTable.voters.length,
+      itemBuilder: (context, index) {
+        var voter = widget.model.votingTable.voters[index];
+        return voterListItem(voter);
+      },
+    );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:voting_app/model/friend.dart';
 import 'package:voting_app/services/main_model.dart';
 
 import '../model/person.dart';
@@ -47,46 +48,37 @@ class FriendsListState extends State<FriendsList> {
             ),
             heroTag: 'add_friend',
           ),
-          body: Column(
-            children: <Widget>[
-              Expanded(
-                // child: ListView(
-                //   children: <Widget>[
-                //     friendListItem(Person(
-                //         id: 213,
-                //         firstName: 'Rafael',
-                //         lastName: 'Fortunato Cambareri',
-                //         nationalId: '22.263.164'))
-                //   ],
-                // ),
-                child: model.isLoadingFriends
-                    ? Center(child: CircularProgressIndicator())
-                    : (model.friendsList.length > 0)
-                        ? RefreshIndicator(
-                            onRefresh: () => model.fetchFriends(model),
-                            child: ListView.builder(
+          body: RefreshIndicator(
+            onRefresh: () => model.fetchFriends(model),
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: model.isLoadingFriends
+                      ? Center(child: CircularProgressIndicator())
+                      : (model.friendsList.length > 0)
+                          ? ListView.builder(
                               itemCount: model.friendsCount,
                               itemBuilder: (context, index) {
                                 var friend = model.friendsList[index];
                                 return friendListItem(friend);
                               },
-                            ),
-                          )
-                        : Center(child: Text("No hay amigos en tu lista.")),
-              ),
-              Container(
-                padding: EdgeInsets.all(5),
-                color: Colors.grey[200],
-                child: Center(
-                  child: Text(
-                    "Última actualización: 23:15 24/05/19",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyleUtils.bottomTimeBar,
+                            )
+                          : Center(child: Text("No hay amigos en tu lista.")),
+                ),
+                Container(
+                  padding: EdgeInsets.all(5),
+                  color: Colors.grey[200],
+                  child: Center(
+                    child: Text(
+                      "Última actualización: 23:15 24/05/19",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyleUtils.bottomTimeBar,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -100,7 +92,7 @@ class FriendsListState extends State<FriendsList> {
         : Text("Mis Amigos");
   }
 
-  Widget friendListItem(Person person) {
+  Widget friendListItem(Friend friend) {
     return Container(
       decoration: BoxDecoration(
           border: Border(
@@ -108,13 +100,13 @@ class FriendsListState extends State<FriendsList> {
       )),
       child: ListTile(
         title: Text(
-            '${person.firstName} ${person.lastName}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black),*/),
-        subtitle: Text('DNI: ${person.nationalId}'),
-        trailing: Text(person.id.toString()),
+            '${friend.citizen.first} ${friend.citizen.last}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black),*/),
+        subtitle: Text('DNI: ${friend.citizen.nationalId}'),
+        trailing: Text(friend.id.toString()),
         isThreeLine: false,
         dense: false,
         onTap: () {
-          print('${person.firstName}');
+          print('${friend.citizen.nationalId}');
         },
       ),
     );

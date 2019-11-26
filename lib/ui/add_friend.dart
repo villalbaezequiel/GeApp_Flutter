@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/text_style_utils.dart';
@@ -62,6 +63,10 @@ class AddFriendState extends State<AddFriend> {
                   child: Column(
                     children: <Widget>[
                       TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                            WhitelistingTextInputFormatter.digitsOnly
+                          ],
                         decoration: InputDecoration(
                           hintText: "Ejemplo: 30154487",
                           labelText: "DNI",
@@ -77,6 +82,7 @@ class AddFriendState extends State<AddFriend> {
                         onSaved: (val) => _email = val,
                       ),
                       TextFormField(
+                        keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
                             hintText: "+54-911-4567-4567",
                             labelText: "Número de teléfono"),

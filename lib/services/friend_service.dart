@@ -4,14 +4,14 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/error.dart';
-import 'package:voting_app/model/person.dart';
+import 'package:voting_app/model/friend.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/constant.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 
 mixin FriendService on Model {
-  List<Person> _friendsList = [];
-  List<Person> get friendsList => _friendsList;
+  List<Friend> _friendsList = [];
+  List<Friend> get friendsList => _friendsList;
 
   // this is used for all api call required for friends
   bool _isLoadingFriends = false;
@@ -22,7 +22,7 @@ mixin FriendService on Model {
 
   CommonWidgest commonWidgests = CommonWidgest();
 
-  Future<List<Person>> fetchFriends(MainModel model) async {
+  Future<List<Friend>> fetchFriends(MainModel model) async {
     try {
       _isLoadingFriends = true;
       notifyListeners();
@@ -36,12 +36,11 @@ mixin FriendService on Model {
 
       if (response.statusCode == 200) {
         var responseData = json.decode(response.body);
-//      print(responseData);
 
-        final List<Person> fetchedEvents = [];
+        final List<Friend> fetchedEvents = [];
         responseData.forEach((dynamic json) {
           if (responseData != null) {
-            Person friend = Person.fromJson(json);
+            Friend friend = Friend.fromJson(json);
 
             fetchedEvents.add(friend);
           }
@@ -86,8 +85,8 @@ mixin FriendService on Model {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> mapResponse = json.decode(response.body);
-        Person user = Person.fromJson(mapResponse);
-        addToFriendsList(user);
+        Friend friend = Friend.fromJson(mapResponse);
+        addToFriendsList(friend);
         _isLoadingFriends = false;
         notifyListeners();
         commonWidgests.showToast("Con éxito amigo añadido.");
@@ -108,7 +107,7 @@ mixin FriendService on Model {
     }
   }
 
-  Future<bool> deleteFriend(MainModel model, Person person) async {
+  Future<bool> deleteFriend(MainModel model, Friend person) async {
     try {
       _isLoadingFriends = true;
       notifyListeners();
@@ -151,7 +150,7 @@ mixin FriendService on Model {
     notifyListeners();
   }
 
-  addToFriendsList(Person person) {
+  addToFriendsList(Friend person) {
     var existingItem = _friendsList.firstWhere(
         (itemToCheck) => (itemToCheck.id == person.id),
         orElse: () => null);
@@ -161,7 +160,7 @@ mixin FriendService on Model {
   }
 
   /// Remove the entry and save to disk.
-  removeFromFriendsList(Person person) {
+  removeFromFriendsList(Friend person) {
     var existingItem = _friendsList.firstWhere(
         (itemToCheck) => (itemToCheck.id == person.id),
         orElse: () => null);

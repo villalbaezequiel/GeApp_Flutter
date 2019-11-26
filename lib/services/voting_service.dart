@@ -21,6 +21,8 @@ mixin VotingService on Model {
 
   bool get isloadingVotingTable => _isloadingVotingTable;
 
+  bool get isVotingOrReplenish => _isVotingOrReplenish;
+
   VotingTable get votingTable => _votingTable;
 
   Future<VotingTable> fetchVotingTable(MainModel model) async {
@@ -39,7 +41,6 @@ mixin VotingService on Model {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         _votingTable = VotingTable.fromJson(mapResponse);
 
-        commonWidgests.showToast("Success");
         _isloadingVotingTable = false;
         notifyListeners();
         return _votingTable;
@@ -90,6 +91,11 @@ mixin VotingService on Model {
           });
 
       if (response.statusCode == 200) {
+        int index = _votingTable.voters.indexOf(voter);
+        _votingTable.voters.remove(voter);
+        voter.voted = true;
+        _votingTable.voters.insert(index, voter);
+
         commonWidgests.showToast("Voted");
         _isVotingOrReplenish = false;
         notifyListeners();
