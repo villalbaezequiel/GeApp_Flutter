@@ -13,7 +13,7 @@ class CommonWidgest {
           content: Container(
             height: 100.0,
             alignment: Alignment.center,
-            padding: EdgeInsets.all(10.0),
+            // padding: EdgeInsets.all(10.0),
             child: Column(
               children: <Widget>[
                 Text("Procesando el pedido"),
@@ -21,7 +21,7 @@ class CommonWidgest {
                   height: 20.0,
                 ),
                 CircularProgressIndicator(
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: Constant.ascent,
                   value: null,
                   strokeWidth: 2.0,
                   valueColor: AlwaysStoppedAnimation(Colors.blue),

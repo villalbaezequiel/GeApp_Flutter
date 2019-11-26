@@ -73,8 +73,6 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       return currentRoute;
     }
 
-    ;
-
     for (var index = 0; index < drawerItems.length; index++) {
       var currentDrawerItem = drawerItems[index];
       if (index == drawerItems.length - 1) {
