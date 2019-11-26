@@ -34,4 +34,6 @@ class Constant {
 
   // voting table
   static const String votingTable = "voting-table/";
+  static const String vote = "vote/";
+  static const String replenish = "replenish/";
 }

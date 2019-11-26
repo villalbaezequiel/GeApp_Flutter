@@ -6,6 +6,7 @@ import 'package:unicorndial/unicorndial.dart';
 import 'package:voting_app/model/voter.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/text_style_utils.dart';
+import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 import 'global/constant.dart';
 import 'global/widgets/navigation_drawer.dart';
 
@@ -17,6 +18,8 @@ class MyVotingTableList extends StatefulWidget {
 }
 
 class MyVotingTableState extends State<MyVotingTableList> {
+  CommonWidgest commonWidgest = CommonWidgest();
+
   @override
   void initState() {
     super.initState();
@@ -111,7 +114,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
         txt: 'Reposición',
         iconData: Icons.library_books,
         onPressed: () {
-          _asyncInputDialog(context);
+          _asyncInputDialogReplenish(context);
         },
       ),
     );
@@ -120,7 +123,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
   }
 
   Future<String> _asyncInputDialogVote(BuildContext context) async {
-    String teamName = '';
+    String orderNumber = '';
     return showDialog<String>(
       context: context,
       barrierDismissible:
@@ -142,7 +145,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
                     hintText: 'ejemplo 154',
                   ),
                   onChanged: (value) {
-                    teamName = value;
+                    orderNumber = value;
                   },
                 ),
               )
@@ -150,21 +153,22 @@ class MyVotingTableState extends State<MyVotingTableList> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text(
-                'Ok',
-                style: TextStyleUtils.bottonAndAppBarStyle,
-              ),
+              child: Text('Ok', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
-                Navigator.of(context).pop(teamName);
+                Voter voter = widget.model.validateVoterOrder(orderNumber);
+                if (voter != null) {
+                  showConfirmationDialog(voter, context);
+                } else {
+                  commonWidgest.showToast('Nro de orden no encontrado');
+                }
+                // Navigator.of(context).pop(teamName);
               },
             ),
             FlatButton(
-              child: Text(
-                'Cancelar',
-                style: TextStyleUtils.bottonAndAppBarStyle,
-              ),
+              child:
+                  Text('Cancelar', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
-                Navigator.of(context).pop(teamName);
+                Navigator.of(context).pop(orderNumber);
               },
             ),
           ],
@@ -173,7 +177,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
     );
   }
 
-  Future<String> _asyncInputDialog(BuildContext context) async {
+  Future<String> _asyncInputDialogReplenish(BuildContext context) async {
     String teamName = '';
     return showDialog<String>(
       context: context,
@@ -203,15 +207,16 @@ class MyVotingTableState extends State<MyVotingTableList> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Ok'),
+              child: Text('Ok', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
-                Navigator.of(context).pop(teamName);
+                callAprForReplenish(teamName);
               },
             ),
             FlatButton(
-              child: Text('Cancelar'),
+              child:
+                  Text('Cancelar', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
-                Navigator.of(context).pop(teamName);
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -266,5 +271,50 @@ class MyVotingTableState extends State<MyVotingTableList> {
         },
       ),
     );
+  }
+
+  Future showConfirmationDialog(Voter voter, BuildContext context) {
+    return showDialog(
+      context: context,
+      barrierDismissible:
+          false, // dialog is dismissible with a tap on the barrier
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Reposición de boletas'),
+          content: Container(
+            child: Text(
+              "¿Votó ${voter.citizen.first.toString()} ${voter.citizen.last.toString()} , nro de orden: ${voter.order}?",
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Yes', style: TextStyleUtils.dialogButtonTextStyle),
+              onPressed: () {
+                callApiForVote(voter);
+              },
+            ),
+            FlatButton(
+              child: Text('No', style: TextStyleUtils.dialogButtonTextStyle),
+              onPressed: () {
+                Navigator.popUntil(
+                    context, ModalRoute.withName('/my_voting_table_list'));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void callAprForReplenish(String quantity) async {
+    commonWidgest.progressDialog(context);
+    await widget.model.replenishVote(widget.model, int.parse(quantity));
+    Navigator.popUntil(context, ModalRoute.withName('/my_voting_table_list'));
+  }
+
+  void callApiForVote(Voter voter) async {
+    commonWidgest.progressDialog(context);
+    await widget.model.vote(widget.model, voter);
+    Navigator.popUntil(context, ModalRoute.withName('/my_voting_table_list'));
   }
 }

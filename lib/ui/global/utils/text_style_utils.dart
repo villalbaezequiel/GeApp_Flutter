@@ -19,4 +19,10 @@ class TextStyleUtils {
     fontWeight: FontWeight.w400,
     fontFamily: 'Dosis',
   );
+
+  static TextStyle dialogButtonTextStyle = TextStyle(
+    fontFamily: 'Dosis',
+    fontWeight: FontWeight.bold,
+    fontSize: 18,
+  );
 }
