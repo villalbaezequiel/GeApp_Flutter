@@ -68,12 +68,15 @@ class MyVotingTableState extends State<MyVotingTableList> {
                 padding: EdgeInsets.all(5),
                 color: Colors.grey[200],
                 child: Center(
-                  child: Text(
-                    "Última actualización: 23:15 24/05/19",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyleUtils.bottomTimeBar,
-                  ),
+                  child: widget.model.isloadingVotingTable
+                      ? Center(child: CircularProgressIndicator())
+                      : Text(
+                          "Última actualización: " +
+                              widget.model.lastVotingTableFetchedTime,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleUtils.bottomTimeBar,
+                        ),
                 ),
               ),
             ],

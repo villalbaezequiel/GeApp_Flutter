@@ -87,6 +87,7 @@ mixin FriendService on Model {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         Friend friend = Friend.fromJson(mapResponse);
         addToFriendsList(friend);
+        model.setFriendFetchedTime(DateTime.now());
         _isLoadingFriends = false;
         notifyListeners();
         commonWidgests.showToast("Con éxito amigo añadido.");

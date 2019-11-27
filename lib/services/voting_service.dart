@@ -40,7 +40,7 @@ mixin VotingService on Model {
       if (response.statusCode == 200) {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         _votingTable = VotingTable.fromJson(mapResponse);
-
+        model.setVotingTableFetchedTime(DateTime.now());
         _isloadingVotingTable = false;
         notifyListeners();
         return _votingTable;
