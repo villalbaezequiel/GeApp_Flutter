@@ -1,10 +1,12 @@
 import 'dart:ui';
-import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Constant {
   static var dateFormatter = DateFormat('HH:mm dd/MM/yyyy');
+
+  static var whatsAppUrl = "whatsapp://send?phone=";
   static const Color primary = Color(0xFF717ed3);
   static const Color ascent = Color(0xFF40b3f7);
   static Color bgColor = Colors.grey.shade50;

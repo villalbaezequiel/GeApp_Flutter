@@ -101,6 +101,10 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                 logout(currentDrawerItem);
                 break;
 
+              case "/help":
+                widget.model.openWhatsApp(widget.model);
+                break;
+
               default:
                 Navigator.of(context).pushNamed(currentDrawerItem.route);
             }

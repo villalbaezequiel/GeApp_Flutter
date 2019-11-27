@@ -2,11 +2,15 @@ import 'dart:convert';
 
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:voting_app/model/person.dart';
 import 'package:voting_app/services/main_model.dart';
+import 'package:voting_app/ui/global/utils/constant.dart';
+import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 
 mixin MeService on Model {
   Person _me;
+  CommonWidgest commonWidgest = CommonWidgest();
 
   Person get user => _me;
 
@@ -36,5 +40,12 @@ mixin MeService on Model {
   savePersonToSharedPref(String userData) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("user", userData);
+  }
+
+  void openWhatsApp(MainModel model) async {
+    String url = Constant.whatsAppUrl + model.user.helpPhone;
+    await canLaunch(url)
+        ? launch(url)
+        : commonWidgest.showToast("Failed to open WhatsApp");
   }
 }

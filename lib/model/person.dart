@@ -7,6 +7,9 @@ class Person {
   String role;
   bool approved;
   bool isOwner;
+  String helpPhone;
+  String email;
+  String phone;
 
   Person({
     this.id,
@@ -17,6 +20,9 @@ class Person {
     this.isOwner,
     this.firstName,
     this.lastName,
+    this.helpPhone,
+    this.email,
+    this.phone,
   });
 
   factory Person.fromJson(Map<String, dynamic> json) {
@@ -29,6 +35,9 @@ class Person {
       isOwner: json['isOwner'],
       firstName: json['first'],
       lastName: json['last'],
+      helpPhone: json['helpPhone'],
+      email: json['email'],
+      phone: json['phone'],
     );
   }
 
@@ -42,6 +51,9 @@ class Person {
       isOwner: json['isOwner'],
       firstName: json['firstName'],
       lastName: json['lastName'],
+      helpPhone: json['helpPhone'],
+      email: json['email'],
+      phone: json['phone'],
     );
   }
 
@@ -54,5 +66,8 @@ class Person {
         'isOwner': isOwner,
         'firstName': firstName,
         'lastName': lastName,
+        'helpPhone': helpPhone,
+        'email': email,
+        'phone': phone,
       };
 }

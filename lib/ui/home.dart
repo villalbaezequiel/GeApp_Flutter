@@ -15,6 +15,13 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future loadData() {}
+  @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
       builder: (context, child, model) {
@@ -55,7 +62,11 @@ class HomeState extends State<Home> {
       ),
       child: FlatButton(
         onPressed: () {
-          Navigator.of(context).pushNamed(path);
+          if (path == "/help") {
+            widget.model.openWhatsApp(widget.model);
+          } else {
+            Navigator.of(context).pushNamed(path);
+          }
         },
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 12),
