@@ -11,7 +11,7 @@ class CommonWidgest {
       builder: (BuildContext context) {
         return AlertDialog(
           content: Container(
-            height: 100.0,
+            height: 80.0,
             alignment: Alignment.center,
             // padding: EdgeInsets.all(10.0),
             child: Column(
