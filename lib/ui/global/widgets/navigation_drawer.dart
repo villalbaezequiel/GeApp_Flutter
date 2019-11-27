@@ -39,6 +39,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     List<Widget> drawerOptions = [];
 
     Widget headerView = UserAccountsDrawerHeader(
+      key: Key("geapp_nav_drawer"),
       decoration: BoxDecoration(gradient: Constant.appBarGradient),
       accountName: Text(
         (widget.model.user == null || widget.model.user.firstName == null)
@@ -58,7 +59,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           (widget.model.user == null || widget.model.user.firstName == null)
               ? "G"
               : widget.model.user.firstName[0].toUpperCase(),
-          style: TextStyle(fontSize: 40.0),
+          style: TextStyle(fontSize: 30.0),
         ),
       ),
     );
@@ -97,9 +98,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                 break;
 
               case "/login":
-                widget.model.logout();
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    currentDrawerItem.route, (Route<dynamic> route) => false);
+                logout(currentDrawerItem);
                 break;
 
               default:
@@ -118,5 +117,11 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
         );
       },
     );
+  }
+
+  void logout(DrawerItem currentDrawerItem) async {
+    await widget.model.logout(widget.model);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        currentDrawerItem.route, (Route<dynamic> route) => false);
   }
 }

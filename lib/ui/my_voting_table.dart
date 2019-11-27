@@ -56,13 +56,14 @@ class MyVotingTableState extends State<MyVotingTableList> {
               Expanded(
                 child: widget.model.isloadingVotingTable
                     ? Center(child: CircularProgressIndicator())
-                    : (widget.model.votingTable.voters.length > 0)
+                    : (widget.model.votingTable != null &&
+                            widget.model.votingTable.voters.length > 0)
                         ? RefreshIndicator(
                             onRefresh: () =>
                                 widget.model.fetchVotingTable(widget.model),
                             child: buildVoters(),
                           )
-                        : Center(child: Text("No voters")),
+                        : Center(child: Text("No voters available")),
               ),
               SizedBox(height: 50),
               Container(

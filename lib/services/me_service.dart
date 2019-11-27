@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_app/model/person.dart';
+import 'package:voting_app/services/main_model.dart';
 
 mixin MeService on Model {
   Person _me;
@@ -23,7 +24,10 @@ mixin MeService on Model {
     notifyListeners();
   }
 
-  logout() async {
+  logout(MainModel model) async {
+    model.clearVotingTable();
+    model.clearFriendList();
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
     notifyListeners();

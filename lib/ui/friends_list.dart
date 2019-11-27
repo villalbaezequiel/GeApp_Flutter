@@ -54,7 +54,8 @@ class FriendsListState extends State<FriendsList> {
                 Expanded(
                   child: model.isLoadingFriends
                       ? Center(child: CircularProgressIndicator())
-                      : (model.friendsList.length > 0)
+                      : (model.friendsList != null &&
+                              model.friendsList.length > 0)
                           ? ListView.builder(
                               itemCount: model.friendsCount,
                               itemBuilder: (context, index) {

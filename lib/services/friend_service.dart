@@ -169,4 +169,8 @@ mixin FriendService on Model {
       this._friendsList.remove(existingItem);
     }
   }
+
+  clearFriendList() {
+    this._friendsList = null;
+  }
 }

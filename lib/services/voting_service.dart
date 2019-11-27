@@ -131,7 +131,7 @@ mixin VotingService on Model {
       final response = await http.put(
           Constant.baseUrl +
               Constant.votingTable +
-              Constant.vote +
+              Constant.replenish +
               quantity.toString(),
           headers: {
             'Content-Type': 'application/json',
@@ -156,5 +156,9 @@ mixin VotingService on Model {
 
       catchExceptions(error);
     }
+  }
+
+  clearVotingTable() {
+    _votingTable = null;
   }
 }
