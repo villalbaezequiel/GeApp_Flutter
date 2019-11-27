@@ -69,7 +69,7 @@ mixin VotingService on Model {
     notifyListeners();
   }
 
-  Voter validateVoterOrder(String order) {
+  Voter validateVoterOrder(int order) {
     return _votingTable.voters
         .firstWhere((voter) => (voter.order == order), orElse: () => null);
   }
@@ -91,13 +91,23 @@ mixin VotingService on Model {
           });
 
       if (response.statusCode == 200) {
-        int index = _votingTable.voters.indexOf(voter);
         _votingTable.voters.remove(voter);
-        voter.voted = true;
-        _votingTable.voters.insert(index, voter);
-
-        commonWidgests.showToast("Voted");
         _isVotingOrReplenish = false;
+        _isloadingVotingTable = true;
+        notifyListeners();
+
+        voter.voted = true;
+        _votingTable.voters.add(voter);
+        _votingTable.voters.sort((a, b) {
+          if (a.order == b.order) {
+            return 0;
+          } else if (a.order > b.order) {
+            return 1;
+          } else {
+            return -1;
+          }
+        });
+        _isloadingVotingTable = false;
         notifyListeners();
       } else {
         Map<String, dynamic> mapResponse = json.decode(response.body);

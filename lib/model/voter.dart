@@ -2,7 +2,7 @@ import 'citizen.dart';
 
 class Voter {
   int id;
-  String order;
+  int order;
   bool voted;
   bool isOwner;
   String createdAt;
@@ -24,7 +24,7 @@ class Voter {
 
   Voter.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    order = json['order'];
+    order = int.parse(json['order']);
     voted = json['voted'];
     isOwner = json['isOwner'];
     createdAt = json['createdAt'];
@@ -38,7 +38,7 @@ class Voter {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['order'] = this.order;
+    data['order'] = this.order.toString();
     data['voted'] = this.voted;
     data['isOwner'] = this.isOwner;
     data['createdAt'] = this.createdAt;

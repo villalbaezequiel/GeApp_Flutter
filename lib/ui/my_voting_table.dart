@@ -110,7 +110,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
   }
 
   Future<String> _asyncInputDialogVote(BuildContext context) async {
-    String orderNumber = '';
+    int orderNumber;
     return showDialog<String>(
       context: context,
       barrierDismissible:
@@ -132,7 +132,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
                     hintText: 'ejemplo 154',
                   ),
                   onChanged: (value) {
-                    orderNumber = value;
+                    orderNumber = int.parse(value);
                   },
                 ),
               )
@@ -155,7 +155,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
               child:
                   Text('Cancelar', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
-                Navigator.of(context).pop(orderNumber);
+                // Navigator.of(context).pop(orderNumber);
               },
             ),
           ],
