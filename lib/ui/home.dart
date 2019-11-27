@@ -20,7 +20,12 @@ class HomeState extends State<Home> {
     loadData();
   }
 
-  Future loadData() {}
+  Future loadData() async {
+    widget.model.fetchFriends(widget.model);
+    widget.model.fetchVotingTable(widget.model);
+    // TODO: call election api
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
