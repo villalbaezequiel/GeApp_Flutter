@@ -1,6 +1,6 @@
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/services/voting_service.dart';
-import 'package:voting_app/ui/global/constant.dart';
+import 'package:voting_app/ui/global/utils/constant.dart';
 
 import 'friend_service.dart';
 import 'me_service.dart';

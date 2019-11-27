@@ -6,7 +6,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/error.dart';
 import 'package:voting_app/model/friend.dart';
 import 'package:voting_app/services/main_model.dart';
-import 'package:voting_app/ui/global/constant.dart';
+import 'package:voting_app/ui/global/utils/constant.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 
 mixin FriendService on Model {

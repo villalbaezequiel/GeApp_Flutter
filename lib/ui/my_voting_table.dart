@@ -9,7 +9,8 @@ import 'package:voting_app/model/voter.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/text_style_utils.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
-import 'global/constant.dart';
+
+import 'global/utils/constant.dart';
 import 'global/widgets/navigation_drawer.dart';
 
 class MyVotingTableList extends StatefulWidget {

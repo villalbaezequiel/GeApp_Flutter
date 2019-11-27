@@ -8,7 +8,7 @@ import 'services/main_model.dart';
 import 'ui/add_friend.dart';
 import 'ui/escrutinio.dart';
 import 'ui/friends_list.dart';
-import 'ui/global/constant.dart';
+import 'ui/global/utils/constant.dart';
 import 'ui/help.dart';
 import 'ui/home.dart';
 import 'ui/login.dart';

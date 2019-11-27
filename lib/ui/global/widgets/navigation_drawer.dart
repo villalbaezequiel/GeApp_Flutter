@@ -4,7 +4,7 @@ import 'package:voting_app/model/drawer_item.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/text_style_utils.dart';
 
-import '../constant.dart';
+import '../utils/constant.dart';
 
 class NavigationDrawer extends StatefulWidget {
   final MainModel model;

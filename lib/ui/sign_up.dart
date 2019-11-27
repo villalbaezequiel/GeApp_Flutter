@@ -9,7 +9,7 @@ import 'package:voting_app/model/error.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/text_style_utils.dart';
 
-import 'global/constant.dart';
+import 'global/utils/constant.dart';
 import 'global/widgets/common_widgets.dart';
 
 class SignUp extends StatefulWidget {

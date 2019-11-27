@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/error.dart';
 import 'package:voting_app/model/voter.dart';
 import 'package:voting_app/model/voting_table.dart';
 import 'package:voting_app/services/main_model.dart';
-import 'package:voting_app/ui/global/constant.dart';
-
-import 'package:http/http.dart' as http;
+import 'package:voting_app/ui/global/utils/constant.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 
 mixin VotingService on Model {

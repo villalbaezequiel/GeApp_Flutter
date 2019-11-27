@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:voting_app/services/main_model.dart';
 
-import 'global/constant.dart';
+import 'global/utils/constant.dart';
 import 'global/widgets/navigation_drawer.dart';
 
 class PersonDetails extends StatefulWidget {

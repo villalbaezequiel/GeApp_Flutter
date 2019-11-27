@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 
-import 'global/constant.dart';
+import 'global/utils/constant.dart';
 
 class Help extends StatelessWidget {
   @override

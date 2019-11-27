@@ -5,7 +5,7 @@ import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/text_style_utils.dart';
 import 'package:voting_app/ui/global/widgets/navigation_drawer.dart';
 
-import 'global/constant.dart';
+import 'global/utils/constant.dart';
 
 class Home extends StatefulWidget {
   final MainModel model;

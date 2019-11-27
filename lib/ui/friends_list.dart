@@ -4,7 +4,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/friend.dart';
 import 'package:voting_app/services/main_model.dart';
 
-import 'global/constant.dart';
+import 'global/utils/constant.dart';
 import 'global/utils/text_style_utils.dart';
 import 'global/widgets/navigation_drawer.dart';
 
