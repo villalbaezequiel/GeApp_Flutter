@@ -140,7 +140,6 @@ mixin VotingService on Model {
           });
 
       if (response.statusCode == 200) {
-        commonWidgests.showToast("replenish Done");
         _isVotingOrReplenish = false;
         notifyListeners();
       } else {

@@ -151,19 +151,19 @@ mixin FriendService on Model {
     notifyListeners();
   }
 
-  addToFriendsList(Friend person) {
+  addToFriendsList(Friend friend) {
     var existingItem = _friendsList.firstWhere(
-        (itemToCheck) => (itemToCheck.id == person.id),
+        (itemToCheck) => (itemToCheck.id == friend.id),
         orElse: () => null);
     if (existingItem == null) {
-      this._friendsList.add(person);
+      this._friendsList.add(friend);
     }
   }
 
   /// Remove the entry and save to disk.
-  removeFromFriendsList(Friend person) {
+  removeFromFriendsList(Friend friend) {
     var existingItem = _friendsList.firstWhere(
-        (itemToCheck) => (itemToCheck.id == person.id),
+        (itemToCheck) => (itemToCheck.id == friend.id),
         orElse: () => null);
     if (existingItem != null) {
       this._friendsList.remove(existingItem);

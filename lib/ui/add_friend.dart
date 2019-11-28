@@ -34,8 +34,7 @@ class AddFriendState extends State<AddFriend> {
 
   void performSubmit() async {
     commonWidgest.progressDialog(context);
-    await widget.model
-        .addFriend(widget.model, _nationalId, _email, _phoneNumber);
+    widget.model.addFriend(widget.model, _nationalId, _email, _phoneNumber);
     Navigator.of(context).pop();
   }
 

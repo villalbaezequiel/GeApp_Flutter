@@ -105,7 +105,7 @@ class FriendsListState extends State<FriendsList> {
         title: Text(
             '${friend.citizen.first} ${friend.citizen.last}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black),*/),
         subtitle: Text('DNI: ${friend.citizen.nationalId}'),
-        trailing: Text(friend.id.toString()),
+        // trailing: Text(friend.id.toString()),
         isThreeLine: false,
         dense: false,
         onTap: () {

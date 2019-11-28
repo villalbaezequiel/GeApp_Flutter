@@ -160,7 +160,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
               child:
                   Text('Cancelar', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
-                // Navigator.of(context).pop(orderNumber);
+                Navigator.of(context).pop();
               },
             ),
           ],

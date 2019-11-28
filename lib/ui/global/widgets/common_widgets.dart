@@ -10,24 +10,20 @@ class CommonWidgest {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Container(
-            height: 80.0,
-            alignment: Alignment.center,
-            // padding: EdgeInsets.all(10.0),
-            child: Column(
-              children: <Widget>[
-                Text("Procesando el pedido"),
-                SizedBox(
-                  height: 20.0,
-                ),
-                CircularProgressIndicator(
-                  backgroundColor: Constant.ascent,
-                  value: null,
-                  strokeWidth: 2.0,
-                  valueColor: AlwaysStoppedAnimation(Colors.blue),
-                ),
-              ],
-            ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text("Procesando el pedido"),
+              SizedBox(
+                height: 20.0,
+              ),
+              CircularProgressIndicator(
+                backgroundColor: Constant.ascent,
+                value: null,
+                strokeWidth: 2.0,
+                valueColor: AlwaysStoppedAnimation(Colors.blue),
+              ),
+            ],
           ),
         );
       },
