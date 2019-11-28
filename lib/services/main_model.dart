@@ -16,12 +16,24 @@ class MainModel extends Model with MeService, FriendService, VotingService {
       Constant.dateFormatter.format(_votingTableFetchedTime);
 
   setFriendFetchedTime(DateTime dateTime) {
-    this._lastFetchedTime = dateTime;
+    _lastFetchedTime = dateTime;
     // notifyListeners();
   }
 
   setVotingTableFetchedTime(DateTime dateTime) {
-    this._votingTableFetchedTime = dateTime;
+    _votingTableFetchedTime = dateTime;
     // notifyListeners();
+  }
+
+  checkDiability(String path) {
+    if (path == "/my_voting_table_list" || path == '/escrutinio') {
+      if (user.isOwner && votingTable != null && votingTable.isOpen) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
+    }
   }
 }

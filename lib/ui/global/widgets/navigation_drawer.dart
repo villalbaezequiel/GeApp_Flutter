@@ -81,6 +81,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       }
       drawerOptions.add(
         ListTile(
+          enabled: widget.model.checkDiability(currentDrawerItem.route),
           leading: Icon(currentDrawerItem.icon),
           title: Text(
             currentDrawerItem.title,

@@ -65,15 +65,12 @@ class HomeState extends State<Home> {
         gradient: Constant.gradient,
         borderRadius: BorderRadius.circular(2),
       ),
-      child: FlatButton(
-        onPressed: () {
-          if (path == "/help") {
-            widget.model.openWhatsApp(widget.model);
-          } else {
-            Navigator.of(context).pushNamed(path);
-          }
+      child: ListTile(
+        enabled: widget.model.checkDiability(path),
+        onTap: () {
+          navigateToPath(path);
         },
-        child: Container(
+        title: Container(
           padding: EdgeInsets.symmetric(vertical: 12),
           child: Row(
             children: <Widget>[
@@ -92,5 +89,13 @@ class HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  void navigateToPath(String path) {
+    if (path == "/help") {
+      widget.model.openWhatsApp(widget.model);
+    } else {
+      Navigator.of(context).pushNamed(path);
+    }
   }
 }
