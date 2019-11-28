@@ -94,7 +94,7 @@ class FriendsListState extends State<FriendsList> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text("Mis Amigos"),
-          CircularProgressIndicator(),
+          CircularProgressIndicator(strokeWidth: 1),
         ],
       );
     } else if (widget.model.friendsCount > 0) {

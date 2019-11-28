@@ -240,7 +240,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text("Mi Mesa"),
-          CircularProgressIndicator(),
+          CircularProgressIndicator(strokeWidth: 1),
         ],
       );
     } else if (widget.model.votingTable != null) {
