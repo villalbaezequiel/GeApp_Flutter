@@ -124,9 +124,13 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     );
   }
 
-  void logout(DrawerItem currentDrawerItem) async {
-    await widget.model.logout(widget.model);
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        currentDrawerItem.route, (Route<dynamic> route) => false);
+  void logout(DrawerItem currentDrawerItem) {
+    widget.model.logout(widget.model).then((onvalue) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          currentDrawerItem.route, (Route<dynamic> route) => false);
+    }).catchError((onError) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          currentDrawerItem.route, (Route<dynamic> route) => false);
+    });
   }
 }

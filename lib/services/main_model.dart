@@ -27,7 +27,10 @@ class MainModel extends Model with MeService, FriendService, VotingService {
 
   checkDiability(String path) {
     if (path == "/my_voting_table_list" || path == '/escrutinio') {
-      if (user.isOwner && votingTable != null && votingTable.isOpen) {
+      if (user != null &&
+          user.isOwner &&
+          votingTable != null &&
+          votingTable.isOpen) {
         return true;
       } else {
         return false;

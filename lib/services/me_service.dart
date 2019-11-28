@@ -34,7 +34,6 @@ mixin MeService on Model {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    notifyListeners();
   }
 
   savePersonToSharedPref(String userData) async {
