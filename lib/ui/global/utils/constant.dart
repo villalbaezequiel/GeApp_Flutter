@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 class Constant {
   static var dateFormatter = DateFormat('HH:mm dd/MM/yyyy');
-
+  static var termsUrl = "www.geapp.com.ar/tyc";
   static var whatsAppUrl = "whatsapp://send?phone=";
   static const Color primary = Color(0xFF717ed3);
   static const Color ascent = Color(0xFF40b3f7);

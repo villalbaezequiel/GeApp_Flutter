@@ -48,7 +48,7 @@ mixin FriendService on Model {
 
         _friendsList = fetchedEvents;
 
-        print("LENGTH friends: ${_friendsList.length}");
+        model.setFriendFetchedTime(DateTime.now());
         _isLoadingFriends = false;
         notifyListeners();
       } else {
@@ -86,7 +86,9 @@ mixin FriendService on Model {
       if (response.statusCode == 200) {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         Friend friend = Friend.fromJson(mapResponse);
-        addToFriendsList(friend);
+        if (friend.id != null) {
+          addToFriendsList(friend);
+        }
         model.setFriendFetchedTime(DateTime.now());
         _isLoadingFriends = false;
         notifyListeners();

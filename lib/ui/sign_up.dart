@@ -26,11 +26,12 @@ class SignUpState extends State<SignUp> {
   String _phone; //optional
   String _email; //optional
   String _password; //mandatory
+  bool _isChecked = false;
   CommonWidgest commonWidgests = CommonWidgest();
 
   void _submit() {
     final form = formKey.currentState;
-    if (form.validate()) {
+    if (form.validate() && _isChecked == true) {
       form.save();
       performSubmit();
     }
@@ -149,6 +150,25 @@ class SignUpState extends State<SignUp> {
                                 : null;
                           },
                         ),
+                        SizedBox(height: 10),
+                        Row(
+                          children: <Widget>[
+                            Checkbox(
+                              value: _isChecked,
+                              onChanged: (value) {
+                                setState(() {
+                                  this._isChecked = value;
+                                });
+                              },
+                            ),
+                            FlatButton(
+                              onPressed: () {
+                                widget.model.openTermsUrl();
+                              },
+                              child: Text("Aceptar Términos y Condiciones"),
+                            ),
+                          ],
+                        ),
                         Padding(padding: const EdgeInsets.only(top: 20.0)),
                         RaisedButton(
                           color: Theme.of(context).accentColor,
@@ -157,10 +177,7 @@ class SignUpState extends State<SignUp> {
                             'REGISTRARSE',
                             style: TextStyleUtils.bottonAndAppBarStyle,
                           ),
-                          onPressed: /*_submit*/ () {
-                            // _asyncInputDialog(context);
-                            _submit();
-                          },
+                          onPressed: _isChecked ? _submit : null,
                         ),
                       ],
                     ),

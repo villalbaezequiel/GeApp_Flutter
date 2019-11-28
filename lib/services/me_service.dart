@@ -48,4 +48,10 @@ mixin MeService on Model {
         ? launch(url)
         : commonWidgest.showToast("Failed to open WhatsApp");
   }
+
+  void openTermsUrl() async {
+    await canLaunch(Constant.termsUrl)
+        ? launch(Constant.termsUrl)
+        : commonWidgest.showToast("Failed to open Términos y Condiciones url");
+  }
 }
