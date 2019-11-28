@@ -320,17 +320,25 @@ class MyVotingTableState extends State<MyVotingTableList> {
     );
   }
 
-  void callAprForReplenish(String quantity) async {
+  void callAprForReplenish(String quantity) {
     commonWidgest.progressDialog(context);
-    await widget.model.replenishVote(widget.model, int.parse(quantity));
-    Navigator.popUntil(context, ModalRoute.withName('/my_voting_table_list'));
+    widget.model
+        .replenishVote(widget.model, int.parse(quantity))
+        .then((onValue) {
+      Navigator.popUntil(context, ModalRoute.withName('/my_voting_table_list'));
+    }).catchError((onError) {
+      Navigator.popUntil(context, ModalRoute.withName('/my_voting_table_list'));
+    });
   }
 
-  void callApiForVote(Voter voter) async {
+  void callApiForVote(Voter voter) {
     commonWidgest.progressDialog(context);
-    await widget.model.vote(widget.model, voter);
-    Navigator.popUntil(context, ModalRoute.withName('/my_voting_table_list'));
-    buildVoters();
+    widget.model.vote(widget.model, voter).then((onValue) {
+      Navigator.popUntil(context, ModalRoute.withName('/my_voting_table_list'));
+      buildVoters();
+    }).catchError((onError) {
+      Navigator.popUntil(context, ModalRoute.withName('/my_voting_table_list'));
+    });
   }
 
   Widget buildVoters() {

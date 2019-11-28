@@ -140,6 +140,8 @@ mixin VotingService on Model {
           });
 
       if (response.statusCode == 200) {
+        Map<String, dynamic> mapResponse = json.decode(response.body);
+        commonWidgests.showToast(mapResponse['message']);
         _isVotingOrReplenish = false;
         notifyListeners();
       } else {
