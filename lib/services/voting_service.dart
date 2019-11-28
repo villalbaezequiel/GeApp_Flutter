@@ -106,6 +106,7 @@ mixin VotingService on Model {
             return -1;
           }
         });
+        this._votingTable.sumVotes++;
         _isloadingVotingTable = false;
         notifyListeners();
       } else {

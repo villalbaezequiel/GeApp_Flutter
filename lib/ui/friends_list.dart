@@ -89,10 +89,19 @@ class FriendsListState extends State<FriendsList> {
   }
 
   Widget titleForFriendList() {
-    int friendsCount = widget.model.friendsCount;
-    return (friendsCount > 0)
-        ? Text("Mis Amigos ($friendsCount)")
-        : Text("Mis Amigos");
+    if (widget.model.isLoadingFriends) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text("Mis Amigos"),
+          CircularProgressIndicator(),
+        ],
+      );
+    } else if (widget.model.friendsCount > 0) {
+      return Text("Mis Amigos (${widget.model.friendsCount})");
+    } else {
+      return Text("Mis Amigos");
+    }
   }
 
   Widget friendListItem(Friend friend) {

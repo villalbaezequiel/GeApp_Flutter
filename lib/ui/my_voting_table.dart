@@ -235,8 +235,17 @@ class MyVotingTableState extends State<MyVotingTableList> {
   }
 
   Widget titleForVotingTable() {
-    if (widget.model.votingTable != null) {
-      return Text("Mi Mesa (${widget.model.votingTable.sumVotes})");
+    if (widget.model.isVotingOrReplenish || widget.model.isloadingVotingTable) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text("Mi Mesa"),
+          CircularProgressIndicator(),
+        ],
+      );
+    } else if (widget.model.votingTable != null) {
+      return Text(
+          "Mi Mesa (${widget.model.votingTable.sumVotes}/${widget.model.votingTable.voters.length})");
     } else {
       return Text("Mi Mesa");
     }
