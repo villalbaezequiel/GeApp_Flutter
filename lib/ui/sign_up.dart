@@ -26,7 +26,7 @@ class SignUpState extends State<SignUp> {
   String _phone; //optional
   String _email; //optional
   String _password; //mandatory
-  bool _isChecked = false;
+  bool _isChecked = true;
   CommonWidgest commonWidgests = CommonWidgest();
 
   void _submit() {
@@ -165,7 +165,10 @@ class SignUpState extends State<SignUp> {
                               onPressed: () {
                                 widget.model.openTermsUrl();
                               },
-                              child: Text("Aceptar Términos y Condiciones"),
+                              child: Text(
+                                "Aceptar Términos y Condiciones",
+                                style: TextStyle(color: Colors.blue),
+                              ),
                             ),
                           ],
                         ),
