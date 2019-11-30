@@ -92,7 +92,7 @@ mixin FriendService on Model {
         model.setFriendFetchedTime(DateTime.now());
         _isLoadingFriends = false;
         notifyListeners();
-        commonWidgests.showToast("Con éxito amigo añadido.");
+        commonWidgests.showToast("Amigo agregado");
         return true;
       } else {
         Map<String, dynamic> mapResponse = json.decode(response.body);
@@ -110,13 +110,13 @@ mixin FriendService on Model {
     }
   }
 
-  Future<bool> deleteFriend(MainModel model, Friend person) async {
+  Future<bool> deleteFriend(MainModel model, Friend friend) async {
     try {
       _isLoadingFriends = true;
       notifyListeners();
 
       var response = await http.delete(
-          Constant.baseUrl + Constant.friends + person.id.toString(),
+          Constant.baseUrl + Constant.friends + friend.id.toString(),
           headers: {
             'Content-Type': 'application/json',
             "Accept": "application/json",
@@ -124,7 +124,9 @@ mixin FriendService on Model {
           });
 
       if (response.statusCode == 200) {
-        removeFromFriendsList(person);
+        Map<String, dynamic> mapResponse = json.decode(response.body);
+        removeFromFriendsList(friend);
+        commonWidgests.showToast(mapResponse['message']);
         _isLoadingFriends = false;
         notifyListeners();
         return true;

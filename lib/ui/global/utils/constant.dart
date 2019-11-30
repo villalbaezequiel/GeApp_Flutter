@@ -13,6 +13,10 @@ class Constant {
   static LinearGradient gradient = LinearGradient(
     colors: [ascent, primary],
   );
+
+  static LinearGradient diaabledGradient = LinearGradient(
+    colors: [Colors.grey, Colors.grey],
+  );
   static LinearGradient appBarGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,

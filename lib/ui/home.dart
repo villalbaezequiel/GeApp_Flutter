@@ -59,14 +59,15 @@ class HomeState extends State<Home> {
   }
 
   Container homeButton(String title, String path, IconData icon) {
+    bool isEnabled = widget.model.checkDiability(path);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
       decoration: BoxDecoration(
-        gradient: Constant.gradient,
+        gradient: isEnabled ? Constant.gradient : Constant.diaabledGradient,
         borderRadius: BorderRadius.circular(2),
       ),
       child: ListTile(
-        enabled: widget.model.checkDiability(path),
+        enabled: isEnabled,
         onTap: () {
           navigateToPath(path);
         },

@@ -13,7 +13,7 @@ import 'ui/help.dart';
 import 'ui/home.dart';
 import 'ui/login.dart';
 import 'ui/my_voting_table.dart';
-import 'ui/person.dart';
+import 'ui/person_detail.dart';
 import 'ui/sign_up.dart';
 
 Future main() async {
@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
           '/add_friend': (context) => AddFriend(model),
           '/friends_list': (context) => FriendsList(model),
           '/my_voting_table_list': (context) => MyVotingTableList(model),
-          '/person_details': (context) => PersonDetails(model),
+          '/person_detail': (context) => CitizenDetails(model),
           '/escrutinio': (context) => Escrutinio(model),
           '/help': (context) => Help(),
           '/login': (context) => Login(model),

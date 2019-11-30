@@ -3,7 +3,8 @@ import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/friend.dart';
 import 'package:voting_app/services/main_model.dart';
-
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 import 'global/utils/constant.dart';
 import 'global/utils/text_style_utils.dart';
 import 'global/widgets/navigation_drawer.dart';
@@ -16,6 +17,8 @@ class FriendsList extends StatefulWidget {
 }
 
 class FriendsListState extends State<FriendsList> {
+  CommonWidgest commonWidgest = CommonWidgest();
+
   @override
   void initState() {
     super.initState();
@@ -105,22 +108,79 @@ class FriendsListState extends State<FriendsList> {
   }
 
   Widget friendListItem(Friend friend) {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border(
-        bottom: BorderSide(width: 1.0, color: Colors.grey.shade300),
-      )),
-      child: ListTile(
-        title: Text(
-            '${friend.citizen.first} ${friend.citizen.last}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black),*/),
-        subtitle: Text('DNI: ${friend.citizen.nationalId}'),
-        // trailing: Text(friend.id.toString()),
-        isThreeLine: false,
-        dense: false,
-        onTap: () {
-          print('${friend.citizen.nationalId}');
-        },
+    return Slidable(
+      key: Key(friend.id.toString()),
+      actionPane: SlidableDrawerActionPane(),
+      actionExtentRatio: 0.25,
+      closeOnScroll: false,
+      secondaryActions: <Widget>[
+        IconSlideAction(
+          caption: 'Eliminar',
+          color: Colors.red,
+          icon: Icons.delete,
+          onTap: () {
+            confirmDeletion(friend, context);
+          },
+        ),
+      ],
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border(
+          bottom: BorderSide(width: 1.0, color: Colors.grey.shade300),
+        )),
+        child: ListTile(
+          title: Text(
+              '${friend.citizen.first} ${friend.citizen.last}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black),*/),
+          subtitle: Text('DNI: ${friend.citizen.nationalId}'),
+          // trailing: Text(friend.id.toString()),
+          isThreeLine: false,
+          dense: false,
+          onTap: () {
+            print('${friend.citizen.nationalId}');
+          },
+        ),
       ),
+    );
+  }
+
+  void deleteFriend(Friend friend) {
+    commonWidgest.progressDialog(context);
+    widget.model
+        .deleteFriend(widget.model, friend)
+        .then((onValue) => Navigator.of(context).pop())
+        .catchError((onError) => Navigator.of(context).pop());
+  }
+
+  Future confirmDeletion(Friend friend, BuildContext context) {
+    return showDialog(
+      context: context,
+      barrierDismissible:
+          false, // dialog is dismissible with a tap on the barrier
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmar eliminación'),
+          content: Container(
+            child: Text(
+              "Está seguro que desea eliminar?",
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Yes', style: TextStyleUtils.dialogButtonTextStyle),
+              onPressed: () {
+                deleteFriend(friend);
+              },
+            ),
+            FlatButton(
+              child: Text('No', style: TextStyleUtils.dialogButtonTextStyle),
+              onPressed: () {
+                Navigator.popUntil(
+                    context, ModalRoute.withName('/friends_list'));
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -5,15 +5,15 @@ import 'package:voting_app/services/main_model.dart';
 import 'global/utils/constant.dart';
 import 'global/widgets/navigation_drawer.dart';
 
-class PersonDetails extends StatefulWidget {
+class CitizenDetails extends StatefulWidget {
   final MainModel model;
-  PersonDetails(this.model);
+  CitizenDetails(this.model);
 
   @override
-  _PersonDetailsState createState() => _PersonDetailsState();
+  _CitizenDetailsState createState() => _CitizenDetailsState();
 }
 
-class _PersonDetailsState extends State<PersonDetails> {
+class _CitizenDetailsState extends State<CitizenDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
