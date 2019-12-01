@@ -36,7 +36,7 @@ class CommonWidgest {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIos: 1,
-      backgroundColor: Constant.ascent,
+      backgroundColor: Colors.grey,
       textColor: Colors.white,
       fontSize: 16.0,
     );

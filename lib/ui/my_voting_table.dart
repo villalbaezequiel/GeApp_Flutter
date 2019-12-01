@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
@@ -114,6 +112,16 @@ class MyVotingTableState extends State<MyVotingTableList> {
     return children;
   }
 
+  Widget buildVoters() {
+    return ListView.builder(
+      itemCount: widget.model.votingTable.voters.length,
+      itemBuilder: (context, index) {
+        var voter = widget.model.votingTable.voters[index];
+        return voterListItem(voter);
+      },
+    );
+  }
+
   Future<String> _asyncInputDialogVote(BuildContext context) async {
     int orderNumber;
     return showDialog<String>(
@@ -133,7 +141,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
                   ],
                   autofocus: true,
                   decoration: InputDecoration(
-                    labelText: 'Ingrese el número de orden',
+                    labelText: 'Número de orden',
                     hintText: 'Ejemplo 154',
                   ),
                   onChanged: (value) {
@@ -269,28 +277,17 @@ class MyVotingTableState extends State<MyVotingTableList> {
                     color: Colors.transparent, size: 14),
           ),
           Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    '${voter.citizen.first} ${voter.citizen.last}',
-                    style: TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(height: 10),
-                  Text("DNI: " + voter.citizen.nationalId.toString())
-                ],
-              ),
+            child: ListTile(
+              title: Text('${voter.citizen.first} ${voter.citizen.last}'),
+              subtitle: Text('DNI: ${voter.citizen.nationalId}'),
+              trailing: Text(voter.id.toString()),
+              isThreeLine: false,
+              dense: false,
+              onTap: () {
+                print('${voter.order}');
+              },
             ),
           ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Center(
-              child: Text(voter.order.toString()),
-            ),
-          )
         ],
       ),
     );
@@ -348,15 +345,5 @@ class MyVotingTableState extends State<MyVotingTableList> {
     }).catchError((onError) {
       Navigator.popUntil(context, ModalRoute.withName('/my_voting_table_list'));
     });
-  }
-
-  Widget buildVoters() {
-    return ListView.builder(
-      itemCount: widget.model.votingTable.voters.length,
-      itemBuilder: (context, index) {
-        var voter = widget.model.votingTable.voters[index];
-        return voterListItem(voter);
-      },
-    );
   }
 }
