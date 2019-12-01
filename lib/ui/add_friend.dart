@@ -24,22 +24,6 @@ class AddFriendState extends State<AddFriend> {
 
   CommonWidgest commonWidgest = CommonWidgest();
 
-  void _submit() {
-    final form = formKey.currentState;
-    if (form.validate()) {
-      form.save();
-      performSubmit();
-    }
-  }
-
-  void performSubmit() {
-    commonWidgest.progressDialog(context);
-    widget.model
-        .addFriend(widget.model, _nationalId, _email, _phoneNumber)
-        .then((onValue) => Navigator.of(context).pop())
-        .catchError((onError) => Navigator.of(context).pop());
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,5 +93,23 @@ class AddFriendState extends State<AddFriend> {
         ),
       ),
     );
+  }
+
+  void _submit() {
+    final form = formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      performSubmit();
+    }
+  }
+
+  void performSubmit() {
+    commonWidgest.progressDialog(context);
+    widget.model
+        .addFriend(widget.model, _nationalId, _email, _phoneNumber)
+        .then((onValue) {
+      Navigator.of(context).pop();
+      formKey.currentState?.reset();
+    }).catchError((onError) => Navigator.of(context).pop());
   }
 }

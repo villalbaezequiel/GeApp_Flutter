@@ -166,7 +166,7 @@ class FriendsListState extends State<FriendsList> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Yes', style: TextStyleUtils.dialogButtonTextStyle),
+              child: Text('Si', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
                 deleteFriend(friend);
               },

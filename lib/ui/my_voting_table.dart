@@ -134,7 +134,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
                   autofocus: true,
                   decoration: InputDecoration(
                     labelText: 'Ingrese el número de orden',
-                    hintText: 'ejemplo 154',
+                    hintText: 'Ejemplo 154',
                   ),
                   onChanged: (value) {
                     orderNumber = int.parse(value);
@@ -311,7 +311,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Yes', style: TextStyleUtils.dialogButtonTextStyle),
+              child: Text('Si', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
                 callApiForVote(voter);
               },

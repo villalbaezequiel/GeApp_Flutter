@@ -20,7 +20,7 @@ class HomeState extends State<Home> {
     loadData();
   }
 
-  Future loadData() async {
+  Future<void> loadData() async {
     widget.model.fetchFriends(widget.model);
     widget.model.fetchVotingTable(widget.model);
     // TODO: call election api
@@ -38,20 +38,23 @@ class HomeState extends State<Home> {
           drawer: NavigationDrawer(model: widget.model),
           backgroundColor: Colors.white,
           // floatingActionButton: floatingAction,
-          body: ListView(
-            children: <Widget>[
-              Image.asset(
-                'assets/images/logo2.png',
-                height: 150,
-              ),
-              SizedBox(height: 30),
-              homeButton('Agregar amigo', '/add_friend', Icons.person_add),
-              homeButton('Mis amigos', '/friends_list', Icons.group),
-              homeButton('Mi mesa', '/my_voting_table_list', Icons.list),
-              homeButton('Escrutinio', '/escrutinio', Icons.check_circle),
-              homeButton('Ayuda', '/help', Icons.help_outline),
-              SizedBox(height: 30),
-            ],
+          body: RefreshIndicator(
+            onRefresh: loadData,
+            child: ListView(
+              children: <Widget>[
+                Image.asset(
+                  'assets/images/logo2.png',
+                  height: 150,
+                ),
+                SizedBox(height: 30),
+                homeButton('Agregar amigo', '/add_friend', Icons.person_add),
+                homeButton('Mis amigos', '/friends_list', Icons.group),
+                homeButton('Mi mesa', '/my_voting_table_list', Icons.list),
+                homeButton('Escrutinio', '/escrutinio', Icons.check_circle),
+                homeButton('Ayuda', '/help', Icons.help_outline),
+                SizedBox(height: 30),
+              ],
+            ),
           ),
         );
       },
