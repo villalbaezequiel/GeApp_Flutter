@@ -147,8 +147,10 @@ class FriendsListState extends State<FriendsList> {
     commonWidgest.progressDialog(context);
     widget.model
         .deleteFriend(widget.model, friend)
-        .then((onValue) => Navigator.of(context).pop())
-        .catchError((onError) => Navigator.of(context).pop());
+        .then((onValue) =>
+            Navigator.popUntil(context, ModalRoute.withName('/friends_list')))
+        .catchError((onError) =>
+            Navigator.popUntil(context, ModalRoute.withName('/friends_list')));
   }
 
   Future confirmDeletion(Friend friend, BuildContext context) {
