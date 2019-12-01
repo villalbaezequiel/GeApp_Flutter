@@ -62,8 +62,12 @@ class AddFriendState extends State<AddFriend> {
                         onSaved: (val) => _nationalId = val,
                       ),
                       TextFormField(
+                        keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                            hintText: "", labelText: "Correo Electrónico"),
+                          hintText: "",
+                          labelText: "Correo Electrónico",
+                        ),
+                        validator: validateEmail,
                         onSaved: (val) => _email = val,
                       ),
                       TextFormField(
@@ -93,6 +97,16 @@ class AddFriendState extends State<AddFriend> {
         ),
       ),
     );
+  }
+
+  String validateEmail(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return 'Enter Valid Email';
+    else
+      return null;
   }
 
   void _submit() {
