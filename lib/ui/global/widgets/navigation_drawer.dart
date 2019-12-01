@@ -55,11 +55,14 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       ),
       currentAccountPicture: CircleAvatar(
         backgroundColor: Colors.blue,
-        child: Text(
-          (widget.model.user == null || widget.model.user.firstName == null)
-              ? "G"
-              : widget.model.user.firstName[0].toUpperCase(),
-          style: TextStyle(fontSize: 30.0),
+        child: Container(
+          margin: EdgeInsets.all(10),
+          child: Text(
+            (widget.model.user == null || widget.model.user.firstName == null)
+                ? "G"
+                : widget.model.user.firstName[0].toUpperCase(),
+            style: TextStyle(fontSize: 30.0),
+          ),
         ),
       ),
     );

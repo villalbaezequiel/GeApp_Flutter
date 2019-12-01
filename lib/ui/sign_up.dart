@@ -161,13 +161,15 @@ class SignUpState extends State<SignUp> {
                                 });
                               },
                             ),
-                            FlatButton(
-                              onPressed: () {
-                                widget.model.openTermsUrl();
-                              },
-                              child: Text(
-                                "Aceptar Términos y Condiciones",
-                                style: TextStyle(color: Colors.blue),
+                            Flexible(
+                              child: FlatButton(
+                                onPressed: () {
+                                  widget.model.openTermsUrl();
+                                },
+                                child: Text(
+                                  "Aceptar Términos y Condiciones",
+                                  style: TextStyle(color: Colors.blue),
+                                ),
                               ),
                             ),
                           ],
