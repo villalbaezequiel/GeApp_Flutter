@@ -147,6 +147,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
                   onChanged: (value) {
                     orderNumber = int.parse(value);
                   },
+                  onSubmitted: (value) => orderNumber = int.parse(value),
                 ),
               )
             ],
@@ -280,7 +281,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
             child: ListTile(
               title: Text('${voter.citizen.first} ${voter.citizen.last}'),
               subtitle: Text('DNI: ${voter.citizen.nationalId}'),
-              trailing: Text(voter.id.toString()),
+              trailing: Text(voter.order.toString()),
               isThreeLine: false,
               dense: false,
               onTap: () {
