@@ -69,8 +69,9 @@ mixin VotingService on Model {
   }
 
   Voter validateVoterOrder(int order) {
-    return _votingTable.voters
-        .firstWhere((voter) => (voter.order == order), orElse: () => null);
+    return _votingTable.voters.firstWhere(
+        (voter) => (voter.order == order && voter.voted == false),
+        orElse: () => null);
   }
 
   Future vote(MainModel model, Voter voter) async {
