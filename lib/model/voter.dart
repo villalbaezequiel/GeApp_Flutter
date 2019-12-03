@@ -10,17 +10,20 @@ class Voter {
   int citizenId;
   int votingtableId;
   Citizen citizen;
+  String address;
 
-  Voter(
-      {this.id,
-      this.order,
-      this.voted,
-      this.isOwner,
-      this.createdAt,
-      this.updatedAt,
-      this.citizenId,
-      this.votingtableId,
-      this.citizen});
+  Voter({
+    this.id,
+    this.order,
+    this.voted,
+    this.isOwner,
+    this.createdAt,
+    this.updatedAt,
+    this.citizenId,
+    this.votingtableId,
+    this.address,
+    this.citizen,
+  });
 
   Voter.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -31,6 +34,7 @@ class Voter {
     updatedAt = json['updatedAt'];
     citizenId = json['citizenId'];
     votingtableId = json['votingtableId'];
+    address = json['address'];
     citizen =
         json['citizen'] != null ? new Citizen.fromJson(json['citizen']) : null;
   }
@@ -45,6 +49,7 @@ class Voter {
     data['updatedAt'] = this.updatedAt;
     data['citizenId'] = this.citizenId;
     data['votingtableId'] = this.votingtableId;
+    data['address'] = this.address;
     if (this.citizen != null) {
       data['citizen'] = this.citizen.toJson();
     }

@@ -7,14 +7,15 @@ import 'package:voting_app/ui/splash_screen.dart';
 import 'services/main_model.dart';
 import 'ui/add_friend.dart';
 import 'ui/escrutinio.dart';
+import 'ui/friend_citizen_details.dart';
 import 'ui/friends_list.dart';
 import 'ui/global/utils/constant.dart';
 import 'ui/help.dart';
 import 'ui/home.dart';
 import 'ui/login.dart';
 import 'ui/my_voting_table.dart';
-import 'ui/person_detail.dart';
 import 'ui/sign_up.dart';
+import 'ui/voter_citizen_details.dart';
 
 Future main() async {
   await SystemChrome.setPreferredOrientations(
@@ -56,7 +57,8 @@ class _MyAppState extends State<MyApp> {
           '/add_friend': (context) => AddFriend(model),
           '/friends_list': (context) => FriendsList(model),
           '/my_voting_table_list': (context) => MyVotingTableList(model),
-          '/person_detail': (context) => CitizenDetails(model),
+          '/friend_citizen_details': (context) => FriendCitizenDetails(),
+          '/voter_citizen_details': (context) => VoterCitizenDetails(),
           '/escrutinio': (context) => Escrutinio(model),
           '/help': (context) => Help(),
           '/login': (context) => Login(model),

@@ -4,6 +4,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/friend.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:voting_app/ui/friend_citizen_details.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 import 'global/utils/constant.dart';
 import 'global/utils/text_style_utils.dart';
@@ -136,7 +137,10 @@ class FriendsListState extends State<FriendsList> {
           isThreeLine: false,
           dense: false,
           onTap: () {
-            print('${friend.citizen.nationalId}');
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) => FriendCitizenDetails(friend: friend)),
+            );
           },
         ),
       ),
