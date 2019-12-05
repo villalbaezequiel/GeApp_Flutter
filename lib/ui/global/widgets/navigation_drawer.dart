@@ -76,7 +76,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
         children: <Widget>[
           CircleAvatar(
             backgroundColor: Colors.blue,
-            radius: 30,
+            radius: 35,
             child: Container(
               child: Text(
                 (widget.model.user == null ||
