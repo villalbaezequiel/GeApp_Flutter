@@ -60,13 +60,7 @@ class FriendsListState extends State<FriendsList> {
                       ? Center(child: CircularProgressIndicator())
                       : (model.friendsList != null &&
                               model.friendsList.length > 0)
-                          ? ListView.builder(
-                              itemCount: model.friendsCount,
-                              itemBuilder: (context, index) {
-                                var friend = model.friendsList[index];
-                                return friendListItem(friend);
-                              },
-                            )
+                          ? buildFriends()
                           : Center(child: Text("No hay amigos en tu lista.")),
                 ),
                 Container(
@@ -186,6 +180,21 @@ class FriendsListState extends State<FriendsList> {
             ),
           ],
         );
+      },
+    );
+  }
+
+  Widget buildFriends() {
+    int totalLength = widget.model.friendsCount + 1;
+    return ListView.builder(
+      itemCount: totalLength,
+      itemBuilder: (context, index) {
+        if (index >= widget.model.friendsCount) {
+          return Container(height: 50);
+        } else {
+          var friend = widget.model.friendsList[index];
+          return friendListItem(friend);
+        }
       },
     );
   }

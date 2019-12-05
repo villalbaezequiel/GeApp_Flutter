@@ -50,37 +50,37 @@ class MyVotingTableState extends State<MyVotingTableList> {
           ),
           drawer: NavigationDrawer(model: widget.model),
           floatingActionButton: floatingAction,
-          body: Column(
-            children: <Widget>[
-              Expanded(
-                child: widget.model.isloadingVotingTable
-                    ? Center(child: CircularProgressIndicator())
-                    : (widget.model.votingTable != null &&
-                            widget.model.votingTable.voters.length > 0)
-                        ? RefreshIndicator(
-                            onRefresh: () =>
-                                widget.model.fetchVotingTable(widget.model),
-                            child: buildVoters(),
-                          )
-                        : Center(child: Text("No voters available")),
-              ),
-              SizedBox(height: 50),
-              Container(
-                padding: EdgeInsets.all(5),
-                color: Colors.grey[200],
-                child: Center(
+          body: RefreshIndicator(
+            onRefresh: () => widget.model.fetchVotingTable(widget.model),
+            child: Column(
+              children: <Widget>[
+                Expanded(
                   child: widget.model.isloadingVotingTable
                       ? Center(child: CircularProgressIndicator())
-                      : Text(
-                          "Última actualización: " +
-                              widget.model.lastVotingTableFetchedTime,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyleUtils.bottomTimeBar,
-                        ),
+                      : (widget.model.votingTable != null &&
+                              widget.model.votingTable.voters.length > 0)
+                          ? Container(
+                              child: buildVoters(),
+                            )
+                          : Center(child: Text("No voters available")),
                 ),
-              ),
-            ],
+                Container(
+                  padding: EdgeInsets.all(5),
+                  color: Colors.grey[200],
+                  child: Center(
+                    child: widget.model.isloadingVotingTable
+                        ? Center(child: CircularProgressIndicator())
+                        : Text(
+                            "Última actualización: " +
+                                widget.model.lastVotingTableFetchedTime,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyleUtils.bottomTimeBar,
+                          ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -114,11 +114,16 @@ class MyVotingTableState extends State<MyVotingTableList> {
   }
 
   Widget buildVoters() {
+    int totalLength = widget.model.votingTable.voters.length + 1;
     return ListView.builder(
-      itemCount: widget.model.votingTable.voters.length,
+      itemCount: totalLength,
       itemBuilder: (context, index) {
-        var voter = widget.model.votingTable.voters[index];
-        return voterListItem(voter);
+        if (index >= widget.model.votingTable.voters.length) {
+          return Container(height: 50);
+        } else {
+          var voter = widget.model.votingTable.voters[index];
+          return voterListItem(voter);
+        }
       },
     );
   }
