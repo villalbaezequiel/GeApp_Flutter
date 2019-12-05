@@ -38,34 +38,80 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     ];
     List<Widget> drawerOptions = [];
 
-    Widget headerView = UserAccountsDrawerHeader(
-      key: Key("geapp_nav_drawer"),
-      decoration: BoxDecoration(gradient: Constant.appBarGradient),
-      accountName: Text(
-        (widget.model.user == null || widget.model.user.firstName == null)
-            ? "GeApp"
-            : (widget.model.user.firstName.toString() +
-                " " +
-                widget.model.user.lastName.toString()),
-      ),
-      accountEmail: Text(
-        (widget.model.user == null)
-            ? "DNI: 1234567890"
-            : "DNI: ${widget.model.user.nationalId.toString()}",
-      ),
-      currentAccountPicture: CircleAvatar(
-        backgroundColor: Colors.blue,
-        child: Container(
-          margin: EdgeInsets.all(10),
-          child: Text(
-            (widget.model.user == null || widget.model.user.firstName == null)
-                ? "G"
-                : widget.model.user.firstName[0].toUpperCase(),
-            style: TextStyle(fontSize: 30.0),
+    // Widget headerView = UserAccountsDrawerHeader(
+    //   key: Key("geapp_nav_drawer"),
+    //   decoration: BoxDecoration(gradient: Constant.appBarGradient),
+    //   accountName: Text(
+    //     (widget.model.user == null || widget.model.user.firstName == null)
+    //         ? "GeApp"
+    //         : (widget.model.user.firstName.toString() +
+    //             " " +
+    //             widget.model.user.lastName.toString()),
+    //   ),
+    //   accountEmail: Text(
+    //     (widget.model.user == null)
+    //         ? "DNI: 1234567890"
+    //         : "DNI: ${widget.model.user.nationalId.toString()}",
+    //   ),
+    //   currentAccountPicture: CircleAvatar(
+    //     backgroundColor: Colors.blue,
+    //     child: Container(
+    //       margin: EdgeInsets.all(10),
+    //       child: Text(
+    //         (widget.model.user == null || widget.model.user.firstName == null)
+    //             ? "G"
+    //             : widget.model.user.firstName[0].toUpperCase(),
+    //         style: TextStyle(fontSize: 30.0),
+    //       ),
+    //     ),
+    //   ),
+    // );
+
+    Widget headerView = Container(
+      padding: EdgeInsets.only(top: 60, left: 20, right: 20, bottom: 20),
+      decoration: BoxDecoration(gradient: Constant.gradient),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          CircleAvatar(
+            backgroundColor: Colors.blue,
+            radius: 30,
+            child: Container(
+              child: Text(
+                (widget.model.user == null ||
+                        widget.model.user.firstName == null)
+                    ? "G"
+                    : widget.model.user.firstName[0].toUpperCase(),
+                style: TextStyle(fontSize: 30.0),
+              ),
+            ),
           ),
-        ),
+          SizedBox(height: 10),
+          Text(
+            (widget.model.user == null || widget.model.user.firstName == null)
+                ? "GeApp"
+                : (widget.model.user.firstName.toString() +
+                    " " +
+                    widget.model.user.lastName.toString()),
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(height: 5),
+          Text(
+            (widget.model.user == null)
+                ? "DNI: 1234567890"
+                : "DNI: ${widget.model.user.nationalId.toString()}",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+            ),
+          ),
+        ],
       ),
     );
+
     drawerOptions.add(headerView);
 
     String currentRoute(context) {
