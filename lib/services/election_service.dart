@@ -130,13 +130,10 @@ mixin ElectionService on Model {
       });
       var response = await request.send();
       if (response.statusCode == 200) {
-        // Map<String, dynamic> mapResponse = json.decode(response);
         model.disableEscutinioButton(true);
         commonWidgests.showToast("Image upload success");
         return true;
       } else {
-        // Map<String, dynamic> mapResponse = json.decode(response.body);
-        // Errors errors = new Errors.fromJson(mapResponse['errors']);
         commonWidgests.showToast("Image upload failed");
         _isloadingElection = false;
         notifyListeners();
