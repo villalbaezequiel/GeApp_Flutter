@@ -6,16 +6,21 @@ import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/election.dart';
 import 'package:voting_app/model/error.dart';
+import 'package:voting_app/model/vote_election.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/constant.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 
 mixin ElectionService on Model {
+  CommonWidgest commonWidgests = CommonWidgest();
+
   bool _isloadingElection = false;
 
   Election _election;
 
-  CommonWidgest commonWidgests = CommonWidgest();
+  int _numberOfElectionVote = 0;
+
+  int get numberOfElectionVote => _numberOfElectionVote;
 
   bool get isloadingElection => _isloadingElection;
 
@@ -35,6 +40,7 @@ mixin ElectionService on Model {
         _election = Election.fromJson(mapResponse);
         // model.setVotingTableFetchedTime(DateTime.now());
         _isloadingElection = false;
+        setNumberOfElectionVote();
         notifyListeners();
         return _election;
       } else {
@@ -53,7 +59,14 @@ mixin ElectionService on Model {
     }
   }
 
-  Future submitScrutiny(MainModel model, String notes) {
+  setNumberOfElectionVote() {
+    _election.scrutinycategories.forEach((category) {
+      _numberOfElectionVote =
+          _numberOfElectionVote + category.scrutinyparties.length;
+    });
+  }
+
+  Future submitScrutiny(MainModel model, VoteElection voteElection) {
     try {
       // hello
       return null;

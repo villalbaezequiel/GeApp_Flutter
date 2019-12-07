@@ -4,6 +4,7 @@ import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/scrutiny_category.dart';
 import 'package:voting_app/model/scrutiny_party.dart';
+import 'package:voting_app/model/vote_election.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 
@@ -21,6 +22,14 @@ class Escrutinio extends StatefulWidget {
 }
 
 class _EscrutinioState extends State<Escrutinio> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
+
+  CommonWidgest commonWidgest = CommonWidgest();
+  String notes = '';
+
+  VoteElection voteElection = VoteElection(quantities: [], notes: "");
+
   @override
   void initState() {
     super.initState();
@@ -30,12 +39,6 @@ class _EscrutinioState extends State<Escrutinio> {
   Future loadData() async {
     widget.model.fetchElection(widget.model);
   }
-
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
-
-  CommonWidgest commonWidgest = CommonWidgest();
-  String notes = '';
 
   @override
   Widget build(BuildContext context) {
@@ -91,13 +94,13 @@ class _EscrutinioState extends State<Escrutinio> {
           initiallyExpanded: true,
           title: Text(scrutinyCategory.name),
           children: scrutinyCategory.scrutinyparties
-              .map((party) =>
-                  buildPartyForm(scrutinyCategory.scrutinyparties[0]))
+              .map((party) => buildPartyForm(scrutinyCategory, party))
               .toList()),
     );
   }
 
-  Widget buildPartyForm(ScrutinyParty party) {
+  Widget buildPartyForm(
+      ScrutinyCategory scrutinyCategory, ScrutinyParty party) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Column(
@@ -116,10 +119,14 @@ class _EscrutinioState extends State<Escrutinio> {
             decoration: InputDecoration(
               hintText: "Cantidad: 12",
             ),
-            autovalidate: true,
             validator: (val) =>
                 (val == null) ? 'Please input valid number' : null,
-            // onSaved: (val) => _nationalId = val,
+            onChanged: (val) {
+              validateVoteForElection(party, val, scrutinyCategory.name);
+            },
+            // onSaved: (val) {
+            //   validateVoteForElection(party, val, scrutinyCategory.name);
+            // },
           ),
         ],
       ),
@@ -157,7 +164,8 @@ class _EscrutinioState extends State<Escrutinio> {
               ),
               maxLines: 10,
               minLines: 5,
-              onSaved: (value) => notes = value,
+              onChanged: (value) => voteElection.notes = value,
+              onSaved: (value) => voteElection.notes = value,
             ),
           ),
         ),
@@ -176,19 +184,78 @@ class _EscrutinioState extends State<Escrutinio> {
     );
   }
 
+  addVote(Vote vote) {
+    var existingItem = voteElection.quantities.firstWhere(
+        (itemToCheck) => (itemToCheck.scrutinyPartyId == vote.scrutinyPartyId),
+        orElse: () => null);
+    if (existingItem == null) {
+      voteElection.quantities.add(vote);
+    } else {
+      existingItem.qty = vote.qty;
+      voteElection.quantities.remove(existingItem);
+      voteElection.quantities.add(vote);
+    }
+  }
+
+  bool validateAllElectionData() {
+    return voteElection.quantities.length == widget.model.numberOfElectionVote;
+  }
+
   void _submitElectionVote() {
     final form = formKey.currentState;
-    if (form.validate()) {
+    if (form.validate() && validateAllElectionData()) {
       form.save();
-      // performSubmit();
+      confirmElectionVote();
+    } else {
+      commonWidgest.showToast(
+          "Form is invalid, please check all informations. You may have missed to input some values");
     }
+  }
+
+  Future confirmElectionVote() {
+    return showDialog(
+      context: context,
+      barrierDismissible:
+          false, // dialog is dismissible with a tap on the barrier
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Container(
+            child: Text("Está seguro que desea enviar la información?"),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Si', style: TextStyleUtils.dialogButtonTextStyle),
+              onPressed: () {
+                // performSubmit();
+              },
+            ),
+            FlatButton(
+              child: Text('No', style: TextStyleUtils.dialogButtonTextStyle),
+              onPressed: () {
+                Navigator.popUntil(context, ModalRoute.withName('/escrutinio'));
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void performSubmit() {
     commonWidgest.progressDialog(context);
-    widget.model.submitScrutiny(widget.model, notes).then((onValue) {
+    widget.model.submitScrutiny(widget.model, voteElection).then((onValue) {
       Navigator.of(context).pop();
       formKey.currentState?.reset();
     }).catchError((onError) => Navigator.of(context).pop());
+  }
+
+  void validateVoteForElection(
+      ScrutinyParty party, String val, String categoryName) {
+    if (val != null && val.isNotEmpty) {
+      addVote(Vote(scrutinyPartyId: party.id, qty: int.parse(val)));
+    } else {
+      commonWidgest.showToast(
+          "Please enter valid number for ${party.name} at $categoryName");
+    }
   }
 }
