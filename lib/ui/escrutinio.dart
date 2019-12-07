@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
@@ -7,7 +9,7 @@ import 'package:voting_app/model/scrutiny_party.dart';
 import 'package:voting_app/model/vote_election.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
-
+import 'package:image_picker/image_picker.dart';
 import 'global/utils/constant.dart';
 import 'global/utils/text_style_utils.dart';
 import 'global/widgets/navigation_drawer.dart';
@@ -29,6 +31,16 @@ class _EscrutinioState extends State<Escrutinio> {
   String notes = '';
 
   VoteElection voteElection = VoteElection(quantities: [], notes: "");
+
+  File scrutinyImage;
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      scrutinyImage = image;
+    });
+  }
 
   @override
   void initState() {
@@ -154,6 +166,31 @@ class _EscrutinioState extends State<Escrutinio> {
       children: <Widget>[
         Card(
           margin: EdgeInsets.all(10),
+          child: (scrutinyImage == null)
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text('No image selected.'),
+                    ),
+                    FlatButton(
+                      child: Text("Pick Image"),
+                      onPressed: () {
+                        getImage();
+                      },
+                    )
+                  ],
+                )
+              : Image.file(
+                  scrutinyImage,
+                  height: 200,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+        ),
+        Card(
+          margin: EdgeInsets.all(10),
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 10),
             child: TextFormField(
@@ -203,7 +240,9 @@ class _EscrutinioState extends State<Escrutinio> {
 
   void _submitElectionVote() {
     final form = formKey.currentState;
-    if (form.validate() && validateAllElectionData()) {
+    if (scrutinyImage == null) {
+      commonWidgest.showToast("Please select image as well");
+    } else if (form.validate() && validateAllElectionData()) {
       form.save();
       confirmElectionVote();
     } else {
@@ -243,10 +282,28 @@ class _EscrutinioState extends State<Escrutinio> {
 
   void performSubmit() {
     commonWidgest.progressDialog(context);
-    widget.model.submitScrutiny(widget.model, voteElection).then((onValue) {
-      formKey.currentState?.reset();
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/home', (Route<dynamic> route) => false);
+    widget.model
+        .uploadScrutinyImage(widget.model, scrutinyImage)
+        .then((onValue) {
+      if (onValue) {
+        submitData();
+      } else {
+        Navigator.popUntil(context, ModalRoute.withName('/escrutinio'));
+      }
+    }).catchError((onError) {
+      Navigator.popUntil(context, ModalRoute.withName('/escrutinio'));
+    });
+  }
+
+  void submitData() {
+    widget.model.submitScrutiny(widget.model, voteElection).then((response) {
+      if (response) {
+        formKey.currentState?.reset();
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/home', (Route<dynamic> route) => false);
+      } else {
+        Navigator.popUntil(context, ModalRoute.withName('/escrutinio'));
+      }
     }).catchError((onError) =>
         Navigator.popUntil(context, ModalRoute.withName('/escrutinio')));
   }

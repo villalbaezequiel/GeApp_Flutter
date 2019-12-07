@@ -23,7 +23,7 @@ class FriendsListState extends State<FriendsList> {
   @override
   void initState() {
     super.initState();
-    if (widget.model.friendsCount == 0) loadFriends();
+    if (widget.model.friendsList.length == 0) loadFriends();
   }
 
   Future loadFriends() async {
@@ -95,8 +95,8 @@ class FriendsListState extends State<FriendsList> {
           CircularProgressIndicator(strokeWidth: 1),
         ],
       );
-    } else if (widget.model.friendsCount > 0) {
-      return Text("Mis Amigos (${widget.model.friendsCount})");
+    } else if (widget.model.friendsList.length > 0) {
+      return Text("Mis Amigos (${widget.model.friendsList.length})");
     } else {
       return Text("Mis Amigos");
     }
@@ -185,11 +185,11 @@ class FriendsListState extends State<FriendsList> {
   }
 
   Widget buildFriends() {
-    int totalLength = widget.model.friendsCount + 1;
+    int totalLength = widget.model.friendsList.length + 1;
     return ListView.builder(
       itemCount: totalLength,
       itemBuilder: (context, index) {
-        if (index >= widget.model.friendsCount) {
+        if (index >= widget.model.friendsList.length) {
           return Container(height: 50);
         } else {
           var friend = widget.model.friendsList[index];

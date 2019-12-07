@@ -18,8 +18,6 @@ mixin FriendService on Model {
 
   bool get isLoadingFriends => _isLoadingFriends;
 
-  int get friendsCount => _friendsList.length;
-
   CommonWidgest commonWidgests = CommonWidgest();
 
   Future<List<Friend>> fetchFriends(MainModel model) async {

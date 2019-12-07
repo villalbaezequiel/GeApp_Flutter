@@ -21,7 +21,8 @@ class HomeState extends State<Home> {
   }
 
   Future<void> loadData() async {
-    if (widget.model.friendsCount == 0) widget.model.fetchFriends(widget.model);
+    if (widget.model.friendsList.length == 0)
+      widget.model.fetchFriends(widget.model);
     if (widget.model.votingTable == null)
       widget.model.fetchVotingTable(widget.model);
     if (widget.model.election == null) widget.model.fetchElection(widget.model);

@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/election.dart';
 import 'package:voting_app/model/error.dart';
@@ -93,13 +94,58 @@ mixin ElectionService on Model {
         Errors errors = new Errors.fromJson(mapResponse['errors']);
         commonWidgests.showToast(errors.message);
         _isloadingElection = false;
+        model.disableEscutinioButton(false);
+        notifyListeners();
+        return false;
+      }
+    } catch (error) {
+      _isloadingElection = false;
+      model.disableEscutinioButton(false);
+      catchExceptions(error);
+      return false;
+    }
+  }
+
+  Future<bool> uploadScrutinyImage(MainModel model, File scrutinyImage) async {
+    try {
+      _isloadingElection = true;
+      notifyListeners();
+
+      final mimeTypeData =
+          lookupMimeType(scrutinyImage.path, headerBytes: [0xFF, 0xD8])
+              .split('/');
+
+      var postUri = Uri.parse(Constant.baseUrl + Constant.scrutinyfile);
+      var request = http.MultipartRequest("POST", postUri);
+      http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+          'scrutinyImage', scrutinyImage.path,
+          contentType: MediaType(mimeTypeData[0],
+              mimeTypeData[1])); //returns a Future<MultipartFile>
+
+      request.files.add(multipartFile);
+      request.headers.addAll({
+        "Authorization": "Bearer ${model.user.token}",
+        'Content-Type': 'multipart/form-data;',
+        "Accept": "application/json",
+      });
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        // Map<String, dynamic> mapResponse = json.decode(response);
+        model.disableEscutinioButton(true);
+        commonWidgests.showToast("Image upload success");
+        return true;
+      } else {
+        // Map<String, dynamic> mapResponse = json.decode(response.body);
+        // Errors errors = new Errors.fromJson(mapResponse['errors']);
+        commonWidgests.showToast("Image upload failed");
+        _isloadingElection = false;
         notifyListeners();
         return false;
       }
     } catch (error) {
       _isloadingElection = false;
       catchExceptions(error);
-      return null;
+      return false;
     }
   }
 
