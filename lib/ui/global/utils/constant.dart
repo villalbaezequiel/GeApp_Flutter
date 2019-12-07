@@ -47,4 +47,8 @@ class Constant {
 
   // election
   static const String election = "election/";
+
+  // scrutiny for votes
+  static const String scrutinyVotes = "voting-table/scrutiny/";
+  static const String scrutinyfile = "voting-table/scrutiny/file";
 }

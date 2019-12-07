@@ -226,7 +226,7 @@ class _EscrutinioState extends State<Escrutinio> {
             FlatButton(
               child: Text('Si', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
-                // performSubmit();
+                performSubmit();
               },
             ),
             FlatButton(
@@ -244,9 +244,11 @@ class _EscrutinioState extends State<Escrutinio> {
   void performSubmit() {
     commonWidgest.progressDialog(context);
     widget.model.submitScrutiny(widget.model, voteElection).then((onValue) {
-      Navigator.of(context).pop();
       formKey.currentState?.reset();
-    }).catchError((onError) => Navigator.of(context).pop());
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/home', (Route<dynamic> route) => false);
+    }).catchError((onError) =>
+        Navigator.popUntil(context, ModalRoute.withName('/escrutinio')));
   }
 
   void validateVoteForElection(

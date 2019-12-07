@@ -10,6 +10,9 @@ class MainModel extends Model
     with MeService, FriendService, VotingService, ElectionService {
   DateTime _lastFetchedTime = DateTime.now();
   DateTime _votingTableFetchedTime = DateTime.now();
+  bool _disableEscrutinioButton = false;
+
+  bool get isEscrutinioButtonDisabled => _disableEscrutinioButton;
 
   String get lastFriendListFetchedTime =>
       Constant.dateFormatter.format(_lastFetchedTime);
@@ -27,12 +30,15 @@ class MainModel extends Model
     // notifyListeners();
   }
 
-  checkDiability(String path) {
+  checkEnablity(String path) {
     if (path == "/my_voting_table_list" || path == '/escrutinio') {
       if (user != null &&
           user.isOwner &&
           votingTable != null &&
           votingTable.isOpen) {
+        if (path == '/escrutinio' && isEscrutinioButtonDisabled) {
+          return false;
+        }
         return true;
       } else {
         return false;
@@ -40,5 +46,9 @@ class MainModel extends Model
     } else {
       return true;
     }
+  }
+
+  disableEscutinioButton(bool disable) {
+    _disableEscrutinioButton = disable;
   }
 }

@@ -66,10 +66,36 @@ mixin ElectionService on Model {
     });
   }
 
-  Future submitScrutiny(MainModel model, VoteElection voteElection) {
+  Future<bool> submitScrutiny(
+      MainModel model, VoteElection voteElection) async {
     try {
-      // hello
-      return null;
+      _isloadingElection = true;
+      notifyListeners();
+
+      var body = json.encode(voteElection);
+      var response = await http.post(Constant.baseUrl + Constant.scrutinyVotes,
+          body: body,
+          headers: {
+            'Content-Type': 'application/json',
+            "Accept": "application/json",
+            "Authorization": "Bearer ${model.user.token}",
+          });
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> mapResponse = json.decode(response.body);
+        model.disableEscutinioButton(true);
+        _isloadingElection = false;
+        notifyListeners();
+        commonWidgests.showToast(mapResponse['message']);
+        return true;
+      } else {
+        Map<String, dynamic> mapResponse = json.decode(response.body);
+        Errors errors = new Errors.fromJson(mapResponse['errors']);
+        commonWidgests.showToast(errors.message);
+        _isloadingElection = false;
+        notifyListeners();
+        return false;
+      }
     } catch (error) {
       _isloadingElection = false;
       catchExceptions(error);

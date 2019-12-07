@@ -60,7 +60,7 @@ class HomeState extends State<Home> {
   }
 
   Container homeButton(String title, String path, IconData icon) {
-    bool isEnabled = widget.model.checkDiability(path);
+    bool isEnabled = widget.model.checkEnablity(path);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
       decoration: BoxDecoration(
