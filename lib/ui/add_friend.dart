@@ -44,54 +44,55 @@ class AddFriendState extends State<AddFriend> {
             Container(
               padding: const EdgeInsets.all(10.0),
               child: Form(
-                  key: formKey,
-                  child: Column(
-                    children: <Widget>[
-                      TextFormField(
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          WhitelistingTextInputFormatter.digitsOnly
-                        ],
-                        decoration: InputDecoration(
-                          hintText: "Ejemplo: 30154487",
-                          labelText: "DNI",
-                        ),
-                        validator: (val) => !val.contains(RegExp('[0-9]*'))
-                            ? 'Sólo números para el DNI.'
-                            : null,
-                        onSaved: (val) => _nationalId = val,
+                key: formKey,
+                child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        WhitelistingTextInputFormatter.digitsOnly
+                      ],
+                      decoration: InputDecoration(
+                        hintText: "Ejemplo: 30154487",
+                        labelText: "DNI",
                       ),
-                      TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          hintText: "",
-                          labelText: "Correo Electrónico",
-                        ),
-                        validator: validateEmail,
-                        onSaved: (val) => _email = val,
+                      validator: (val) => !val.contains(RegExp('[0-9]*'))
+                          ? 'Sólo números para el DNI.'
+                          : null,
+                      onSaved: (val) => _nationalId = val,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        hintText: "",
+                        labelText: "Correo Electrónico",
                       ),
-                      TextFormField(
-                        keyboardType: TextInputType.phone,
-                        decoration: InputDecoration(
-                            hintText: "+54-911-4567-4567",
-                            labelText: "Número de teléfono"),
-                        validator: (val) => !val.contains(RegExp(r'[0-9]*'))
-                            ? 'Teléfono incorrecto.'
-                            : null,
-                        onSaved: (val) => _phoneNumber = val,
+                      validator: validateEmail,
+                      onSaved: (val) => _email = val,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                          hintText: "+54-911-4567-4567",
+                          labelText: "Número de teléfono"),
+                      validator: (val) => !val.contains(RegExp(r'[0-9]*'))
+                          ? 'Teléfono incorrecto.'
+                          : null,
+                      onSaved: (val) => _phoneNumber = val,
+                    ),
+                    SizedBox(height: 20),
+                    RaisedButton(
+                      color: Theme.of(context).accentColor,
+                      textColor: Colors.white,
+                      child: Text(
+                        'AGREGAR',
+                        style: TextStyleUtils.bottonAndAppBarStyle,
                       ),
-                      Padding(padding: const EdgeInsets.only(top: 20.0)),
-                      RaisedButton(
-                        color: Theme.of(context).accentColor,
-                        textColor: Colors.white,
-                        child: Text(
-                          'AGREGAR',
-                          style: TextStyleUtils.bottonAndAppBarStyle,
-                        ),
-                        onPressed: _submit,
-                      )
-                    ],
-                  )),
+                      onPressed: _submit,
+                    )
+                  ],
+                ),
+              ),
             ),
           ],
         ),

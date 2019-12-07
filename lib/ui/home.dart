@@ -21,9 +21,10 @@ class HomeState extends State<Home> {
   }
 
   Future<void> loadData() async {
-    widget.model.fetchFriends(widget.model);
-    widget.model.fetchVotingTable(widget.model);
-    // TODO: call election api
+    if (widget.model.friendsCount == 0) widget.model.fetchFriends(widget.model);
+    if (widget.model.votingTable == null)
+      widget.model.fetchVotingTable(widget.model);
+    if (widget.model.election == null) widget.model.fetchElection(widget.model);
   }
 
   @override
@@ -38,23 +39,20 @@ class HomeState extends State<Home> {
           drawer: NavigationDrawer(model: widget.model),
           backgroundColor: Colors.white,
           // floatingActionButton: floatingAction,
-          body: RefreshIndicator(
-            onRefresh: loadData,
-            child: ListView(
-              children: <Widget>[
-                Image.asset(
-                  'assets/images/logo2.png',
-                  height: 150,
-                ),
-                SizedBox(height: 30),
-                homeButton('Agregar amigo', '/add_friend', Icons.person_add),
-                homeButton('Mis amigos', '/friends_list', Icons.group),
-                homeButton('Mi mesa', '/my_voting_table_list', Icons.list),
-                homeButton('Escrutinio', '/escrutinio', Icons.check_circle),
-                homeButton('Ayuda', '/help', Icons.help_outline),
-                SizedBox(height: 30),
-              ],
-            ),
+          body: ListView(
+            children: <Widget>[
+              Image.asset(
+                'assets/images/logo2.png',
+                height: 150,
+              ),
+              SizedBox(height: 30),
+              homeButton('Agregar amigo', '/add_friend', Icons.person_add),
+              homeButton('Mis amigos', '/friends_list', Icons.group),
+              homeButton('Mi mesa', '/my_voting_table_list', Icons.list),
+              homeButton('Escrutinio', '/escrutinio', Icons.check_circle),
+              homeButton('Ayuda', '/help', Icons.help_outline),
+              SizedBox(height: 30),
+            ],
           ),
         );
       },
