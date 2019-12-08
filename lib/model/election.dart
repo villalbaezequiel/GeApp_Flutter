@@ -61,7 +61,7 @@ class Election {
       });
     }
     return Election(
-      id: int.parse(json['id']),
+      id: json['id'],
       name: json['name'],
       year: json['year'],
       description: json['description'],

@@ -21,9 +21,9 @@ class ScrutinyParty {
 
   factory ScrutinyParty.fromString(Map<String, dynamic> json) {
     return ScrutinyParty(
-      id: int.parse(json['id']),
+      id: json['id'],
       name: json['name'],
-      scrutinycategoryId: int.parse(json['scrutinycategoryId']),
+      scrutinycategoryId: json['scrutinycategoryId'],
     );
   }
 }

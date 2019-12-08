@@ -165,19 +165,23 @@ mixin ElectionService on Model {
     });
   }
 
-  loadElectionFromSharedPref(MainModel model) async {
+  loadElectionFromSharedPref(MainModel model, SharedPreferences prefs) async {
     this._isloadingElection = true;
     notifyListeners();
-    await SharedPreferences.getInstance().then((SharedPreferences prefs) {
-      var election = prefs.getString(ELECTION_KEY);
+    var election = prefs.getString(ELECTION_KEY);
 
-      if (election != null) {
-        this._election = Election.fromString(json.decode(election));
-      }
-      model.getVotingTableTimeFromSharedPref(prefs);
-    });
+    if (election != null) {
+      this._election = Election.fromString(json.decode(election));
+      this._numberOfElectionVote = 0;
+      setNumberOfElectionVote();
+      model.getEscutinioButtonStatus(prefs);
+    }
 
     this._isloadingElection = false;
     notifyListeners();
+  }
+
+  clearElection() {
+    this._election = null;
   }
 }

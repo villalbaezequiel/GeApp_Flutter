@@ -186,7 +186,6 @@ mixin VotingService on Model {
       this._votingTable = VotingTable.fromString(json.decode(votingTable));
       model.getVotingTableTimeFromSharedPref(prefs);
     }
-
     this._isloadingVotingTable = false;
     notifyListeners();
   }

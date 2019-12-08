@@ -41,9 +41,9 @@ class ScrutinyCategory {
       });
     }
     return ScrutinyCategory(
-      id: int.parse(json['id']),
+      id: json['id'],
       name: json['name'],
-      electionId: int.parse(json['electionId']),
+      electionId: json['electionId'],
       scrutinyparties: _scrutinyparties,
     );
   }

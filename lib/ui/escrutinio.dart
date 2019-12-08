@@ -45,7 +45,8 @@ class _EscrutinioState extends State<Escrutinio> {
   @override
   void initState() {
     super.initState();
-    if (widget.model.election == null) loadData();
+    if (widget.model.election == null && !widget.model.isloadingElection)
+      loadData();
   }
 
   Future loadData() async {

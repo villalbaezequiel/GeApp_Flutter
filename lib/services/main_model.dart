@@ -11,6 +11,7 @@ class MainModel extends Model
     with MeService, FriendService, VotingService, ElectionService {
   static const String VOTING_TABLE_TIME_KEY = "voting_table_time";
   static const String FRIEND_LIST_TIME_KEY = "friend_list_time";
+  static const String ESCRITINIO_STATUS_KEY = "escrutinio";
 
   DateTime _lastFetchedTime = DateTime.now();
   DateTime _votingTableFetchedTime = DateTime.now();
@@ -54,6 +55,7 @@ class MainModel extends Model
 
   disableEscutinioButton(bool disable) {
     _disableEscrutinioButton = disable;
+    saveEscutinioButtonStatus();
   }
 
   saveVoteTableTimeToSharedPred(DateTime dateTime) async {
@@ -65,7 +67,9 @@ class MainModel extends Model
 
   getVotingTableTimeFromSharedPref(SharedPreferences prefs) async {
     String votingTableTime = prefs.getString(VOTING_TABLE_TIME_KEY);
-    this._votingTableFetchedTime = DateTime.parse(votingTableTime);
+    if (votingTableTime != null) {
+      this._votingTableFetchedTime = DateTime.parse(votingTableTime);
+    }
   }
 
   saveFriendListTimeToSharedPred(DateTime dateTime) async {
@@ -77,6 +81,21 @@ class MainModel extends Model
 
   getFriendListTimeFromSharedPref(SharedPreferences prefs) async {
     String friendListTime = prefs.getString(FRIEND_LIST_TIME_KEY);
-    this._lastFetchedTime = DateTime.parse(friendListTime);
+    if (friendListTime != null) {
+      this._lastFetchedTime = DateTime.parse(friendListTime);
+    }
+  }
+
+  saveEscutinioButtonStatus() async {
+    SharedPreferences.getInstance().then((SharedPreferences prefs) {
+      prefs.setBool(ESCRITINIO_STATUS_KEY, this._disableEscrutinioButton);
+    });
+  }
+
+  getEscutinioButtonStatus(SharedPreferences prefs) async {
+    var status = prefs.getBool(ESCRITINIO_STATUS_KEY);
+    if (status != null) {
+      this._disableEscrutinioButton = status;
+    }
   }
 }
