@@ -23,7 +23,8 @@ class FriendsListState extends State<FriendsList> {
   @override
   void initState() {
     super.initState();
-    if (widget.model.friendsList.length == 0) loadFriends();
+    if (widget.model.friendsList.length == 0 && !widget.model.isLoadingFriends)
+      loadFriends();
   }
 
   Future loadFriends() async {

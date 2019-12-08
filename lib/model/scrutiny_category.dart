@@ -31,4 +31,20 @@ class ScrutinyCategory {
     }
     return data;
   }
+
+  factory ScrutinyCategory.fromString(Map<String, dynamic> json) {
+    List<ScrutinyParty> _scrutinyparties = [];
+
+    if (json['scrutinyparties'] != null) {
+      json['scrutinyparties'].forEach((v) {
+        _scrutinyparties.add(ScrutinyParty.fromString(v));
+      });
+    }
+    return ScrutinyCategory(
+      id: int.parse(json['id']),
+      name: json['name'],
+      electionId: int.parse(json['electionId']),
+      scrutinyparties: _scrutinyparties,
+    );
+  }
 }

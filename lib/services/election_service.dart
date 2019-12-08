@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_app/model/election.dart';
 import 'package:voting_app/model/error.dart';
 import 'package:voting_app/model/vote_election.dart';
@@ -13,6 +14,8 @@ import 'package:voting_app/ui/global/utils/constant.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 
 mixin ElectionService on Model {
+  static const String ELECTION_KEY = "election";
+
   CommonWidgest commonWidgests = CommonWidgest();
 
   bool _isloadingElection = false;
@@ -38,12 +41,12 @@ mixin ElectionService on Model {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> mapResponse = json.decode(response.body);
-        _election = Election.fromJson(mapResponse);
-        // model.setVotingTableFetchedTime(DateTime.now());
-        _isloadingElection = false;
+        this._election = Election.fromJson(mapResponse);
+        saveElectionToSharedPref();
+        this._isloadingElection = false;
         setNumberOfElectionVote();
         notifyListeners();
-        return _election;
+        return this._election;
       } else {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         Errors errors = new Errors.fromJson(mapResponse['errors']);
@@ -152,6 +155,29 @@ mixin ElectionService on Model {
     } else {
       commonWidgests.showToast(error.message);
     }
+    notifyListeners();
+  }
+
+  saveElectionToSharedPref() async {
+    SharedPreferences.getInstance().then((SharedPreferences prefs) {
+      String election = json.encode(this._election.toJson());
+      prefs.setString(ELECTION_KEY, election);
+    });
+  }
+
+  loadElectionFromSharedPref(MainModel model) async {
+    this._isloadingElection = true;
+    notifyListeners();
+    await SharedPreferences.getInstance().then((SharedPreferences prefs) {
+      var election = prefs.getString(ELECTION_KEY);
+
+      if (election != null) {
+        this._election = Election.fromString(json.decode(election));
+      }
+      model.getVotingTableTimeFromSharedPref(prefs);
+    });
+
+    this._isloadingElection = false;
     notifyListeners();
   }
 }

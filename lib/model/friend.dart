@@ -50,4 +50,19 @@ class Friend {
     }
     return data;
   }
+
+  factory Friend.fromString(Map<String, dynamic> json) {
+    return Friend(
+      id: json['id'],
+      phone: json['phone'],
+      email: json['email'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+      deletedAt: json['deletedAt'],
+      userId: json['userId'],
+      citizenId: json['citizenId'],
+      citizen:
+          json['citizen'] != null ? Citizen.fromString(json['citizen']) : null,
+    );
+  }
 }

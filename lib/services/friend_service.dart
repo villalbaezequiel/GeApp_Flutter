@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_app/model/error.dart';
 import 'package:voting_app/model/friend.dart';
 import 'package:voting_app/services/main_model.dart';
@@ -10,6 +11,8 @@ import 'package:voting_app/ui/global/utils/constant.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 
 mixin FriendService on Model {
+  static const String FRIENDS_LIST_KEY = "friends_list";
+
   List<Friend> _friendsList = [];
   List<Friend> get friendsList => _friendsList;
 
@@ -35,16 +38,18 @@ mixin FriendService on Model {
       if (response.statusCode == 200) {
         var responseData = json.decode(response.body);
 
-        final List<Friend> fetchedEvents = [];
+        final List<Friend> fetchedFriends = [];
         responseData.forEach((dynamic json) {
           if (responseData != null) {
             Friend friend = Friend.fromJson(json);
 
-            fetchedEvents.add(friend);
+            fetchedFriends.add(friend);
           }
         });
 
-        _friendsList = fetchedEvents;
+        _friendsList = fetchedFriends;
+
+        this.saveFriendsToSharedPref();
 
         model.setFriendFetchedTime(DateTime.now());
         _isLoadingFriends = false;
@@ -159,6 +164,7 @@ mixin FriendService on Model {
         orElse: () => null);
     if (existingItem == null) {
       this._friendsList.add(friend);
+      this.saveFriendsToSharedPref();
     }
   }
 
@@ -169,10 +175,38 @@ mixin FriendService on Model {
         orElse: () => null);
     if (existingItem != null) {
       this._friendsList.remove(existingItem);
+      this.saveFriendsToSharedPref();
     }
   }
 
   clearFriendList() {
     this._friendsList = null;
+  }
+
+  saveFriendsToSharedPref() async {
+    SharedPreferences.getInstance().then((SharedPreferences prefs) {
+      List<String> friendsList = _friendsList
+          .map((Friend friend) => json.encode(friend.toJson()))
+          .toList();
+      prefs.setStringList(FRIENDS_LIST_KEY, friendsList);
+    });
+  }
+
+  loadFriendsFromSharedPref(MainModel model) async {
+    this._isLoadingFriends = true;
+    notifyListeners();
+    await SharedPreferences.getInstance().then((SharedPreferences prefs) {
+      var friends = prefs.getStringList(FRIENDS_LIST_KEY);
+
+      if (friends != null) {
+        for (String friend in friends) {
+          this._friendsList.add(Friend.fromString(json.decode(friend)));
+        }
+        model.getFriendListTimeFromSharedPref(prefs);
+      }
+    });
+
+    this._isLoadingFriends = false;
+    notifyListeners();
   }
 }

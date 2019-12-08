@@ -21,11 +21,12 @@ class HomeState extends State<Home> {
   }
 
   Future<void> loadData() async {
-    if (widget.model.friendsList.length == 0)
+    if (widget.model.friendsList.length == 0 && !widget.model.isLoadingFriends)
       widget.model.fetchFriends(widget.model);
-    if (widget.model.votingTable == null)
+    if (widget.model.votingTable == null && !widget.model.isloadingVotingTable)
       widget.model.fetchVotingTable(widget.model);
-    if (widget.model.election == null) widget.model.fetchElection(widget.model);
+    if (widget.model.election == null && !widget.model.isloadingElection)
+      widget.model.fetchElection(widget.model);
   }
 
   @override

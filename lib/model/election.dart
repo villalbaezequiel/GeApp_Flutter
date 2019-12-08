@@ -52,4 +52,23 @@ class Election {
     }
     return data;
   }
+
+  factory Election.fromString(Map<String, dynamic> json) {
+    List<ScrutinyCategory> _scrutinycategories = [];
+    if (json['scrutinycategories'] != null) {
+      json['scrutinycategories'].forEach((v) {
+        _scrutinycategories.add(ScrutinyCategory.fromString(v));
+      });
+    }
+    return Election(
+      id: int.parse(json['id']),
+      name: json['name'],
+      year: json['year'],
+      description: json['description'],
+      isActive: json['isActive'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+      scrutinycategories: _scrutinycategories,
+    );
+  }
 }

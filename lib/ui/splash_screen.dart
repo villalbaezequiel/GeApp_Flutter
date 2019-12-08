@@ -52,7 +52,12 @@ class _SplashScreenState extends State<SplashScreen> {
       await widget.model.loadUser();
       user = widget.model.user;
 
-      (user != null) ? _goToHome() : _goToLogin();
+      if (user != null) {
+        _loadDataFromSharedPref();
+        _goToHome();
+      } else {
+        _goToLogin();
+      }
     } else {
       Timer(
         Duration(seconds: 3),
@@ -72,5 +77,9 @@ class _SplashScreenState extends State<SplashScreen> {
       () => Navigator.of(context)
           .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false),
     );
+  }
+
+  _loadDataFromSharedPref() {
+    widget.model.loadFriendsFromSharedPref(widget.model);
   }
 }

@@ -18,4 +18,12 @@ class ScrutinyParty {
     data['scrutinycategoryId'] = this.scrutinycategoryId;
     return data;
   }
+
+  factory ScrutinyParty.fromString(Map<String, dynamic> json) {
+    return ScrutinyParty(
+      id: int.parse(json['id']),
+      name: json['name'],
+      scrutinycategoryId: int.parse(json['scrutinycategoryId']),
+    );
+  }
 }

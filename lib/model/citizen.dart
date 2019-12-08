@@ -45,4 +45,18 @@ class Citizen {
     data['age'] = this.age;
     return data;
   }
+
+  factory Citizen.fromString(Map<String, dynamic> json) {
+    return Citizen(
+      id: json['id'],
+      nationalId: json['nationalId'],
+      first: json['first'],
+      last: json['last'],
+      birthday: json['birthday'],
+      friendsQty: json['friendsQty'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+      age: json['age'],
+    );
+  }
 }
