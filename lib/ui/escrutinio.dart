@@ -90,7 +90,7 @@ class _EscrutinioState extends State<Escrutinio> {
                         ),
                       )
                     : Center(
-                        child: Text("No election data."),
+                        child: Text("No hay datos de elección"),
                       ),
           ),
         );
@@ -132,7 +132,7 @@ class _EscrutinioState extends State<Escrutinio> {
               hintText: "Cantidad: 12",
             ),
             validator: (val) =>
-                (val == null) ? 'Please input valid number' : null,
+                (val == null) ? 'Ingrese un número válido' : null,
             onChanged: (val) {
               validateVoteForElection(party, val, scrutinyCategory.name);
             },
@@ -172,10 +172,10 @@ class _EscrutinioState extends State<Escrutinio> {
                   children: <Widget>[
                     Container(
                       padding: EdgeInsets.only(left: 10),
-                      child: Text('No image selected.'),
+                      child: Text('No hay imagen seleccionada'),
                     ),
                     FlatButton(
-                      child: Text("Pick Image"),
+                      child: Text("Elegir imagen"),
                       onPressed: () {
                         getImage();
                       },
@@ -197,7 +197,7 @@ class _EscrutinioState extends State<Escrutinio> {
               keyboardType: TextInputType.multiline,
               decoration: InputDecoration(
                 labelText: "Notas",
-                hintText: "Hello",
+                hintText: "Hola",
               ),
               maxLines: 10,
               minLines: 5,
@@ -241,13 +241,13 @@ class _EscrutinioState extends State<Escrutinio> {
   void _submitElectionVote() {
     final form = formKey.currentState;
     if (scrutinyImage == null) {
-      commonWidgest.showToast("Please select image as well");
+      commonWidgest.showToast("Por favor, seleccionar imagen");
     } else if (form.validate() && validateAllElectionData()) {
       form.save();
       confirmElectionVote();
     } else {
       commonWidgest.showToast(
-          "Form is invalid, please check all informations. You may have missed to input some values");
+          "Formulario inválido, revisar los campos. Olvidó cargar campos");
     }
   }
 
@@ -314,7 +314,7 @@ class _EscrutinioState extends State<Escrutinio> {
       addVote(Vote(scrutinyPartyId: party.id, qty: int.parse(val)));
     } else {
       commonWidgest.showToast(
-          "Please enter valid number for ${party.name} at $categoryName");
+          "Por favor ingrese un número válido para ${party.name} en $categoryName");
     }
   }
 }

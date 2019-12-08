@@ -45,7 +45,7 @@ mixin MeService on Model {
     String url = Constant.whatsAppUrl + model.user.helpPhone;
     await canLaunch(url)
         ? launch(url)
-        : commonWidgest.showToast("Failed to open WhatsApp");
+        : commonWidgest.showToast("Fallo al abrir WhatsApp");
   }
 
   void openTermsUrl() async {

@@ -131,10 +131,10 @@ mixin ElectionService on Model {
       var response = await request.send();
       if (response.statusCode == 200) {
         model.disableEscutinioButton(true);
-        commonWidgests.showToast("Image upload success");
+        commonWidgests.showToast("Imagen subida con éxito");
         return true;
       } else {
-        commonWidgests.showToast("Image upload failed");
+        commonWidgests.showToast("Fallo al subir imagen");
         _isloadingElection = false;
         notifyListeners();
         return false;
