@@ -49,11 +49,10 @@ class _SplashScreenState extends State<SplashScreen> {
   checkLoggedIn() async {
     Person user = widget.model.user;
     if (user == null) {
-      await widget.model.loadUser();
+      await widget.model.loadUserAndOtherData(widget.model);
       user = widget.model.user;
 
       if (user != null) {
-        _loadDataFromSharedPref();
         _goToHome();
       } else {
         _goToLogin();
@@ -77,9 +76,5 @@ class _SplashScreenState extends State<SplashScreen> {
       () => Navigator.of(context)
           .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false),
     );
-  }
-
-  _loadDataFromSharedPref() {
-    widget.model.loadFriendsFromSharedPref(widget.model);
   }
 }

@@ -192,19 +192,17 @@ mixin FriendService on Model {
     });
   }
 
-  loadFriendsFromSharedPref(MainModel model) async {
+  loadFriendsFromSharedPref(MainModel model, SharedPreferences prefs) async {
     this._isLoadingFriends = true;
     notifyListeners();
-    await SharedPreferences.getInstance().then((SharedPreferences prefs) {
-      var friends = prefs.getStringList(FRIENDS_LIST_KEY);
+    var friends = prefs.getStringList(FRIENDS_LIST_KEY);
 
-      if (friends != null) {
-        for (String friend in friends) {
-          this._friendsList.add(Friend.fromString(json.decode(friend)));
-        }
-        model.getFriendListTimeFromSharedPref(prefs);
+    if (friends != null) {
+      for (String friend in friends) {
+        this._friendsList.add(Friend.fromString(json.decode(friend)));
       }
-    });
+      model.getFriendListTimeFromSharedPref(prefs);
+    }
 
     this._isLoadingFriends = false;
     notifyListeners();

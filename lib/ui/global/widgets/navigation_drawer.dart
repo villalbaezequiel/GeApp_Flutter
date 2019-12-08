@@ -22,7 +22,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   }
 
   Future fetchData() async {
-    widget.model.loadUser();
+    widget.model.loadUser(widget.model);
   }
 
   @override

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_app/services/election_service.dart';

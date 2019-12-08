@@ -14,13 +14,28 @@ mixin MeService on Model {
 
   Person get user => _me;
 
-  loadUser() async {
+  loadUserAndOtherData(MainModel model) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userString = prefs.getString('user');
+    if (userString != null) {
+      _me = Person.fromString(json.decode(userString));
+      loadOtherData(prefs, model);
+    }
+    notifyListeners();
+  }
+
+  loadUser(MainModel model) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userString = prefs.getString('user');
     if (userString != null) {
       _me = Person.fromString(json.decode(userString));
     }
     notifyListeners();
+  }
+
+  loadOtherData(SharedPreferences prefs, MainModel model) async {
+    model.loadFriendsFromSharedPref(model, prefs);
+    model.loadVotingTableFromSharedPref(model, prefs);
   }
 
   setUser(Person user) {

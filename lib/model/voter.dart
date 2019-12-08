@@ -36,13 +36,13 @@ class Voter {
     votingtableId = json['votingtableId'];
     address = json['address'];
     citizen =
-        json['citizen'] != null ? new Citizen.fromJson(json['citizen']) : null;
+        json['citizen'] != null ? Citizen.fromJson(json['citizen']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
-    data['order'] = this.order.toString();
+    data['order'] = this.order;
     data['voted'] = this.voted;
     data['isOwner'] = this.isOwner;
     data['createdAt'] = this.createdAt;
@@ -54,5 +54,21 @@ class Voter {
       data['citizen'] = this.citizen.toJson();
     }
     return data;
+  }
+
+  factory Voter.fromString(Map<String, dynamic> json) {
+    return Voter(
+      id: json['id'],
+      order: json['order'],
+      voted: json['voted'],
+      isOwner: json['isOwner'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+      citizenId: json['citizenId'],
+      votingtableId: json['votingtableId'],
+      address: json['address'],
+      citizen:
+          json['citizen'] != null ? Citizen.fromString(json['citizen']) : null,
+    );
   }
 }

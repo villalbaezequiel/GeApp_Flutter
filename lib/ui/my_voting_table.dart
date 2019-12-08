@@ -25,7 +25,8 @@ class MyVotingTableState extends State<MyVotingTableList> {
   @override
   void initState() {
     super.initState();
-    if (widget.model.votingTable == null) loadVotingTable();
+    if (widget.model.votingTable == null && !widget.model.isloadingVotingTable)
+      loadVotingTable();
   }
 
   Future loadVotingTable() async {

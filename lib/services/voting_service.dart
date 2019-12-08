@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_app/model/error.dart';
 import 'package:voting_app/model/voter.dart';
 import 'package:voting_app/model/voting_table.dart';
@@ -11,6 +12,8 @@ import 'package:voting_app/ui/global/utils/constant.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 
 mixin VotingService on Model {
+  static const String VOTING_TABLE_KEY = "voting_talble";
+
   bool _isloadingVotingTable = false;
   bool _isVotingOrReplenish = false;
 
@@ -40,6 +43,7 @@ mixin VotingService on Model {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         _votingTable = VotingTable.fromJson(mapResponse);
         model.setVotingTableFetchedTime(DateTime.now());
+        saveVotingTableToSharedPref();
         _isloadingVotingTable = false;
         notifyListeners();
         return _votingTable;
@@ -163,5 +167,27 @@ mixin VotingService on Model {
 
   clearVotingTable() {
     _votingTable = null;
+  }
+
+  saveVotingTableToSharedPref() async {
+    SharedPreferences.getInstance().then((SharedPreferences prefs) {
+      String votingTable = json.encode(this._votingTable.toJson());
+      prefs.setString(VOTING_TABLE_KEY, votingTable);
+    });
+  }
+
+  loadVotingTableFromSharedPref(
+      MainModel model, SharedPreferences prefs) async {
+    this._isloadingVotingTable = true;
+    notifyListeners();
+    var votingTable = prefs.getString(VOTING_TABLE_KEY);
+
+    if (votingTable != null) {
+      this._votingTable = VotingTable.fromString(json.decode(votingTable));
+      model.getVotingTableTimeFromSharedPref(prefs);
+    }
+
+    this._isloadingVotingTable = false;
+    notifyListeners();
   }
 }
