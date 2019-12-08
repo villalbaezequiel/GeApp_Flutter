@@ -63,7 +63,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
                           ? Container(
                               child: buildVoters(),
                             )
-                          : Center(child: Text("No voters available")),
+                          : Center(child: Text("No hay votantes")),
                 ),
                 Container(
                   padding: EdgeInsets.all(5),
