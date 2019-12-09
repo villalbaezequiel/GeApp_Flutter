@@ -10,6 +10,7 @@ import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 import 'package:voting_app/ui/voter_citizen_details.dart';
 
 import 'global/utils/constant.dart';
+import 'global/widgets/fab.dart';
 import 'global/widgets/navigation_drawer.dart';
 
 class MyVotingTableList extends StatefulWidget {
@@ -19,14 +20,27 @@ class MyVotingTableList extends StatefulWidget {
   MyVotingTableState createState() => MyVotingTableState();
 }
 
-class MyVotingTableState extends State<MyVotingTableList> {
+class MyVotingTableState extends State<MyVotingTableList>
+    with SingleTickerProviderStateMixin {
   CommonWidgest commonWidgest = CommonWidgest();
+  int currentItemIndex = 0;
+  Animation<double> _animation;
+  AnimationController _controller;
 
   @override
   void initState() {
-    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 260),
+    );
+    final curvedAnimation =
+        CurvedAnimation(curve: Curves.easeInOut, parent: _controller);
+    _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
+
     if (widget.model.votingTable == null && !widget.model.isloadingVotingTable)
       loadVotingTable();
+
+    super.initState();
   }
 
   Future loadVotingTable() async {
@@ -35,12 +49,12 @@ class MyVotingTableState extends State<MyVotingTableList> {
 
   @override
   Widget build(BuildContext context) {
-    final floatingAction = UnicornDialer(
-      parentHeroTag: 'vote_parent',
-      orientation: UnicornOrientation.VERTICAL,
-      parentButton: Icon(Icons.add),
-      childButtons: _getFloatingButtons(),
-    );
+    // final floatingAction = UnicornDialer(
+    //   parentHeroTag: 'vote_parent',
+    //   orientation: UnicornOrientation.VERTICAL,
+    //   parentButton: Icon(Icons.add),
+    //   childButtons: _getFloatingButtons(),
+    // );
 
     return ScopedModelDescendant<MainModel>(
       builder: (context, child, model) {
@@ -50,10 +64,39 @@ class MyVotingTableState extends State<MyVotingTableList> {
             gradient: Constant.appBarGradient,
           ),
           drawer: NavigationDrawer(model: widget.model),
-          floatingActionButton: floatingAction,
+          floatingActionButton: ExpandedAnimationFab(
+            items: [
+              FabItem(
+                "Voto",
+                Icons.email,
+                onPress: () {
+                  _asyncInputDialogVote(context);
+                  _controller.reverse();
+                },
+              ),
+              FabItem(
+                "Reposición",
+                Icons.library_books,
+                onPress: () {
+                  _asyncInputDialogReplenish(context);
+
+                  _controller.reverse();
+                },
+              ),
+            ],
+            animation: _animation,
+            onPress: () {
+              if (_controller.isCompleted) {
+                _controller.reverse();
+              } else {
+                _controller.forward();
+              }
+            },
+          ),
           body: RefreshIndicator(
             onRefresh: () => widget.model.fetchVotingTable(widget.model),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Expanded(
                   child: widget.model.isloadingVotingTable
@@ -66,19 +109,20 @@ class MyVotingTableState extends State<MyVotingTableList> {
                           : Center(child: Text("No hay votantes")),
                 ),
                 Container(
-                  padding: EdgeInsets.all(5),
+                  padding:
+                      EdgeInsets.only(left: 20, top: 5, bottom: 5, right: 5),
                   color: Colors.grey[200],
-                  child: Center(
-                    child: widget.model.isloadingVotingTable
-                        ? Center(child: CircularProgressIndicator())
-                        : Text(
-                            "Última actualización: " +
-                                widget.model.lastVotingTableFetchedTime,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyleUtils.bottomTimeBar,
-                          ),
-                  ),
+                  width: double.infinity,
+                  child: widget.model.isloadingVotingTable
+                      ? Center(child: CircularProgressIndicator())
+                      : Text(
+                          "Última actualización: " +
+                              widget.model.lastVotingTableFetchedTime,
+                          maxLines: 2,
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleUtils.bottomTimeBar,
+                        ),
                 ),
               ],
             ),
@@ -102,13 +146,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
       ),
     );
     children.add(
-      _floatingButtons(
-        txt: 'Reposición',
-        iconData: Icons.library_books,
-        onPressed: () {
-          _asyncInputDialogReplenish(context);
-        },
-      ),
+      _floatingButtons(),
     );
 
     return children;
