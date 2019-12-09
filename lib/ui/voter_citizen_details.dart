@@ -34,7 +34,7 @@ class VoterCitizenDetails extends StatelessWidget {
           ),
           ListTile(
             title: Text('Dirección'),
-            subtitle: Text('${voter.address}'),
+            subtitle: Text('${model.votingTable.address}'),
           ),
           ListTile(
             title: Text('Establecimiento'),
@@ -57,7 +57,7 @@ class VoterCitizenDetails extends StatelessWidget {
             subtitle: Text('${model.votingTable.table}'),
           ),
           ListTile(
-            title: Text('Order'),
+            title: Text('Orden'),
             subtitle: Text('${voter.order}'),
           ),
         ],

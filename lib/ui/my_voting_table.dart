@@ -359,6 +359,7 @@ class MyVotingTableState extends State<MyVotingTableList> {
     widget.model.vote(widget.model, voter).then((onValue) {
       Navigator.popUntil(context, ModalRoute.withName('/my_voting_table_list'));
       buildVoters();
+      commonWidgest.showToast("Voto registrado correctamente");
     }).catchError((onError) {
       Navigator.popUntil(context, ModalRoute.withName('/my_voting_table_list'));
     });

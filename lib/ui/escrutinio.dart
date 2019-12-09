@@ -34,8 +34,16 @@ class _EscrutinioState extends State<Escrutinio> {
 
   File scrutinyImage;
 
-  Future getImage() async {
+  Future getImageFromGallery() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      scrutinyImage = image;
+    });
+  }
+
+  Future getImageFromCamera() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     setState(() {
       scrutinyImage = image;
@@ -64,36 +72,31 @@ class _EscrutinioState extends State<Escrutinio> {
             gradient: Constant.appBarGradient,
           ),
           drawer: NavigationDrawer(model: widget.model),
-          body: RefreshIndicator(
-            onRefresh: loadData,
-            child: model.isloadingElection
-                ? Center(child: CircularProgressIndicator())
-                : (model.election != null)
-                    ? Form(
-                        key: formKey,
-                        child: ListView.builder(
-                          itemCount:
+          body: model.isloadingElection
+              ? Center(child: CircularProgressIndicator())
+              : (model.election != null)
+                  ? Form(
+                      key: formKey,
+                      child: ListView.builder(
+                        itemCount:
+                            widget.model.election.scrutinycategories.length + 2,
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return headerView();
+                          } else if (index >=
                               widget.model.election.scrutinycategories.length +
-                                  2,
-                          itemBuilder: (context, index) {
-                            if (index == 0) {
-                              return headerView();
-                            } else if (index >=
-                                widget.model.election.scrutinycategories
-                                        .length +
-                                    1) {
-                              return footerViewWithNoteAndSubmitButton();
-                            } else {
-                              return oneCategory(
-                                  model.election.scrutinycategories[index - 1]);
-                            }
-                          },
-                        ),
-                      )
-                    : Center(
-                        child: Text("No hay datos de elección"),
+                                  1) {
+                            return footerViewWithNoteAndSubmitButton();
+                          } else {
+                            return oneCategory(
+                                model.election.scrutinycategories[index - 1]);
+                          }
+                        },
                       ),
-          ),
+                    )
+                  : Center(
+                      child: Text("No hay datos de elección"),
+                    ),
         );
       },
     );
@@ -167,28 +170,59 @@ class _EscrutinioState extends State<Escrutinio> {
       children: <Widget>[
         Card(
           margin: EdgeInsets.all(10),
-          child: (scrutinyImage == null)
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text('No hay imagen seleccionada'),
-                    ),
-                    FlatButton(
-                      child: Text("Elegir imagen"),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Flexible(
+                    flex: 1,
+                    child: FlatButton.icon(
+                      color: Constant.ascent,
+                      icon: Icon(Icons.add_a_photo, color: Colors.white),
+                      label: Text(
+                        'Cámara',
+                        style: TextStyle(color: Colors.white),
+                      ),
                       onPressed: () {
-                        getImage();
+                        getImageFromCamera();
                       },
-                    )
-                  ],
-                )
-              : Image.file(
-                  scrutinyImage,
-                  height: 200,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: FlatButton.icon(
+                      color: Constant.ascent,
+                      icon: Icon(Icons.add_to_photos, color: Colors.white),
+                      label: Text(
+                        'Galería',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        getImageFromGallery();
+                      },
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 10),
+              Container(
+                child: (scrutinyImage == null)
+                    ? Center(
+                        child: Text('No hay imagen seleccionada'),
+                      )
+                    : Image.file(
+                        scrutinyImage,
+                        height: 200,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+              ),
+              SizedBox(height: 10),
+            ],
+          ),
         ),
         Card(
           margin: EdgeInsets.all(10),
@@ -198,7 +232,7 @@ class _EscrutinioState extends State<Escrutinio> {
               keyboardType: TextInputType.multiline,
               decoration: InputDecoration(
                 labelText: "Notas",
-                hintText: "Hola",
+                hintText: "Agregar notas (opcional)",
               ),
               maxLines: 10,
               minLines: 5,

@@ -33,16 +33,18 @@ class AddFriendState extends State<AddFriend> {
       ),
       drawer: NavigationDrawer(model: widget.model),
       body: Container(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(20.0),
         child: ListView(
           children: <Widget>[
-            Text('El número de DNI del amigo debe estar dentro del padrón. '
-                'Los datos de correo electrónico y teléfono son opcionales y solo los verá usted.'),
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0),
+            // SizedBox(height: 10),
+            Text(
+              'El número de DNI del amigo debe estar dentro del padrón. '
+              'Los datos de correo electrónico y teléfono son opcionales y solo los verá usted.',
+              textAlign: TextAlign.justify,
             ),
+            SizedBox(height: 10),
             Container(
-              padding: const EdgeInsets.all(10.0),
+              // padding: const EdgeInsets.all(10.0),
               child: Form(
                 key: formKey,
                 child: Column(
@@ -106,7 +108,7 @@ class AddFriendState extends State<AddFriend> {
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
       RegExp regex = new RegExp(pattern);
       if (!regex.hasMatch(value))
-        return 'Enter Valid Email';
+        return 'Ingrese correo válido';
       else
         return null;
     } else {

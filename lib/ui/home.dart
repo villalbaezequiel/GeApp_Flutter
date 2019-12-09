@@ -33,7 +33,7 @@ class HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
       builder: (context, child, model) {
-        return new Scaffold(
+        return Scaffold(
           appBar: GradientAppBar(
             title: Text('Inicio'),
             gradient: Constant.appBarGradient,
@@ -43,6 +43,7 @@ class HomeState extends State<Home> {
           // floatingActionButton: floatingAction,
           body: ListView(
             children: <Widget>[
+              SizedBox(height: 30),
               Image.asset(
                 'assets/images/logo2.png',
                 height: 150,

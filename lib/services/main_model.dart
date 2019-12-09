@@ -15,9 +15,6 @@ class MainModel extends Model
 
   DateTime _lastFetchedTime = DateTime.now();
   DateTime _votingTableFetchedTime = DateTime.now();
-  bool _disableEscrutinioButton = false;
-
-  bool get isEscrutinioButtonDisabled => _disableEscrutinioButton;
 
   String get lastFriendListFetchedTime =>
       Constant.dateFormatter.format(_lastFetchedTime);
@@ -41,9 +38,6 @@ class MainModel extends Model
           user.isOwner &&
           votingTable != null &&
           votingTable.isOpen) {
-        if (path == '/escrutinio' && isEscrutinioButtonDisabled) {
-          return false;
-        }
         return true;
       } else {
         return false;
@@ -51,11 +45,6 @@ class MainModel extends Model
     } else {
       return true;
     }
-  }
-
-  disableEscutinioButton(bool disable) {
-    _disableEscrutinioButton = disable;
-    saveEscutinioButtonStatus();
   }
 
   saveVoteTableTimeToSharedPred(DateTime dateTime) async {
@@ -83,19 +72,6 @@ class MainModel extends Model
     String friendListTime = prefs.getString(FRIEND_LIST_TIME_KEY);
     if (friendListTime != null) {
       this._lastFetchedTime = DateTime.parse(friendListTime);
-    }
-  }
-
-  saveEscutinioButtonStatus() async {
-    SharedPreferences.getInstance().then((SharedPreferences prefs) {
-      prefs.setBool(ESCRITINIO_STATUS_KEY, this._disableEscrutinioButton);
-    });
-  }
-
-  getEscutinioButtonStatus(SharedPreferences prefs) async {
-    var status = prefs.getBool(ESCRITINIO_STATUS_KEY);
-    if (status != null) {
-      this._disableEscrutinioButton = status;
     }
   }
 }

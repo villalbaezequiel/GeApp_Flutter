@@ -189,4 +189,9 @@ mixin VotingService on Model {
     this._isloadingVotingTable = false;
     notifyListeners();
   }
+
+  updateVotingTableIsOpen(bool isOpen) {
+    this._votingTable.isOpen = isOpen;
+    this.saveVotingTableToSharedPref();
+  }
 }

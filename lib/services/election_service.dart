@@ -87,7 +87,7 @@ mixin ElectionService on Model {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> mapResponse = json.decode(response.body);
-        model.disableEscutinioButton(true);
+        model.updateVotingTableIsOpen(false);
         _isloadingElection = false;
         notifyListeners();
         commonWidgests.showToast(mapResponse['message']);
@@ -97,13 +97,11 @@ mixin ElectionService on Model {
         Errors errors = new Errors.fromJson(mapResponse['errors']);
         commonWidgests.showToast(errors.message);
         _isloadingElection = false;
-        model.disableEscutinioButton(false);
         notifyListeners();
         return false;
       }
     } catch (error) {
       _isloadingElection = false;
-      model.disableEscutinioButton(false);
       catchExceptions(error);
       return false;
     }
@@ -133,7 +131,6 @@ mixin ElectionService on Model {
       });
       var response = await request.send();
       if (response.statusCode == 200) {
-        model.disableEscutinioButton(true);
         commonWidgests.showToast("Imagen subida con éxito");
         return true;
       } else {
@@ -174,7 +171,6 @@ mixin ElectionService on Model {
       this._election = Election.fromString(json.decode(election));
       this._numberOfElectionVote = 0;
       setNumberOfElectionVote();
-      model.getEscutinioButtonStatus(prefs);
     }
 
     this._isloadingElection = false;
