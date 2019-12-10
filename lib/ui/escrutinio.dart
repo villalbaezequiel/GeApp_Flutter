@@ -103,15 +103,28 @@ class _EscrutinioState extends State<Escrutinio> {
   }
 
   Widget oneCategory(ScrutinyCategory scrutinyCategory) {
+    List<Widget> widgetItems = [];
+    widgetItems.add(
+      Container(
+        padding: EdgeInsets.all(10),
+        child: Text(
+          scrutinyCategory.name,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+    widgetItems.addAll(otherInputsbyParty(scrutinyCategory));
     return Card(
       margin: EdgeInsets.all(10),
-      child: ExpansionTile(
-          key: PageStorageKey<ScrutinyCategory>(scrutinyCategory),
-          initiallyExpanded: true,
-          title: Text(scrutinyCategory.name),
-          children: scrutinyCategory.scrutinyparties
-              .map((party) => buildPartyForm(scrutinyCategory, party))
-              .toList()),
+      elevation: 3,
+      child: Container(
+        key: PageStorageKey<ScrutinyCategory>(scrutinyCategory),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: widgetItems),
+      ),
     );
   }
 
@@ -152,6 +165,7 @@ class _EscrutinioState extends State<Escrutinio> {
   Widget headerView() {
     return Card(
       margin: EdgeInsets.all(10),
+      elevation: 3,
       child: ExpansionTile(
         title: Text(widget.model.election.name),
         children: <Widget>[
@@ -170,6 +184,7 @@ class _EscrutinioState extends State<Escrutinio> {
       children: <Widget>[
         Card(
           margin: EdgeInsets.all(10),
+          elevation: 3,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -226,6 +241,7 @@ class _EscrutinioState extends State<Escrutinio> {
         ),
         Card(
           margin: EdgeInsets.all(10),
+          elevation: 3,
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 10),
             child: TextFormField(
@@ -351,5 +367,11 @@ class _EscrutinioState extends State<Escrutinio> {
       commonWidgest.showToast(
           "Por favor ingrese un número válido para ${party.name} en $categoryName");
     }
+  }
+
+  otherInputsbyParty(ScrutinyCategory scrutinyCategory) {
+    return scrutinyCategory.scrutinyparties
+        .map((party) => buildPartyForm(scrutinyCategory, party))
+        .toList();
   }
 }

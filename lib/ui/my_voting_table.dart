@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:unicorndial/unicorndial.dart';
 import 'package:voting_app/model/voter.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/text_style_utils.dart';
@@ -49,13 +48,6 @@ class MyVotingTableState extends State<MyVotingTableList>
 
   @override
   Widget build(BuildContext context) {
-    // final floatingAction = UnicornDialer(
-    //   parentHeroTag: 'vote_parent',
-    //   orientation: UnicornOrientation.VERTICAL,
-    //   parentButton: Icon(Icons.add),
-    //   childButtons: _getFloatingButtons(),
-    // );
-
     return ScopedModelDescendant<MainModel>(
       builder: (context, child, model) {
         return Scaffold(
@@ -130,26 +122,6 @@ class MyVotingTableState extends State<MyVotingTableList>
         );
       },
     );
-  }
-
-  List<UnicornButton> _getFloatingButtons() {
-    List<UnicornButton> children = [];
-
-    // Add Children here
-    children.add(
-      _floatingButtons(
-        txt: 'Voto',
-        iconData: Icons.email,
-        onPressed: () {
-          _asyncInputDialogVote(context);
-        },
-      ),
-    );
-    children.add(
-      _floatingButtons(),
-    );
-
-    return children;
   }
 
   Widget buildVoters() {
@@ -269,23 +241,6 @@ class MyVotingTableState extends State<MyVotingTableList>
           ],
         );
       },
-    );
-  }
-
-  Widget _floatingButtons({String txt, IconData iconData, Function onPressed}) {
-    return UnicornButton(
-      labelText: txt,
-      labelHasShadow: true,
-      labelColor: Theme.of(context).accentColor,
-      hasLabel: true,
-      currentButton: FloatingActionButton(
-        heroTag: txt,
-        backgroundColor: Theme.of(context).accentColor,
-        foregroundColor: Colors.white,
-        mini: true,
-        child: Icon(iconData),
-        onPressed: onPressed,
-      ),
     );
   }
 

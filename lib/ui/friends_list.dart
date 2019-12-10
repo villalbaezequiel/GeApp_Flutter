@@ -23,8 +23,9 @@ class FriendsListState extends State<FriendsList> {
   @override
   void initState() {
     super.initState();
-    if (widget.model.friendsList.length == 0 && !widget.model.isLoadingFriends)
-      loadFriends();
+    if (widget.model.friendsList != null &&
+        widget.model.friendsList.length == 0 &&
+        !widget.model.isLoadingFriends) loadFriends();
   }
 
   Future loadFriends() async {
@@ -96,7 +97,8 @@ class FriendsListState extends State<FriendsList> {
           CircularProgressIndicator(strokeWidth: 1),
         ],
       );
-    } else if (widget.model.friendsList.length > 0) {
+    } else if (widget.model.friendsList != null &&
+        widget.model.friendsList.length > 0) {
       return Text("Mis Amigos (${widget.model.friendsList.length})");
     } else {
       return Text("Mis Amigos");
