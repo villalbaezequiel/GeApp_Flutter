@@ -166,10 +166,11 @@ class SignUpState extends State<SignUp> {
                                 onPressed: () {
                                   widget.model.openTermsUrl();
                                 },
-                                child: Text(
-                                  "Aceptar Términos y Condiciones",
-                                  style: TextStyle(color: Colors.blue),
-                                ),
+                                child: Text("Aceptar Términos y Condiciones",
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontFamily: "Helvetica",
+                                    )),
                               ),
                             ),
                           ],

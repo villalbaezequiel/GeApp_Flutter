@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/scrutiny_category.dart';
 import 'package:voting_app/model/scrutiny_party.dart';
 import 'package:voting_app/model/vote_election.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
-import 'package:image_picker/image_picker.dart';
 import 'global/utils/constant.dart';
 import 'global/utils/text_style_utils.dart';
 import 'global/widgets/navigation_drawer.dart';
@@ -36,7 +36,6 @@ class _EscrutinioState extends State<Escrutinio> {
 
   Future getImageFromGallery() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
     setState(() {
       scrutinyImage = image;
     });
