@@ -127,6 +127,7 @@ class SignUpState extends State<SignUp> {
                             hintText: "",
                             labelText: "Correo electrónico",
                           ),
+                          validator: validateEmail,
                           onSaved: (val) => _email = val,
                         ),
                         TextFormField(
@@ -197,5 +198,19 @@ class SignUpState extends State<SignUp> {
         );
       },
     );
+  }
+
+  String validateEmail(String value) {
+    if (value != null && value.isNotEmpty) {
+      Pattern pattern =
+          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+      RegExp regex = new RegExp(pattern);
+      if (!regex.hasMatch(value))
+        return 'Ingrese correo válido';
+      else
+        return null;
+    } else {
+      return null;
+    }
   }
 }
