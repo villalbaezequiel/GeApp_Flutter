@@ -7,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/scrutiny_category.dart';
 import 'package:voting_app/model/scrutiny_party.dart';
-import 'package:voting_app/model/vote_election.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 import 'global/utils/constant.dart';
@@ -30,9 +29,9 @@ class _EscrutinioState extends State<Escrutinio> {
   CommonWidgest commonWidgest = CommonWidgest();
   String notes = '';
 
-  VoteElection voteElection = VoteElection(quantities: [], notes: "");
-
   File scrutinyImage;
+
+  bool autoValidateForm = false;
 
   Future getImageFromGallery() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -76,6 +75,7 @@ class _EscrutinioState extends State<Escrutinio> {
               : (model.election != null)
                   ? Form(
                       key: formKey,
+                      autovalidate: this.autoValidateForm,
                       child: ListView.builder(
                         itemCount:
                             widget.model.election.scrutinycategories.length + 2,
@@ -121,42 +121,9 @@ class _EscrutinioState extends State<Escrutinio> {
       child: Container(
         key: PageStorageKey<ScrutinyCategory>(scrutinyCategory),
         child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: widgetItems),
-      ),
-    );
-  }
-
-  Widget buildPartyForm(
-      ScrutinyCategory scrutinyCategory, ScrutinyParty party) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            child: Text(party.name),
-          ),
-          TextFormField(
-            key: PageStorageKey<ScrutinyParty>(party),
-            keyboardType:
-                TextInputType.numberWithOptions(signed: false, decimal: false),
-            inputFormatters: <TextInputFormatter>[
-              WhitelistingTextInputFormatter.digitsOnly
-            ],
-            decoration: InputDecoration(
-              hintText: "Cantidad: 12",
-            ),
-            validator: (val) =>
-                (val == null) ? 'Ingrese un número válido' : null,
-            onChanged: (val) {
-              validateVoteForElection(party, val, scrutinyCategory.name);
-            },
-            // onSaved: (val) {
-            //   validateVoteForElection(party, val, scrutinyCategory.name);
-            // },
-          ),
-        ],
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: widgetItems,
+        ),
       ),
     );
   }
@@ -251,8 +218,8 @@ class _EscrutinioState extends State<Escrutinio> {
               ),
               maxLines: 10,
               minLines: 5,
-              onChanged: (value) => voteElection.notes = value,
-              onSaved: (value) => voteElection.notes = value,
+              // onChanged: (value) => voteElection.notes = value,
+              onSaved: (value) => widget.model.voteElection.notes = value,
             ),
           ),
         ),
@@ -271,29 +238,17 @@ class _EscrutinioState extends State<Escrutinio> {
     );
   }
 
-  addVote(Vote vote) {
-    var existingItem = voteElection.quantities.firstWhere(
-        (itemToCheck) => (itemToCheck.scrutinyPartyId == vote.scrutinyPartyId),
-        orElse: () => null);
-    if (existingItem == null) {
-      voteElection.quantities.add(vote);
-    } else {
-      existingItem.qty = vote.qty;
-      voteElection.quantities.remove(existingItem);
-      voteElection.quantities.add(vote);
-    }
-  }
-
-  bool validateAllElectionData() {
-    return voteElection.quantities.length == widget.model.numberOfElectionVote;
-  }
-
   void _submitElectionVote() {
+    setState(() {
+      autoValidateForm = true;
+    });
     final form = formKey.currentState;
+    form.save();
+    bool isFormValid = form.validate();
+
     if (scrutinyImage == null) {
       commonWidgest.showToast("Por favor, seleccionar imagen");
-    } else if (form.validate() && validateAllElectionData()) {
-      form.save();
+    } else if (isFormValid) {
       confirmElectionVote();
     } else {
       commonWidgest.showToast(
@@ -346,7 +301,7 @@ class _EscrutinioState extends State<Escrutinio> {
   }
 
   void submitData() {
-    widget.model.submitScrutiny(widget.model, voteElection).then((response) {
+    widget.model.submitScrutiny(widget.model).then((response) {
       if (response) {
         formKey.currentState?.reset();
         Navigator.pushNamedAndRemoveUntil(
@@ -358,19 +313,66 @@ class _EscrutinioState extends State<Escrutinio> {
         Navigator.popUntil(context, ModalRoute.withName('/escrutinio')));
   }
 
-  void validateVoteForElection(
-      ScrutinyParty party, String val, String categoryName) {
-    if (val != null && val.isNotEmpty) {
-      addVote(Vote(scrutinyPartyId: party.id, qty: int.parse(val)));
-    } else {
-      commonWidgest.showToast(
-          "Por favor ingrese un número válido para ${party.name} en $categoryName");
-    }
-  }
-
   otherInputsbyParty(ScrutinyCategory scrutinyCategory) {
     return scrutinyCategory.scrutinyparties
-        .map((party) => buildPartyForm(scrutinyCategory, party))
+        .map((party) =>
+            PartyInputTextField(widget.model, party, scrutinyCategory))
         .toList();
+  }
+}
+
+class PartyInputTextField extends StatelessWidget {
+  final MainModel model;
+  final ScrutinyParty party;
+  final ScrutinyCategory scrutinyCategory;
+
+  PartyInputTextField(this.model, this.party, this.scrutinyCategory);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            child: Text(party.name),
+          ),
+          TextFormField(
+            key: PageStorageKey<ScrutinyParty>(party),
+            initialValue: getValue(),
+            keyboardType:
+                TextInputType.numberWithOptions(signed: false, decimal: false),
+            inputFormatters: <TextInputFormatter>[
+              WhitelistingTextInputFormatter.digitsOnly
+            ],
+            decoration: InputDecoration(
+              hintText: "Cantidad: 12",
+            ),
+            validator: (val) => (val == null || val.isEmpty)
+                ? 'Ingrese un número válido'
+                : null,
+            onChanged: (val) {
+              model.validateVoteForElection(val, party, scrutinyCategory);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  String getValue() {
+    if (model.voteElection == null ||
+        model.voteElection.quantities.length == 0) {
+      return "";
+    }
+    var existingItem = model.voteElection.quantities.firstWhere(
+        (itemToCheck) => (itemToCheck.scrutinyPartyId == party.id),
+        orElse: () => null);
+    if (existingItem == null) {
+      return "";
+    } else {
+      return existingItem.qty.toString();
+    }
   }
 }

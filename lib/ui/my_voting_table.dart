@@ -178,7 +178,7 @@ class MyVotingTableState extends State<MyVotingTableList>
                   showConfirmationDialog(voter, context);
                 } else {
                   commonWidgest.showToast(
-                      'Número de pedido no encontrado o ya ha votado');
+                      'Número de orden no encontrado o ya ha votado');
                 }
                 // Navigator.of(context).pop(teamName);
               },

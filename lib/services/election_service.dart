@@ -8,6 +8,8 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_app/model/election.dart';
 import 'package:voting_app/model/error.dart';
+import 'package:voting_app/model/scrutiny_category.dart';
+import 'package:voting_app/model/scrutiny_party.dart';
 import 'package:voting_app/model/vote_election.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/constant.dart';
@@ -23,6 +25,8 @@ mixin ElectionService on Model {
   Election _election;
 
   int _numberOfElectionVote = 0;
+
+  VoteElection voteElection = VoteElection(quantities: [], notes: "");
 
   int get numberOfElectionVote => _numberOfElectionVote;
 
@@ -70,8 +74,7 @@ mixin ElectionService on Model {
     });
   }
 
-  Future<bool> submitScrutiny(
-      MainModel model, VoteElection voteElection) async {
+  Future<bool> submitScrutiny(MainModel model) async {
     try {
       _isloadingElection = true;
       notifyListeners();
@@ -179,5 +182,28 @@ mixin ElectionService on Model {
 
   clearElection() {
     this._election = null;
+  }
+
+  addVote(Vote vote) {
+    var existingItem = voteElection.quantities.firstWhere(
+        (itemToCheck) => (itemToCheck.scrutinyPartyId == vote.scrutinyPartyId),
+        orElse: () => null);
+    if (existingItem == null) {
+      voteElection.quantities.add(vote);
+    } else {
+      existingItem.qty = vote.qty;
+      voteElection.quantities.remove(existingItem);
+      voteElection.quantities.add(vote);
+    }
+  }
+
+  void validateVoteForElection(
+      String val, ScrutinyParty party, ScrutinyCategory scrutinyCategory) {
+    if (val != null && val.isNotEmpty) {
+      addVote(Vote(scrutinyPartyId: party.id, qty: int.parse(val)));
+    } else {
+      commonWidgests.showToast(
+          "Por favor ingrese un número válido para ${party.name} en ${scrutinyCategory.name}");
+    }
   }
 }
