@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,7 +28,8 @@ mixin VotingService on Model {
 
   VotingTable get votingTable => _votingTable;
 
-  Future<VotingTable> fetchVotingTable(MainModel model) async {
+  Future<VotingTable> fetchVotingTable(
+      MainModel model, BuildContext context) async {
     try {
       _isloadingVotingTable = true;
       notifyListeners();
@@ -38,6 +40,10 @@ mixin VotingService on Model {
         "Accept": "application/json",
         "Authorization": "Bearer ${model.user.token}",
       });
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        model.logout(model, context);
+      }
 
       if (response.statusCode == 200) {
         Map<String, dynamic> mapResponse = json.decode(response.body);
@@ -78,7 +84,7 @@ mixin VotingService on Model {
         orElse: () => null);
   }
 
-  Future vote(MainModel model, Voter voter) async {
+  Future vote(MainModel model, Voter voter, BuildContext context) async {
     try {
       _isVotingOrReplenish = true;
       notifyListeners();
@@ -93,6 +99,10 @@ mixin VotingService on Model {
             "Accept": "application/json",
             "Authorization": "Bearer ${model.user.token}",
           });
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        model.logout(model, context);
+      }
 
       if (response.statusCode == 200) {
         _votingTable.voters.remove(voter);
@@ -129,7 +139,8 @@ mixin VotingService on Model {
     }
   }
 
-  Future replenishVote(MainModel model, int quantity) async {
+  Future replenishVote(
+      MainModel model, int quantity, BuildContext context) async {
     try {
       _isVotingOrReplenish = true;
       notifyListeners();
@@ -144,7 +155,9 @@ mixin VotingService on Model {
             "Accept": "application/json",
             "Authorization": "Bearer ${model.user.token}",
           });
-
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        model.logout(model, context);
+      }
       if (response.statusCode == 200) {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         commonWidgests.showToast(mapResponse['message']);

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -44,13 +45,16 @@ mixin MeService on Model {
     notifyListeners();
   }
 
-  logout(MainModel model) async {
+  logout(MainModel model, BuildContext context) async {
     model.clearVotingTable();
     model.clearFriendList();
     model.clearElection();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
   }
 
   savePersonToSharedPref(String userData) async {

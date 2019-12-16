@@ -34,7 +34,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       DrawerItem("Mi Mesa", Icons.list, '/my_voting_table_list'),
       DrawerItem("Escrutinio", Icons.check_circle, '/escrutinio'),
       DrawerItem("Ayuda", Icons.help, '/help'),
-      DrawerItem("Salir", Icons.exit_to_app, '/login'),
+      DrawerItem("Salir", Icons.exit_to_app, '/ '),
     ];
     List<Widget> drawerOptions = [];
 
@@ -148,7 +148,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                 break;
 
               case "/login":
-                logout(currentDrawerItem);
+                widget.model.logout(widget.model, context);
                 break;
 
               case "/help":
@@ -171,15 +171,5 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
         );
       },
     );
-  }
-
-  void logout(DrawerItem currentDrawerItem) {
-    widget.model.logout(widget.model).then((onvalue) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          currentDrawerItem.route, (Route<dynamic> route) => false);
-    }).catchError((onError) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          currentDrawerItem.route, (Route<dynamic> route) => false);
-    });
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
@@ -34,7 +35,7 @@ mixin ElectionService on Model {
 
   Election get election => _election;
 
-  Future<Election> fetchElection(MainModel model) async {
+  Future<Election> fetchElection(MainModel model, BuildContext context) async {
     try {
       final response =
           await http.get(Constant.baseUrl + Constant.election, headers: {
@@ -42,6 +43,10 @@ mixin ElectionService on Model {
         "Accept": "application/json",
         "Authorization": "Bearer ${model.user.token}",
       });
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        model.logout(model, context);
+      }
 
       if (response.statusCode == 200) {
         Map<String, dynamic> mapResponse = json.decode(response.body);
@@ -74,7 +79,7 @@ mixin ElectionService on Model {
     });
   }
 
-  Future<bool> submitScrutiny(MainModel model) async {
+  Future<bool> submitScrutiny(MainModel model, BuildContext context) async {
     try {
       _isloadingElection = true;
       notifyListeners();
@@ -87,6 +92,10 @@ mixin ElectionService on Model {
             "Accept": "application/json",
             "Authorization": "Bearer ${model.user.token}",
           });
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        model.logout(model, context);
+      }
 
       if (response.statusCode == 200) {
         Map<String, dynamic> mapResponse = json.decode(response.body);
@@ -110,7 +119,8 @@ mixin ElectionService on Model {
     }
   }
 
-  Future<bool> uploadScrutinyImage(MainModel model, File scrutinyImage) async {
+  Future<bool> uploadScrutinyImage(
+      MainModel model, File scrutinyImage, BuildContext context) async {
     try {
       _isloadingElection = true;
       notifyListeners();
@@ -133,6 +143,11 @@ mixin ElectionService on Model {
         "Accept": "application/json",
       });
       var response = await request.send();
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        model.logout(model, context);
+      }
+
       if (response.statusCode == 200) {
         commonWidgests.showToast("Imagen subida con éxito");
         return true;

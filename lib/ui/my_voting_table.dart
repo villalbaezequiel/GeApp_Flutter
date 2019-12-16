@@ -43,7 +43,7 @@ class MyVotingTableState extends State<MyVotingTableList>
   }
 
   Future loadVotingTable() async {
-    widget.model.fetchVotingTable(widget.model);
+    widget.model.fetchVotingTable(widget.model, context);
   }
 
   @override
@@ -86,7 +86,8 @@ class MyVotingTableState extends State<MyVotingTableList>
             },
           ),
           body: RefreshIndicator(
-            onRefresh: () => widget.model.fetchVotingTable(widget.model),
+            onRefresh: () =>
+                widget.model.fetchVotingTable(widget.model, context),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -197,6 +198,8 @@ class MyVotingTableState extends State<MyVotingTableList>
   }
 
   Future<String> _asyncInputDialogReplenish(BuildContext context) async {
+    bool validateReplesh = false;
+    final repleshFormKey = GlobalKey<FormState>();
     String teamName = '';
     return showDialog<String>(
       context: context,
@@ -208,18 +211,22 @@ class MyVotingTableState extends State<MyVotingTableList>
           content: Row(
             children: <Widget>[
               Expanded(
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    WhitelistingTextInputFormatter.digitsOnly
-                  ],
-                  autofocus: true,
-                  decoration: InputDecoration(
-                      labelText: 'Cantidad boletas repuestas',
-                      hintText: 'ejemplo 25'),
-                  onChanged: (value) {
-                    teamName = value;
-                  },
+                child: Form(
+                  autovalidate: validateReplesh,
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                    autofocus: true,
+                    decoration: InputDecoration(
+                        labelText: 'Cantidad boletas repuestas',
+                        hintText: 'ejemplo 25'),
+                    validator: validateRepleshForm,
+                    onSaved: (value) {
+                      teamName = value;
+                    },
+                  ),
                 ),
               )
             ],
@@ -228,7 +235,14 @@ class MyVotingTableState extends State<MyVotingTableList>
             FlatButton(
               child: Text('Ok', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
-                callAprForReplenish(teamName);
+                setState(() {
+                  validateReplesh = true;
+                });
+                final repleshForm = repleshFormKey.currentState;
+                repleshForm.save();
+                if (repleshForm.validate()) {
+                  callAprForReplenish(teamName);
+                }
               },
             ),
             FlatButton(
@@ -242,6 +256,14 @@ class MyVotingTableState extends State<MyVotingTableList>
         );
       },
     );
+  }
+
+  String validateRepleshForm(String value) {
+    if (value == null || value.isEmpty) {
+      return "Please enter value";
+    } else {
+      return null;
+    }
   }
 
   Widget titleForVotingTable() {
@@ -339,7 +361,7 @@ class MyVotingTableState extends State<MyVotingTableList>
   void callAprForReplenish(String quantity) {
     commonWidgest.progressDialog(context);
     widget.model
-        .replenishVote(widget.model, int.parse(quantity))
+        .replenishVote(widget.model, int.parse(quantity), context)
         .then((onValue) {
       Navigator.popUntil(context, ModalRoute.withName('/my_voting_table_list'));
     }).catchError((onError) {
@@ -349,7 +371,7 @@ class MyVotingTableState extends State<MyVotingTableList>
 
   void callApiForVote(Voter voter) {
     commonWidgest.progressDialog(context);
-    widget.model.vote(widget.model, voter).then((onValue) {
+    widget.model.vote(widget.model, voter, context).then((onValue) {
       Navigator.popUntil(context, ModalRoute.withName('/my_voting_table_list'));
       buildVoters();
       commonWidgest.showToast("Voto registrado correctamente");

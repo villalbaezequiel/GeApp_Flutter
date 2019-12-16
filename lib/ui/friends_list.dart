@@ -28,7 +28,7 @@ class FriendsListState extends State<FriendsList> {
   }
 
   Future loadFriends() async {
-    widget.model.fetchFriends(widget.model);
+    widget.model.fetchFriends(widget.model, context);
   }
 
   @override
@@ -53,7 +53,7 @@ class FriendsListState extends State<FriendsList> {
             heroTag: 'add_friend',
           ),
           body: RefreshIndicator(
-            onRefresh: () => model.fetchFriends(model),
+            onRefresh: () => model.fetchFriends(model, context),
             child: Column(
               children: <Widget>[
                 Expanded(
@@ -146,7 +146,7 @@ class FriendsListState extends State<FriendsList> {
   void deleteFriend(Friend friend) {
     commonWidgest.progressDialog(context);
     widget.model
-        .deleteFriend(widget.model, friend)
+        .deleteFriend(widget.model, friend, context)
         .then((onValue) =>
             Navigator.popUntil(context, ModalRoute.withName('/friends_list')))
         .catchError((onError) =>

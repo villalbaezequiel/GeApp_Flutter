@@ -56,7 +56,7 @@ class _EscrutinioState extends State<Escrutinio> {
   }
 
   Future loadData() async {
-    widget.model.fetchElection(widget.model);
+    widget.model.fetchElection(widget.model, context);
   }
 
   @override
@@ -288,7 +288,7 @@ class _EscrutinioState extends State<Escrutinio> {
   void performSubmit() {
     commonWidgest.progressDialog(context);
     widget.model
-        .uploadScrutinyImage(widget.model, scrutinyImage)
+        .uploadScrutinyImage(widget.model, scrutinyImage, context)
         .then((onValue) {
       if (onValue) {
         submitData();
@@ -301,7 +301,7 @@ class _EscrutinioState extends State<Escrutinio> {
   }
 
   void submitData() {
-    widget.model.submitScrutiny(widget.model).then((response) {
+    widget.model.submitScrutiny(widget.model, context).then((response) {
       if (response) {
         formKey.currentState?.reset();
         Navigator.pushNamedAndRemoveUntil(

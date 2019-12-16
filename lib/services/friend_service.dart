@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,7 +24,8 @@ mixin FriendService on Model {
 
   CommonWidgest commonWidgests = CommonWidgest();
 
-  Future<List<Friend>> fetchFriends(MainModel model) async {
+  Future<List<Friend>> fetchFriends(
+      MainModel model, BuildContext context) async {
     try {
       _isLoadingFriends = true;
       notifyListeners();
@@ -34,6 +36,10 @@ mixin FriendService on Model {
         "Accept": "application/json",
         "Authorization": "Bearer ${model.user.token}",
       });
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        model.logout(model, context);
+      }
 
       if (response.statusCode == 200) {
         var responseData = json.decode(response.body);
@@ -68,7 +74,7 @@ mixin FriendService on Model {
   }
 
   Future<bool> addFriend(MainModel model, String nationalId, String email,
-      String phoneNumber) async {
+      String phoneNumber, BuildContext context) async {
     try {
       var params = {
         "nationalId": nationalId,
@@ -85,6 +91,10 @@ mixin FriendService on Model {
         "Accept": "application/json",
         "Authorization": "Bearer ${model.user.token}",
       });
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        model.logout(model, context);
+      }
 
       if (response.statusCode == 200) {
         Map<String, dynamic> mapResponse = json.decode(response.body);
@@ -113,7 +123,8 @@ mixin FriendService on Model {
     }
   }
 
-  Future<bool> deleteFriend(MainModel model, Friend friend) async {
+  Future<bool> deleteFriend(
+      MainModel model, Friend friend, BuildContext context) async {
     try {
       _isLoadingFriends = true;
       notifyListeners();
@@ -125,6 +136,10 @@ mixin FriendService on Model {
             "Accept": "application/json",
             "Authorization": "Bearer ${model.user.token}",
           });
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        model.logout(model, context);
+      }
 
       if (response.statusCode == 200) {
         Map<String, dynamic> mapResponse = json.decode(response.body);

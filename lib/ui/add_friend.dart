@@ -127,7 +127,7 @@ class AddFriendState extends State<AddFriend> {
   void performSubmit() {
     commonWidgest.progressDialog(context);
     widget.model
-        .addFriend(widget.model, _nationalId, _email, _phoneNumber)
+        .addFriend(widget.model, _nationalId, _email, _phoneNumber, context)
         .then((onValue) {
       Navigator.of(context).pop();
       formKey.currentState?.reset();
