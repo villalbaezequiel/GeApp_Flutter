@@ -26,6 +26,7 @@ class MyVotingTableState extends State<MyVotingTableList>
   Animation<double> _animation;
   AnimationController _controller;
   bool validateReplesh = false;
+  bool validateVote = false;
 
   @override
   void initState() {
@@ -142,7 +143,8 @@ class MyVotingTableState extends State<MyVotingTableList>
   }
 
   Future<String> _asyncInputDialogVote(BuildContext context) async {
-    int orderNumber;
+    final voteFormKey = GlobalKey<FormState>();
+    String orderNumber;
     return showDialog<String>(
       context: context,
       barrierDismissible:
@@ -153,20 +155,24 @@ class MyVotingTableState extends State<MyVotingTableList>
           content: Row(
             children: <Widget>[
               Expanded(
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    WhitelistingTextInputFormatter.digitsOnly
-                  ],
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    labelText: 'Número de orden',
-                    hintText: 'Ejemplo 154',
+                child: Form(
+                  key: voteFormKey,
+                  autovalidate: validateVote,
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      labelText: 'Número de orden',
+                      hintText: 'Ejemplo 154',
+                    ),
+                    validator: (val) => (val == null || val.isEmpty)
+                        ? 'Ingrese un número válido'
+                        : null,
+                    onSaved: (value) => orderNumber = value,
                   ),
-                  onChanged: (value) {
-                    orderNumber = int.parse(value);
-                  },
-                  onSubmitted: (value) => orderNumber = int.parse(value),
                 ),
               )
             ],
@@ -175,14 +181,22 @@ class MyVotingTableState extends State<MyVotingTableList>
             FlatButton(
               child: Text('Ok', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
-                Voter voter = widget.model.validateVoterOrder(orderNumber);
-                if (voter != null) {
-                  showConfirmationDialog(voter, context);
-                } else {
-                  commonWidgest.showToast(
-                      'Número de orden no encontrado o ya ha votado');
+                setState(() {
+                  validateVote = true;
+                });
+
+                var voteForm = voteFormKey.currentState;
+                voteForm.save();
+                if (voteForm.validate()) {
+                  Voter voter =
+                      widget.model.validateVoterOrder(int.parse(orderNumber));
+                  if (voter != null) {
+                    showConfirmationDialog(voter, context);
+                  } else {
+                    commonWidgest.showToast(
+                        'Número de orden no encontrado o ya ha votado');
+                  }
                 }
-                // Navigator.of(context).pop(teamName);
               },
             ),
             FlatButton(
