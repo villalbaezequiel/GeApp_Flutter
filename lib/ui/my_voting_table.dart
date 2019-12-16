@@ -25,6 +25,7 @@ class MyVotingTableState extends State<MyVotingTableList>
   int currentItemIndex = 0;
   Animation<double> _animation;
   AnimationController _controller;
+  bool validateReplesh = false;
 
   @override
   void initState() {
@@ -198,7 +199,6 @@ class MyVotingTableState extends State<MyVotingTableList>
   }
 
   Future<String> _asyncInputDialogReplenish(BuildContext context) async {
-    bool validateReplesh = false;
     final repleshFormKey = GlobalKey<FormState>();
     String teamName = '';
     return showDialog<String>(
@@ -212,6 +212,7 @@ class MyVotingTableState extends State<MyVotingTableList>
             children: <Widget>[
               Expanded(
                 child: Form(
+                  key: repleshFormKey,
                   autovalidate: validateReplesh,
                   child: TextFormField(
                     keyboardType: TextInputType.number,
@@ -222,7 +223,9 @@ class MyVotingTableState extends State<MyVotingTableList>
                     decoration: InputDecoration(
                         labelText: 'Cantidad boletas repuestas',
                         hintText: 'ejemplo 25'),
-                    validator: validateRepleshForm,
+                    validator: (val) => (val == null || val.isEmpty)
+                        ? 'Ingrese un número válido'
+                        : null,
                     onSaved: (value) {
                       teamName = value;
                     },
@@ -238,7 +241,7 @@ class MyVotingTableState extends State<MyVotingTableList>
                 setState(() {
                   validateReplesh = true;
                 });
-                final repleshForm = repleshFormKey.currentState;
+                var repleshForm = repleshFormKey.currentState;
                 repleshForm.save();
                 if (repleshForm.validate()) {
                   callAprForReplenish(teamName);
@@ -256,14 +259,6 @@ class MyVotingTableState extends State<MyVotingTableList>
         );
       },
     );
-  }
-
-  String validateRepleshForm(String value) {
-    if (value == null || value.isEmpty) {
-      return "Please enter value";
-    } else {
-      return null;
-    }
   }
 
   Widget titleForVotingTable() {
