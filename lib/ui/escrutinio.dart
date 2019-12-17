@@ -75,7 +75,7 @@ class _EscrutinioState extends State<Escrutinio> {
               : (model.election != null)
                   ? Form(
                       key: formKey,
-                      autovalidate: this.autoValidateForm,
+                      autovalidate: autoValidateForm,
                       child: ListView.builder(
                         itemCount:
                             widget.model.election.scrutinycategories.length + 2,
