@@ -51,4 +51,7 @@ class Constant {
   // scrutiny for votes
   static const String scrutinyVotes = "voting-table/scrutiny/";
   static const String scrutinyfile = "voting-table/scrutiny/file";
+
+  // health check
+  static const String halthCheck = "ping/";
 }

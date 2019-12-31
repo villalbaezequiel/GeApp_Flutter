@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/friend.dart';
 import 'package:voting_app/services/main_model.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:voting_app/ui/friend_citizen_details.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
+
 import 'global/utils/constant.dart';
 import 'global/utils/text_style_utils.dart';
 import 'global/widgets/navigation_drawer.dart';
@@ -23,8 +24,9 @@ class FriendsListState extends State<FriendsList> {
   @override
   void initState() {
     super.initState();
-    if (widget.model.friendsList == null && !widget.model.isLoadingFriends)
-      loadFriends();
+    if ((widget.model.friendsList == null ||
+            widget.model.friendsList.length == 0) &&
+        !widget.model.isLoadingFriends) loadFriends();
   }
 
   Future loadFriends() async {
@@ -39,6 +41,12 @@ class FriendsListState extends State<FriendsList> {
           appBar: GradientAppBar(
             title: titleForFriendList(),
             gradient: Constant.appBarGradient,
+            // actions: <Widget>[
+            //   IconButton(
+            //     icon: Icon(Icons.refresh),
+            //     onPressed: () => widget.model.fetchFriends(model, context),
+            //   )
+            // ],
           ),
           drawer: NavigationDrawer(model: model),
           floatingActionButton: FloatingActionButton(

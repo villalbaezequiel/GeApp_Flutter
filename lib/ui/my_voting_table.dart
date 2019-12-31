@@ -38,7 +38,7 @@ class MyVotingTableState extends State<MyVotingTableList>
         CurvedAnimation(curve: Curves.easeInOut, parent: _controller);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
 
-    if (widget.model.votingTable == null && !widget.model.isloadingVotingTable)
+    if (widget.model.votingTable == null && !widget.model.isLoadingVotingTable)
       loadVotingTable();
 
     super.initState();
@@ -94,7 +94,7 @@ class MyVotingTableState extends State<MyVotingTableList>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Expanded(
-                  child: widget.model.isloadingVotingTable
+                  child: widget.model.isLoadingVotingTable
                       ? Center(child: CircularProgressIndicator())
                       : (widget.model.votingTable != null &&
                               widget.model.votingTable.voters.length > 0)
@@ -108,7 +108,7 @@ class MyVotingTableState extends State<MyVotingTableList>
                       EdgeInsets.only(left: 20, top: 5, bottom: 5, right: 5),
                   color: Colors.grey[200],
                   width: double.infinity,
-                  child: widget.model.isloadingVotingTable
+                  child: widget.model.isLoadingVotingTable
                       ? Center(child: CircularProgressIndicator())
                       : Text(
                           "Última actualización: " +
@@ -276,7 +276,7 @@ class MyVotingTableState extends State<MyVotingTableList>
   }
 
   Widget titleForVotingTable() {
-    if (widget.model.isVotingOrReplenish || widget.model.isloadingVotingTable) {
+    if (widget.model.isVotingOrReplenish || widget.model.isLoadingVotingTable) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -383,7 +383,7 @@ class MyVotingTableState extends State<MyVotingTableList>
     widget.model.vote(widget.model, voter, context).then((onValue) {
       Navigator.popUntil(context, ModalRoute.withName('/my_voting_table_list'));
       buildVoters();
-      commonWidgest.showToast("Voto registrado correctamente");
+      // commonWidgest.showToast("Voto registrado correctamente");
     }).catchError((onError) {
       Navigator.popUntil(context, ModalRoute.withName('/my_voting_table_list'));
     });

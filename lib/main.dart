@@ -17,7 +17,7 @@ import 'ui/my_voting_table.dart';
 import 'ui/sign_up.dart';
 import 'ui/voter_citizen_details.dart';
 
-Future main() async {
+void main() async {
   runApp(MyApp());
 
   await SystemChrome.setPreferredOrientations(
@@ -33,7 +33,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     MainModel model = MainModel();
-
     return ScopedModel(
       model: model,
       child: MaterialApp(

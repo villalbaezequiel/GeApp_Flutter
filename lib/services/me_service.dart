@@ -38,6 +38,7 @@ mixin MeService on Model {
     model.loadFriendsFromSharedPref(model, prefs);
     model.loadVotingTableFromSharedPref(model, prefs);
     model.loadElectionFromSharedPref(model, prefs);
+    model.loadSavedRequestsFromSharedPref(model, prefs);
   }
 
   setUser(Person user) {
@@ -49,6 +50,7 @@ mixin MeService on Model {
     model.clearVotingTable();
     model.clearFriendList();
     model.clearElection();
+    // model.clearSavedRequestsList();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
