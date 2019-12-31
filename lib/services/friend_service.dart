@@ -7,6 +7,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_app/model/error.dart';
 import 'package:voting_app/model/friend.dart';
+import 'package:voting_app/model/save_request.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/constant.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
@@ -36,6 +37,9 @@ mixin FriendService on Model {
         "Accept": "application/json",
         "Authorization": "Bearer ${model.user.token}",
       });
+
+      if (!model.isLoadingSavedService && model.savedRuestsList.length > 0)
+        model.callSavedRequests(model);
 
       if (response.statusCode == 401 || response.statusCode == 403) {
         model.logout(model, context);
@@ -68,29 +72,34 @@ mixin FriendService on Model {
       return _friendsList;
     } catch (error) {
       _isLoadingFriends = false;
-      catchExceptions(error);
+      catchExceptions(error, 'Sin conexión, por favor intente luego');
       return [];
     }
   }
 
+  // saves request if no internet
   Future<bool> addFriend(MainModel model, String nationalId, String email,
       String phoneNumber, BuildContext context) async {
+    var params = {
+      "nationalId": nationalId,
+      "email": email,
+      "phone": phoneNumber
+    };
+    var body = json.encode(params);
+
     try {
-      var params = {
-        "nationalId": nationalId,
-        "email": email,
-        "phone": phoneNumber
-      };
       _isLoadingFriends = true;
       notifyListeners();
 
-      var body = json.encode(params);
       var response = await http
           .post(Constant.baseUrl + Constant.friends, body: body, headers: {
         'Content-Type': 'application/json',
         "Accept": "application/json",
         "Authorization": "Bearer ${model.user.token}",
       });
+
+      if (!model.isLoadingSavedService && model.savedRuestsList.length > 0)
+        model.callSavedRequests(model);
 
       if (response.statusCode == 401 || response.statusCode == 403) {
         model.logout(model, context);
@@ -118,16 +127,31 @@ mixin FriendService on Model {
     } catch (error) {
       _isLoadingFriends = false;
 
-      catchExceptions(error);
+      if (error is SocketException) {
+        model.addToSavedRequestsList(
+          SaveRequest(
+            id: DateTime.now().millisecond,
+            url: Constant.friends,
+            body: body,
+            requestType: 'post',
+          ),
+        );
+      }
+
+      catchExceptions(error,
+          'No se encontró conexión a internet. Su amigo se agregará cuando tenga conexión');
       return false;
     }
   }
 
+  // saves request if no internet
   Future<bool> deleteFriend(
       MainModel model, Friend friend, BuildContext context) async {
     try {
       _isLoadingFriends = true;
       notifyListeners();
+
+      removeFromFriendsList(friend);
 
       var response = await http.delete(
           Constant.baseUrl + Constant.friends + friend.id.toString(),
@@ -143,7 +167,6 @@ mixin FriendService on Model {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> mapResponse = json.decode(response.body);
-        removeFromFriendsList(friend);
         commonWidgests.showToast(mapResponse['message']);
         _isLoadingFriends = false;
         notifyListeners();
@@ -159,14 +182,25 @@ mixin FriendService on Model {
       }
     } catch (error) {
       _isLoadingFriends = false;
-      catchExceptions(error);
+      if (error is SocketException) {
+        model.addToSavedRequestsList(
+          SaveRequest(
+            id: DateTime.now().millisecond,
+            url: Constant.friends + friend.id.toString(),
+            body: '',
+            requestType: 'delete',
+          ),
+        );
+      }
+      catchExceptions(error,
+          'No se encontró conexión a internet. Su amigo se eliminará cuando tenga conexión');
       return false;
     }
   }
 
-  catchExceptions(error) {
+  catchExceptions(error, String message) {
     if (error is SocketException) {
-      commonWidgests.showToast('Sin conexión, por favor intente luego');
+      commonWidgests.showToast(message);
     } else {
       commonWidgests.showToast(error.message);
     }
@@ -213,6 +247,7 @@ mixin FriendService on Model {
     var friends = prefs.getStringList(FRIENDS_LIST_KEY);
 
     if (friends != null) {
+      this._friendsList = [];
       for (String friend in friends) {
         this._friendsList.add(Friend.fromString(json.decode(friend)));
       }

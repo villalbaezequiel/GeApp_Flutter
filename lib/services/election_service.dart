@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_app/model/election.dart';
@@ -18,7 +18,8 @@ import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 
 mixin ElectionService on Model {
   static const String ELECTION_KEY = "election";
-
+  String errorMessage =
+      'No se encontró conexión a internet. El acta se enviará cuando tenga conexión';
   CommonWidgest commonWidgests = CommonWidgest();
 
   bool _isloadingElection = false;
@@ -44,6 +45,9 @@ mixin ElectionService on Model {
         "Authorization": "Bearer ${model.user.token}",
       });
 
+      if (!model.isLoadingSavedService && model.savedRuestsList.length > 0)
+        model.callSavedRequests(model);
+
       if (response.statusCode == 401 || response.statusCode == 403) {
         model.logout(model, context);
       }
@@ -67,7 +71,7 @@ mixin ElectionService on Model {
       }
     } catch (error) {
       _isloadingElection = false;
-      catchExceptions(error);
+      catchExceptions(error, 'Sin conexión, por favor intente luego');
       return null;
     }
   }
@@ -93,6 +97,9 @@ mixin ElectionService on Model {
             "Authorization": "Bearer ${model.user.token}",
           });
 
+      if (!model.isLoadingSavedService && model.savedRuestsList.length > 0)
+        model.callSavedRequests(model);
+
       if (response.statusCode == 401 || response.statusCode == 403) {
         model.logout(model, context);
       }
@@ -114,7 +121,7 @@ mixin ElectionService on Model {
       }
     } catch (error) {
       _isloadingElection = false;
-      catchExceptions(error);
+      catchExceptions(error, errorMessage);
       return false;
     }
   }
@@ -159,16 +166,16 @@ mixin ElectionService on Model {
       }
     } catch (error) {
       _isloadingElection = false;
-      catchExceptions(error);
+      catchExceptions(error, errorMessage);
       return false;
     }
   }
 
-  catchExceptions(error) {
+  catchExceptions(error, String message) {
     if (error is SocketException) {
-      commonWidgests.showToast('Sin conexión, por favor intente luego');
+      commonWidgests.showToast(message);
     } else {
-      commonWidgests.showToast(error.message);
+      print(error.toString());
     }
     notifyListeners();
   }

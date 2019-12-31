@@ -1,6 +1,7 @@
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_app/services/election_service.dart';
+import 'package:voting_app/services/saved_request_service.dart';
 import 'package:voting_app/services/voting_service.dart';
 import 'package:voting_app/ui/global/utils/constant.dart';
 
@@ -8,7 +9,12 @@ import 'friend_service.dart';
 import 'me_service.dart';
 
 class MainModel extends Model
-    with MeService, FriendService, VotingService, ElectionService {
+    with
+        MeService,
+        FriendService,
+        VotingService,
+        ElectionService,
+        SavedRequestService {
   static const String VOTING_TABLE_TIME_KEY = "voting_table_time";
   static const String FRIEND_LIST_TIME_KEY = "friend_list_time";
   static const String ESCRITINIO_STATUS_KEY = "escrutinio";
