@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_app/model/election.dart';
 import 'package:voting_app/model/error.dart';
+import 'package:voting_app/model/save_request.dart';
 import 'package:voting_app/model/scrutiny_category.dart';
 import 'package:voting_app/model/scrutiny_party.dart';
 import 'package:voting_app/model/vote_election.dart';
@@ -27,6 +29,8 @@ mixin ElectionService on Model {
   Election _election;
 
   int _numberOfElectionVote = 0;
+
+  File imageNewFile;
 
   VoteElection voteElection = VoteElection(quantities: [], notes: "");
 
@@ -84,11 +88,11 @@ mixin ElectionService on Model {
   }
 
   Future<bool> submitScrutiny(MainModel model, BuildContext context) async {
-    try {
-      _isloadingElection = true;
-      notifyListeners();
+    _isloadingElection = true;
+    notifyListeners();
 
-      var body = json.encode(voteElection);
+    var body = json.encode(voteElection);
+    try {
       var response = await http.post(Constant.baseUrl + Constant.scrutinyVotes,
           body: body,
           headers: {
@@ -121,6 +125,16 @@ mixin ElectionService on Model {
       }
     } catch (error) {
       _isloadingElection = false;
+      if (error is SocketException) {
+        model.addToSavedRequestsList(
+          SaveRequest(
+            id: DateTime.now().millisecond,
+            url: Constant.scrutinyVotes,
+            body: body,
+            requestType: 'post',
+          ),
+        );
+      }
       catchExceptions(error, errorMessage);
       return false;
     }
@@ -128,18 +142,20 @@ mixin ElectionService on Model {
 
   Future<bool> uploadScrutinyImage(
       MainModel model, File scrutinyImage, BuildContext context) async {
-    try {
-      _isloadingElection = true;
-      notifyListeners();
+    _isloadingElection = true;
+    notifyListeners();
+    // move file to app document directory
+    imageNewFile = await moveFileToAppDir(scrutinyImage);
 
+    try {
       final mimeTypeData =
-          lookupMimeType(scrutinyImage.path, headerBytes: [0xFF, 0xD8])
+          lookupMimeType(imageNewFile.path, headerBytes: [0xFF, 0xD8])
               .split('/');
 
       var postUri = Uri.parse(Constant.baseUrl + Constant.scrutinyfile);
       var request = http.MultipartRequest("POST", postUri);
       http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
-          'scrutinyImage', scrutinyImage.path,
+          'scrutinyImage', imageNewFile.path,
           contentType: MediaType(mimeTypeData[0],
               mimeTypeData[1])); //returns a Future<MultipartFile>
 
@@ -156,6 +172,7 @@ mixin ElectionService on Model {
       }
 
       if (response.statusCode == 200) {
+        model.updateVotingTableIsOpen(false);
         commonWidgests.showToast("Imagen subida con éxito");
         return true;
       } else {
@@ -167,7 +184,7 @@ mixin ElectionService on Model {
     } catch (error) {
       _isloadingElection = false;
       catchExceptions(error, errorMessage);
-      return false;
+      throw error;
     }
   }
 
@@ -227,5 +244,12 @@ mixin ElectionService on Model {
       commonWidgests.showToast(
           "Por favor ingrese un número válido para ${party.name} en ${scrutinyCategory.name}");
     }
+  }
+
+  Future<File> moveFileToAppDir(File scrutinyImage) async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String fileName = scrutinyImage?.path?.split("/")?.last;
+    File newFile = scrutinyImage.copySync('${appDocDir.path}/$fileName');
+    return newFile;
   }
 }
