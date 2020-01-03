@@ -4,7 +4,12 @@ class SaveRequest {
   String body;
   String requestType;
 
-  SaveRequest({this.id, this.url, this.body, this.requestType});
+  SaveRequest({
+    this.id,
+    this.url,
+    this.body,
+    this.requestType,
+  });
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

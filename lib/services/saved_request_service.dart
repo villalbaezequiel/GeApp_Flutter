@@ -1,12 +1,17 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:mime/mime.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_app/model/save_request.dart';
 import 'package:voting_app/ui/global/utils/constant.dart';
 
 import 'main_model.dart';
+
+import 'package:http_parser/http_parser.dart';
+import 'package:voting_app/services/main_model.dart';
 
 mixin SavedRequestService on Model {
   static const String SAVE_REQUEST_KEY = "save_request";
@@ -81,6 +86,9 @@ mixin SavedRequestService on Model {
         case 'put':
           await putRequest(savedRequest, model);
           break;
+        case 'send':
+          await uploadFileRequest(savedRequest, model);
+          break;
       }
     }
 
@@ -96,6 +104,10 @@ mixin SavedRequestService on Model {
         "Accept": "application/json",
         "Authorization": "Bearer ${model.user.token}",
       });
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        model.clearAllData(model);
+      }
 
       if (response.statusCode == 200) {
         this.removeFromSavedRequestsList(saveRequest);
@@ -114,7 +126,9 @@ mixin SavedRequestService on Model {
             "Accept": "application/json",
             "Authorization": "Bearer ${model.user.token}",
           });
-
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        model.clearAllData(model);
+      }
       if (response.statusCode == 200) {
         this.removeFromSavedRequestsList(savedRequest);
       }
@@ -132,9 +146,45 @@ mixin SavedRequestService on Model {
             "Accept": "application/json",
             "Authorization": "Bearer ${model.user.token}",
           });
-
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        model.clearAllData(model);
+      }
       if (response.statusCode == 200) {
         this.removeFromSavedRequestsList(savedRequest);
+      }
+    } catch (error) {
+      print(error.message);
+    }
+  }
+
+  uploadFileRequest(SaveRequest savedRequest, MainModel model) async {
+    try {
+      File imageNewFile = File(savedRequest.body);
+      final mimeTypeData =
+          lookupMimeType(imageNewFile.path, headerBytes: [0xFF, 0xD8])
+              .split('/');
+
+      var postUri = Uri.parse(Constant.baseUrl + Constant.scrutinyfile);
+      var request = http.MultipartRequest("POST", postUri);
+      http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+          'scrutinyImage', imageNewFile.path,
+          contentType: MediaType(mimeTypeData[0],
+              mimeTypeData[1])); //returns a Future<MultipartFile>
+
+      request.files.add(multipartFile);
+      request.headers.addAll({
+        "Authorization": "Bearer ${model.user.token}",
+        'Content-Type': 'multipart/form-data;',
+        "Accept": "application/json",
+      });
+      var response = await request.send();
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        model.clearAllData(model);
+      }
+      if (response.statusCode == 200) {
+        print('file uploaded with saved req');
+        model.updateVotingTableIsOpen(false);
       }
     } catch (error) {
       print(error.message);

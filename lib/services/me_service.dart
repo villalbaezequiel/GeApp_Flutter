@@ -47,6 +47,13 @@ mixin MeService on Model {
   }
 
   logout(MainModel model, BuildContext context) async {
+    clearAllData(model);
+
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+  }
+
+  clearAllData(MainModel model) async {
     model.clearVotingTable();
     model.clearFriendList();
     model.clearElection();
@@ -54,9 +61,6 @@ mixin MeService on Model {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
   }
 
   savePersonToSharedPref(String userData) async {

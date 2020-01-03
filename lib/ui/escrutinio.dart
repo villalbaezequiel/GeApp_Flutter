@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:voting_app/model/save_request.dart';
 import 'package:voting_app/model/scrutiny_category.dart';
 import 'package:voting_app/model/scrutiny_party.dart';
 import 'package:voting_app/services/main_model.dart';
@@ -293,10 +294,22 @@ class _EscrutinioState extends State<Escrutinio> {
       if (onValue) {
         submitData();
       } else {
-        Navigator.popUntil(context, ModalRoute.withName('/escrutinio'));
+        goToHome();
       }
     }).catchError((onError) {
-      Navigator.popUntil(context, ModalRoute.withName('/escrutinio'));
+      if (onError is SocketException) {
+        widget.model.updateVotingTableIsOpen(false);
+        widget.model.addToSavedRequestsList(
+          SaveRequest(
+            id: DateTime.now().millisecond,
+            url: Constant.scrutinyfile,
+            body: widget.model.imageNewFile.path,
+            requestType: 'send',
+          ),
+        );
+        submitData();
+      }
+      goToHome();
     });
   }
 
@@ -304,13 +317,13 @@ class _EscrutinioState extends State<Escrutinio> {
     widget.model.submitScrutiny(widget.model, context).then((response) {
       if (response) {
         formKey.currentState?.reset();
-        Navigator.pushNamedAndRemoveUntil(
-            context, '/home', (Route<dynamic> route) => false);
+        goToHome();
       } else {
-        Navigator.popUntil(context, ModalRoute.withName('/escrutinio'));
+        goToHome();
       }
-    }).catchError((onError) =>
-        Navigator.popUntil(context, ModalRoute.withName('/escrutinio')));
+    }).catchError(
+      (onError) => goToHome(),
+    );
   }
 
   otherInputsbyParty(ScrutinyCategory scrutinyCategory) {
@@ -318,6 +331,11 @@ class _EscrutinioState extends State<Escrutinio> {
         .map((party) =>
             PartyInputTextField(widget.model, party, scrutinyCategory))
         .toList();
+  }
+
+  goToHome() {
+    Navigator.pushNamedAndRemoveUntil(
+        context, '/home', (Route<dynamic> route) => false);
   }
 }
 
