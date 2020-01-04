@@ -48,16 +48,12 @@ mixin FriendService on Model {
       if (response.statusCode == 200) {
         var responseData = json.decode(response.body);
 
-        final List<Friend> fetchedFriends = [];
         responseData.forEach((dynamic json) {
           if (responseData != null) {
             Friend friend = Friend.fromJson(json);
-
-            fetchedFriends.add(friend);
+            this.addToList(friend);
           }
         });
-
-        _friendsList = fetchedFriends;
 
         this.saveFriendsToSharedPref();
 
@@ -214,6 +210,15 @@ mixin FriendService on Model {
     if (existingItem == null) {
       this._friendsList.add(friend);
       this.saveFriendsToSharedPref();
+    }
+  }
+
+  addToList(Friend friend) {
+    var existingItem = _friendsList.firstWhere(
+        (itemToCheck) => (itemToCheck.id == friend.id),
+        orElse: () => null);
+    if (existingItem == null) {
+      this._friendsList.add(friend);
     }
   }
 
