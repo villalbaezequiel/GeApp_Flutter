@@ -64,15 +64,6 @@ class AddFriendState extends State<AddFriend> {
                       onSaved: (val) => _nationalId = val,
                     ),
                     TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        hintText: "",
-                        labelText: "Correo Electrónico",
-                      ),
-                      validator: validateEmail,
-                      onSaved: (val) => _email = val,
-                    ),
-                    TextFormField(
                       keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
                           hintText: "+54-911-4567-4567",
@@ -81,6 +72,15 @@ class AddFriendState extends State<AddFriend> {
                           ? 'Teléfono incorrecto.'
                           : null,
                       onSaved: (val) => _phoneNumber = val,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        hintText: "",
+                        labelText: "Correo Electrónico",
+                      ),
+                      validator: validateEmail,
+                      onSaved: (val) => _email = val,
                     ),
                     SizedBox(height: 20),
                     RaisedButton(

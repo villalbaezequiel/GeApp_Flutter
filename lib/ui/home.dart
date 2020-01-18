@@ -56,7 +56,7 @@ class HomeState extends State<Home> {
               homeButton('Mis amigos', '/friends_list', Icons.group),
               homeButton('Mi mesa', '/my_voting_table_list', Icons.list),
               homeButton('Escrutinio', '/escrutinio', Icons.check_circle),
-              homeButton('Ayuda', '/help', Icons.help_outline),
+              homeButton('Chat', '/help', Icons.help_outline),
               SizedBox(height: 30),
             ],
           ),

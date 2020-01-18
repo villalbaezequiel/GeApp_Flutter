@@ -33,7 +33,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       DrawerItem("Amigos", Icons.group, '/friends_list'),
       DrawerItem("Mi Mesa", Icons.list, '/my_voting_table_list'),
       DrawerItem("Escrutinio", Icons.check_circle, '/escrutinio'),
-      DrawerItem("Ayuda", Icons.help, '/help'),
+      DrawerItem("Chat", Icons.help, '/help'),
       DrawerItem("Salir", Icons.exit_to_app, '/login'),
     ];
     List<Widget> drawerOptions = [];
