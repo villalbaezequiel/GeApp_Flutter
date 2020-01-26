@@ -1,2 +1,4 @@
 {
+  "solargraph.autoformat": true,
+  "editor.formatOnSave": true
 }
