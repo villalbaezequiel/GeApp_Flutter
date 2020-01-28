@@ -31,7 +31,7 @@ class Constant {
   };
 
   // API Endpoints base url
-  static const String baseUrl = 'http://18.231.45.56:3000/api/';
+  static const String baseUrl = 'http://api.geapp.com.ar/api/';
 
   // user endpoints
   static const String login = 'user/login';
