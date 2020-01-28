@@ -26,8 +26,7 @@ class Escrutinio extends StatefulWidget {
 class _EscrutinioState extends State<Escrutinio> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
-  dynamic _pickImageError;
-  String _retrieveDataError;
+
   CommonWidgest commonWidgest = CommonWidgest();
   String notes = '';
 
@@ -43,61 +42,12 @@ class _EscrutinioState extends State<Escrutinio> {
   }
 
   Future getImageFromCamera() async {
-    try {
-      var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
-      setState(() {
-        scrutinyImage = image;
-      });
-    } catch (error) {
-      // _pickImageError = error;
-      commonWidgest.showToast(
-          "Lo sentimos, encontramos algunos problemas con la cámara. Por favor, elija una imagen de la galería");
-    }
+    setState(() {
+      scrutinyImage = image;
+    });
   }
-
-  // Widget _previewImage() {
-  //   final Text retrieveError = _getRetrieveErrorWidget();
-  //   if (retrieveError != null) {
-  //     return retrieveError;
-  //   }
-  //   if (scrutinyImage != null) {
-  //     return Image.file(scrutinyImage);
-  //   } else if (_pickImageError != null) {
-  //     return Text(
-  //       'Pick image error: $_pickImageError',
-  //       textAlign: TextAlign.center,
-  //     );
-  //   } else {
-  //     return const Text(
-  //       'You have not yet picked an image.',
-  //       textAlign: TextAlign.center,
-  //     );
-  //   }
-  // }
-
-  // Future<void> retrieveLostData() async {
-  //   final LostDataResponse response = await ImagePicker.retrieveLostData();
-  //   if (response.isEmpty) {
-  //     return null;
-  //   }
-  //   if (response.file != null) {
-  //     setState(() {
-  //       scrutinyImage = response.file;
-  //     });
-  //   } else {
-  //     _retrieveDataError = response.exception.code;
-  //   }
-  // }
-
-  // Text _getRetrieveErrorWidget() {
-  //   if (_retrieveDataError != null) {
-  //     final Text result = Text(_retrieveDataError);
-  //     _retrieveDataError = null;
-  //     return result;
-  //   }
-  //   return null;
-  // }
 
   @override
   void initState() {
@@ -209,20 +159,20 @@ class _EscrutinioState extends State<Escrutinio> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Flexible(
-                    flex: 1,
-                    child: FlatButton.icon(
-                      color: Constant.ascent,
-                      icon: Icon(Icons.add_a_photo, color: Colors.white),
-                      label: Text(
-                        'Cámara',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        getImageFromCamera();
-                      },
-                    ),
-                  ),
+                  // Flexible(
+                  //   flex: 1,
+                  //   child: FlatButton.icon(
+                  //     color: Constant.ascent,
+                  //     icon: Icon(Icons.add_a_photo, color: Colors.white),
+                  //     label: Text(
+                  //       'Cámara',
+                  //       style: TextStyle(color: Colors.white),
+                  //     ),
+                  //     onPressed: () {
+                  //       getImageFromCamera();
+                  //     },
+                  //   ),
+                  // ),
                   Flexible(
                     flex: 1,
                     child: FlatButton.icon(
