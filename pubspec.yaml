@@ -65,34 +65,6 @@ flutter:
         - asset: assets/fonts/dosis/Dosis-Medium.otf
         - asset: assets/fonts/dosis/Dosis-Regular.otf
         - asset: assets/fonts/dosis/Dosis-SemiBold.otf
-    - family: Helvetica 
-      fonts:
-        - asset: assets/fonts/Helveticas/HELVBLAK.TTF
-        - asset: assets/fonts/Helveticas/HELVCOND.TTF
-        - asset: assets/fonts/Helveticas/HELVet.TTF
-        - asset: assets/fonts/Helveticas/HELVET10.TTF
-        - asset: assets/fonts/Helveticas/HELVET11.TTF
-        - asset: assets/fonts/Helveticas/HELVET12.TTF
-        - asset: assets/fonts/Helveticas/HELVET13.TTF
-        - asset: assets/fonts/Helveticas/HELVET14.TTF
-        - asset: assets/fonts/Helveticas/HELVET15.TTF
-        - asset: assets/fonts/Helveticas/HELVET16.TTF
-        - asset: assets/fonts/Helveticas/HELVET17.TTF
-        - asset: assets/fonts/Helveticas/HELVETI1.TTF
-        - asset: assets/fonts/Helveticas/HELVETI2.TTF
-        - asset: assets/fonts/Helveticas/HELVETI3.TTF
-        - asset: assets/fonts/Helveticas/HELVETI4.TTF
-        - asset: assets/fonts/Helveticas/HELVETI5.TTF
-        - asset: assets/fonts/Helveticas/HELVETI6.TTF
-        - asset: assets/fonts/Helveticas/HELVETI7.TTF
-        - asset: assets/fonts/Helveticas/HELVETI8.TTF
-        - asset: assets/fonts/Helveticas/HELVETI9.TTF
-        - asset: assets/fonts/Helveticas/HELVETIC.TTF
-        - asset: assets/fonts/Helveticas/HELVETID.TTF
-        - asset: assets/fonts/Helveticas/HELVETIE.TTF
-        - asset: assets/fonts/Helveticas/HELVETIF.TTF
-        - asset: assets/fonts/Helveticas/HELVETIG.TTF
-        - asset: assets/fonts/Helveticas/HELVINS.TTF
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
