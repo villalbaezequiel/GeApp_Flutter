@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:voting_app/model/error.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/text_style_utils.dart';
