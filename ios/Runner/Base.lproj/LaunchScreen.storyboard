@@ -21,9 +21,11 @@
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="YRO-k0-Ey4">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="w2I-Z7-7iF">
-                                <rect key="frame" x="87" y="384" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="w2I-Z7-7iF">
+                                <rect key="frame" x="87" y="298" width="240" height="300"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="300" id="zgx-8S-HuB"/>
+                                </constraints>
                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default"/>
                             </imageView>
                         </subviews>
@@ -33,8 +35,12 @@
                             <constraint firstItem="YRO-k0-Ey4" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="ANv-lu-K4F"/>
                             <constraint firstItem="YRO-k0-Ey4" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="FC6-IE-ZMR"/>
                             <constraint firstAttribute="bottom" secondItem="YRO-k0-Ey4" secondAttribute="bottom" id="GNK-ob-Ekx"/>
+                            <constraint firstItem="w2I-Z7-7iF" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Obr-47-itC"/>
                             <constraint firstItem="YRO-k0-Ey4" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="QZq-L9-8QD"/>
+                            <constraint firstItem="w2I-Z7-7iF" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="67" id="ROL-np-S0d"/>
+                            <constraint firstItem="w2I-Z7-7iF" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="gT1-vS-I2n"/>
                             <constraint firstItem="YRO-k0-Ey4" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="hEn-Sx-3gt"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="w2I-Z7-7iF" secondAttribute="trailing" constant="67" id="sMq-oj-8c2"/>
                         </constraints>
                     </view>
                 </viewController>
