@@ -159,20 +159,20 @@ class _EscrutinioState extends State<Escrutinio> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  // Flexible(
-                  //   flex: 1,
-                  //   child: FlatButton.icon(
-                  //     color: Constant.ascent,
-                  //     icon: Icon(Icons.add_a_photo, color: Colors.white),
-                  //     label: Text(
-                  //       'Cámara',
-                  //       style: TextStyle(color: Colors.white),
-                  //     ),
-                  //     onPressed: () {
-                  //       getImageFromCamera();
-                  //     },
-                  //   ),
-                  // ),
+                  Flexible(
+                    flex: 1,
+                    child: FlatButton.icon(
+                      color: Constant.ascent,
+                      icon: Icon(Icons.add_a_photo, color: Colors.white),
+                      label: Text(
+                        'Cámara',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        getImageFromCamera();
+                      },
+                    ),
+                  ),
                   Flexible(
                     flex: 1,
                     child: FlatButton.icon(
