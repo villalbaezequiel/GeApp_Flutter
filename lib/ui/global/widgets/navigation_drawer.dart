@@ -148,6 +148,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                 break;
 
               case "/login":
+                widget.model.commonWidgest.progressDialog(context);
                 widget.model.logout(widget.model, context);
                 break;
 

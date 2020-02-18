@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_app/model/error.dart';
 import 'package:voting_app/model/person.dart';
 import 'package:voting_app/services/main_model.dart';
@@ -57,6 +58,8 @@ class LoginState extends State<Login> {
           Person user = Person.fromJson(mapResponse);
           await widget.model.savePersonToSharedPref(json.encode(user));
           widget.model.setUser(user);
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          widget.model.loadOtherData(prefs,widget.model);
           _goToHome();
           break;
         case 401:

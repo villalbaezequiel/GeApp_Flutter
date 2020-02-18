@@ -234,7 +234,7 @@ mixin FriendService on Model {
   }
 
   clearFriendList() {
-    this._friendsList = null;
+    this._friendsList = [];
   }
 
   saveFriendsToSharedPref() async {

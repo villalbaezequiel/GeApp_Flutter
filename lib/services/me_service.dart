@@ -47,7 +47,7 @@ mixin MeService on Model {
   }
 
   logout(MainModel model, BuildContext context) async {
-    clearAllData(model);
+    await clearAllData(model);
 
     Navigator.of(context)
         .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
