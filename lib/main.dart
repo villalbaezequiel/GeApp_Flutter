@@ -1,0 +1,70 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:voting_app/ui/global/utils/text_style_utils.dart';
+import 'package:voting_app/ui/splash_screen.dart';
+
+import 'services/main_model.dart';
+import 'ui/add_friend.dart';
+import 'ui/escrutinio.dart';
+import 'ui/friend_citizen_details.dart';
+import 'ui/friends_list.dart';
+import 'ui/global/utils/constant.dart';
+import 'ui/help.dart';
+import 'ui/home.dart';
+import 'ui/login.dart';
+import 'ui/my_voting_table.dart';
+import 'ui/sign_up.dart';
+import 'ui/voter_citizen_details.dart';
+
+void main() async {
+  runApp(MyApp());
+
+  await SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
+    MainModel model = MainModel();
+    return ScopedModel(
+      model: model,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Chubut al Frente',
+        theme: ThemeData(
+          primaryColor: Constant.primary,
+          accentColor: Constant.ascent,
+          scaffoldBackgroundColor: Constant.bgColor,
+          appBarTheme: AppBarTheme(
+            textTheme: TextTheme(
+              title: TextStyleUtils.bottonAndAppBarStyle,
+            ),
+          ),
+          floatingActionButtonTheme:
+              FloatingActionButtonThemeData(foregroundColor: Colors.white),
+        ),
+        home: SplashScreen(model),
+        routes: <String, WidgetBuilder>{
+          '/home': (context) => Home(model),
+          '/add_friend': (context) => AddFriend(model),
+          '/friends_list': (context) => FriendsList(model),
+          '/my_voting_table_list': (context) => MyVotingTableList(model),
+          '/friend_citizen_details': (context) => FriendCitizenDetails(),
+          '/voter_citizen_details': (context) => VoterCitizenDetails(),
+          '/escrutinio': (context) => Escrutinio(model),
+          '/help': (context) => Help(),
+          '/login': (context) => Login(model),
+          '/sign_up': (context) => SignUp(model),
+          '/splash_screen': (context) => SplashScreen(model),
+        },
+      ),
+    );
+  }
+}
