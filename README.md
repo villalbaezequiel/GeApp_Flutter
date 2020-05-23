@@ -1,4 +1,4 @@
-# voting_app
+# geapp_flutter
 
 A new Flutter application.
 
