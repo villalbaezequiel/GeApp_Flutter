@@ -1,29 +1,30 @@
+# frozen_string_literal: true
+
 # Uncomment this line to define a global platform for your project
 # platform :ios, '9.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
-project 'Runner', {
-  'Debug' => :debug,
-  'Profile' => :release,
-  'Release' => :release,
-}
+project 'Runner',
+        'Debug' => :debug,
+        'Profile' => :release,
+        'Release' => :release
 
-def parse_KV_file(file, separator='=')
+def parse_KV_file(file, separator = '=')
   file_abs_path = File.expand_path(file)
-  if !File.exists? file_abs_path
-    return [];
-  end
+  return [] unless File.exist? file_abs_path
+
   generated_key_values = {}
-  skip_line_start_symbols = ["#", "/"]
+  skip_line_start_symbols = ['#', '/']
   File.foreach(file_abs_path) do |line|
     next if skip_line_start_symbols.any? { |symbol| line =~ /^\s*#{symbol}/ }
-    plugin = line.split(pattern=separator)
+
+    plugin = line.split(pattern = separator)
     if plugin.length == 2
-      podname = plugin[0].strip()
-      path = plugin[1].strip()
-      podpath = File.expand_path("#{path}", file_abs_path)
+      podname = plugin[0].strip
+      path = plugin[1].strip
+      podpath = File.expand_path(path.to_s, file_abs_path)
       generated_key_values[podname] = podpath
     else
       puts "Invalid plugin specification: #{line}"
@@ -50,8 +51,9 @@ target 'Runner' do
     unless File.exist?(generated_xcode_build_settings_path)
       raise "Generated.xcconfig must exist. If you're running pod install manually, make sure flutter pub get is executed first"
     end
+
     generated_xcode_build_settings = parse_KV_file(generated_xcode_build_settings_path)
-    cached_framework_dir = generated_xcode_build_settings['FLUTTER_FRAMEWORK_DIR'];
+    cached_framework_dir = generated_xcode_build_settings['FLUTTER_FRAMEWORK_DIR']
 
     unless File.exist?(copied_framework_path)
       FileUtils.cp_r(File.join(cached_framework_dir, 'Flutter.framework'), copied_flutter_dir)
@@ -62,7 +64,7 @@ target 'Runner' do
   end
 
   # Keep pod path relative so it can be checked into Podfile.lock.
-  pod 'Flutter', :path => 'Flutter'
+  pod 'Flutter', path: 'Flutter'
 
   # Plugin Pods
 
@@ -74,7 +76,7 @@ target 'Runner' do
   plugin_pods.each do |name, path|
     symlink = File.join('.symlinks', 'plugins', name)
     File.symlink(path, symlink)
-    pod name, :path => File.join(symlink, 'ios')
+    pod name, path: File.join(symlink, 'ios')
   end
 end
 
