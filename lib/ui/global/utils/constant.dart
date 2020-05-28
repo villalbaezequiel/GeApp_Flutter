@@ -54,4 +54,7 @@ class Constant {
 
   // health check
   static const String halthCheck = "ping/";
+
+  // SCPL / section query
+  static const String scplFetchClient = "scpl/client/fetch";
 }
