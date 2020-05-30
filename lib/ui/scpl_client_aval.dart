@@ -3,6 +3,7 @@ import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:voting_app/model/scpl_client.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/text_style_utils.dart';
+import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 
 import 'global/utils/constant.dart';
 
@@ -11,6 +12,8 @@ class ScplAvalClient extends StatelessWidget {
   final ScplClient client;
 
   ScplAvalClient({this.model, this.client});
+
+  CommonWidgest commonWidgests = CommonWidgest();
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +88,8 @@ class ScplAvalClient extends StatelessWidget {
                     color: Colors.red,
                     child: Text('NO', style: TextStyle(fontSize: 18)),
                     onPressed: () {
-                      Navigator.pop(context, 'No se registró la Firma!');
+                      commonWidgests.showToast('No se registró la Firma!');
+                      Navigator.of(context).pop();
                     },
                   ),
                 )
@@ -114,7 +118,8 @@ class ScplAvalClient extends StatelessWidget {
     model.avalClient(model, id, context)
     .then((onValue) {
       if(onValue != null) {
-        Navigator.pop(context, 'Firma registrada con Exito!');
+        commonWidgests.showToast('Firma registrada con Exito!');
+        Navigator.of(context).pop();
       } else {
         Navigator.pushNamedAndRemoveUntil(
         context, '/scpl/fetch_client', (Route<dynamic> route) => false);

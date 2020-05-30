@@ -25,6 +25,8 @@ class ScplFetchClientForm extends State<ScplFetchClient> {
   final formKey     = GlobalKey<FormState>();
   String dni;
 
+  CommonWidgest commonWidgests = CommonWidgest();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,6 +104,7 @@ class ScplFetchClientForm extends State<ScplFetchClient> {
         getDetailsClientAval(context, onValue);
         formKey.currentState?.reset();
       } else {
+        commonWidgests.showToast('Titular no encontrado!');
         Navigator.pushNamedAndRemoveUntil(
             context, '/scpl/fetch_client', (Route<dynamic> route) => false);
       }
