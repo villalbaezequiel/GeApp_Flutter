@@ -44,50 +44,83 @@ class ScplAvalClient extends StatelessWidget {
           ),
           Container(
             child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    '¿Firmó el Aval?',
-                    textAlign: TextAlign.justify,
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RaisedButton(
-                          color: Theme.of(context).accentColor,
-                          textColor: Colors.white,
-                          child: Text('SI', style: TextStyleUtils.bottonAndAppBarStyle),
-                          onPressed: () {
-                            Navigator.pop(context, 'Firma registrada con Exito!');
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RaisedButton(
-                          textColor: Colors.white,
-                          color: Colors.red,
-                          child: Text('NO', style: TextStyle(fontSize: 18)),
-                          onPressed: () {
-                            Navigator.pop(context, 'No se registró la Firma!');
-                          },
-                        ),
-                      )
-                    ]
-                  ),
-                ],
-              ),
+              child: isFirmoAval(context, client.isSigned),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget isFirmoAval(context, isSigned){
+    if(isSigned == null){
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '¿Firmó el Aval?',
+            textAlign: TextAlign.justify,
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RaisedButton(
+                    color: Theme.of(context).accentColor,
+                    textColor: Colors.white,
+                    child: Text('SI', style: TextStyleUtils.bottonAndAppBarStyle),
+                    onPressed: () {
+                      firmarAval('${client.id}', context);
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RaisedButton(
+                    textColor: Colors.white,
+                    color: Colors.red,
+                    child: Text('NO', style: TextStyle(fontSize: 18)),
+                    onPressed: () {
+                      Navigator.pop(context, 'No se registró la Firma!');
+                    },
+                  ),
+                )
+              ]
+          ),
+        ],
+      );
+    } else {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '¡Firma Registrada!',
+            textAlign: TextAlign.justify,
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          )
+        ],
+      );
+    }
+  }
+
+  void firmarAval(id, context)
+  {
+    model.avalClient(model, id, context)
+    .then((onValue) {
+      if(onValue != null) {
+        Navigator.pop(context, 'Firma registrada con Exito!');
+      } else {
+        Navigator.pushNamedAndRemoveUntil(
+        context, '/scpl/fetch_client', (Route<dynamic> route) => false);
+      }
+    }).catchError((onError) => Navigator.of(context).pop());
+
   }
 
 }

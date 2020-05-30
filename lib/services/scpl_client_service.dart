@@ -82,6 +82,65 @@ mixin ScplClientService on Model {
     }
   }
 
+  Future<bool> avalClient(MainModel model, String id, BuildContext context) async {
+
+    try {
+      _isLoadingScplClients = true;
+      notifyListeners();
+
+      var params = {
+        "referrerId": model.user.id
+      };
+
+      var body = json.encode(params);
+
+      var response = await http
+          .put(Constant.baseUrl + Constant.scplAvalClient +'/'+ id, body: body, headers: {
+        'Content-Type': 'application/json',
+        "Accept": "application/json",
+        "Authorization": "Bearer ${model.user.token}",
+      });
+
+      if(!model.isLoadingSavedService && model.savedRuestsList.length > 0)
+      {
+        model.callSavedRequests(model);
+      }
+
+      if(response.statusCode == 401 || response.statusCode == 403)
+      {
+        return false;
+      }
+
+      if(response.statusCode == 200)
+      {
+        Map<String, dynamic> mapResponse = json.decode(response.body);
+        this._client = ScplClient.fromJson(mapResponse);
+        saveClientToSharedPref();
+        _isLoadingScplClients = false;
+        notifyListeners();
+
+        return true;
+
+      } else {
+
+        Map<String, dynamic> mapResponse = json.decode(response.body);
+        Errors errors = new Errors.fromJson(mapResponse['errors']);
+        commonWidgests.showToast(errors.message);
+        _isLoadingScplClients = false;
+        notifyListeners();
+
+        return false;
+
+      }
+
+    } catch (error) {
+      _isLoadingScplClients = false;
+      catchExceptions(error, 'Sin conexión, por favor intente luego');
+      return false;
+    }
+  }
+
+
   saveClientToSharedPref() async {
     SharedPreferences.getInstance().then((SharedPreferences prefs) {
       String client = json.encode(this._client.toJson());

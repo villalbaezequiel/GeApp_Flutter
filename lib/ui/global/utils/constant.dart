@@ -57,4 +57,6 @@ class Constant {
 
   // SCPL / section query
   static const String scplFetchClient = "scpl/client/fetch";
+  static const String scplAvalClient = "scpl/client";
+
 }

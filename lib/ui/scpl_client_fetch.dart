@@ -110,7 +110,7 @@ class ScplFetchClientForm extends State<ScplFetchClient> {
 
   void getDetailsClientAval(BuildContext context, client) async {
     await Navigator.push(
-      context, MaterialPageRoute(builder: (context) => ScplAvalClient(client: client)),
+      context, MaterialPageRoute(builder: (context) => ScplAvalClient(model: widget.model, client: client)),
     );
   }
 
