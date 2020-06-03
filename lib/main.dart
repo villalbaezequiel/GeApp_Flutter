@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
       model: model,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Chubut al Frente',
+        title: 'Geapp',
         theme: ThemeData(
           primaryColor: Constant.primary,
           accentColor: Constant.ascent,
