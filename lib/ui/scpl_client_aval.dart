@@ -26,16 +26,19 @@ class ScplAvalClient extends StatelessWidget {
         children: <Widget>[
 
           ListTile(
+            title: Text('Número de Distrito Electoral'),
+            subtitle: Text(
+                '${client.electroral}',
+                style: TextStyleUtils.scplTextDistrito
+            ),
+          ),
+          ListTile(
             title: Text('DNI'),
             subtitle: Text('${client.dni}'),
           ),
           ListTile(
             title: Text('Nombre y Apellido'),
             subtitle: Text('${client.nameLastname}'),
-          ),
-          ListTile(
-            title: Text('Número de Sección Electoral'),
-            subtitle: Text('${client.electroral}'),
           ),
           ListTile(
             title: Text('Número de Socio'),

@@ -31,7 +31,7 @@ class ScplFetchClientForm extends State<ScplFetchClient> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: GradientAppBar(
-        title: Text('Consulta de Seccion'),
+        title: Text('Consulta de Distrito'),
         gradient: Constant.appBarGradient,
       ),
       drawer: NavigationDrawer(model: widget.model),
