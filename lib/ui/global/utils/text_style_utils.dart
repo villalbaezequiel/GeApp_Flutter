@@ -25,4 +25,11 @@ class TextStyleUtils {
     fontWeight: FontWeight.bold,
     fontSize: 18,
   );
+
+  static TextStyle scplTextDistrito = TextStyle(
+    color: Colors.blue,
+    fontSize: 60,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Dosis',
+  );
 }

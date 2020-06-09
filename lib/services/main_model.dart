@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_app/services/election_service.dart';
 import 'package:voting_app/services/saved_request_service.dart';
 import 'package:voting_app/services/voting_service.dart';
+import 'package:voting_app/services/scpl_client_service.dart';
 import 'package:voting_app/ui/global/utils/constant.dart';
 
 import 'friend_service.dart';
@@ -14,6 +15,7 @@ class MainModel extends Model
         FriendService,
         VotingService,
         ElectionService,
+        ScplClientService,
         SavedRequestService {
   static const String VOTING_TABLE_TIME_KEY = "voting_table_time";
   static const String FRIEND_LIST_TIME_KEY = "friend_list_time";

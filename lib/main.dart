@@ -5,6 +5,8 @@ import 'package:voting_app/ui/global/utils/text_style_utils.dart';
 import 'package:voting_app/ui/splash_screen.dart';
 
 import 'services/main_model.dart';
+import 'ui/scpl_client_fetch.dart';
+import 'ui/scpl_client_aval.dart';
 import 'ui/add_friend.dart';
 import 'ui/escrutinio.dart';
 import 'ui/friend_citizen_details.dart';
@@ -37,7 +39,7 @@ class _MyAppState extends State<MyApp> {
       model: model,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Geapp',
+        title: 'GeApp',
         theme: ThemeData(
           primaryColor: Constant.primary,
           accentColor: Constant.ascent,
@@ -53,6 +55,8 @@ class _MyAppState extends State<MyApp> {
         home: SplashScreen(model),
         routes: <String, WidgetBuilder>{
           '/home': (context) => Home(model),
+          '/scpl/fetch_client': (context) => ScplFetchClient(model),
+          '/scpl/aval_client': (context) => ScplAvalClient(),
           '/add_friend': (context) => AddFriend(model),
           '/friends_list': (context) => FriendsList(model),
           '/my_voting_table_list': (context) => MyVotingTableList(model),
