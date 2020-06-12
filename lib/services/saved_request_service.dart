@@ -2,16 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_app/model/save_request.dart';
+import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/constant.dart';
 
 import 'main_model.dart';
-
-import 'package:http_parser/http_parser.dart';
-import 'package:voting_app/services/main_model.dart';
 
 mixin SavedRequestService on Model {
   static const String SAVE_REQUEST_KEY = "save_request";
@@ -99,7 +98,7 @@ mixin SavedRequestService on Model {
   deleteRequest(SaveRequest saveRequest, MainModel model) async {
     try {
       var response =
-          await http.delete(Constant.baseUrl + saveRequest.url, headers: {
+          await http.delete(Constant.baseUrl() + saveRequest.url, headers: {
         'Content-Type': 'application/json',
         "Accept": "application/json",
         "Authorization": "Bearer ${model.user.token}",
@@ -119,7 +118,7 @@ mixin SavedRequestService on Model {
 
   postRequest(SaveRequest savedRequest, MainModel model) async {
     try {
-      var response = await http.post(Constant.baseUrl + savedRequest.url,
+      var response = await http.post(Constant.baseUrl() + savedRequest.url,
           body: savedRequest.body,
           headers: {
             'Content-Type': 'application/json',
@@ -139,7 +138,7 @@ mixin SavedRequestService on Model {
 
   putRequest(SaveRequest savedRequest, MainModel model) async {
     try {
-      var response = await http.put(Constant.baseUrl + savedRequest.url,
+      var response = await http.put(Constant.baseUrl() + savedRequest.url,
           body: savedRequest.body,
           headers: {
             'Content-Type': 'application/json',
@@ -164,7 +163,7 @@ mixin SavedRequestService on Model {
           lookupMimeType(imageNewFile.path, headerBytes: [0xFF, 0xD8])
               .split('/');
 
-      var postUri = Uri.parse(Constant.baseUrl + Constant.scrutinyfile);
+      var postUri = Uri.parse(Constant.baseUrl() + Constant.scrutinyfile);
       var request = http.MultipartRequest("POST", postUri);
       http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
           'scrutinyImage', imageNewFile.path,

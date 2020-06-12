@@ -32,7 +32,7 @@ mixin FriendService on Model {
       notifyListeners();
 
       var response =
-          await http.get(Constant.baseUrl + Constant.friends, headers: {
+          await http.get(Constant.baseUrl() + Constant.friends, headers: {
         'Content-Type': 'application/json',
         "Accept": "application/json",
         "Authorization": "Bearer ${model.user.token}",
@@ -88,7 +88,7 @@ mixin FriendService on Model {
       notifyListeners();
 
       var response = await http
-          .post(Constant.baseUrl + Constant.friends, body: body, headers: {
+          .post(Constant.baseUrl() + Constant.friends, body: body, headers: {
         'Content-Type': 'application/json',
         "Accept": "application/json",
         "Authorization": "Bearer ${model.user.token}",
@@ -150,7 +150,7 @@ mixin FriendService on Model {
       removeFromFriendsList(friend);
 
       var response = await http.delete(
-          Constant.baseUrl + Constant.friends + friend.id.toString(),
+          Constant.baseUrl() + Constant.friends + friend.id.toString(),
           headers: {
             'Content-Type': 'application/json',
             "Accept": "application/json",

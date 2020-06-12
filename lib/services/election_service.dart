@@ -43,7 +43,7 @@ mixin ElectionService on Model {
   Future<Election> fetchElection(MainModel model, BuildContext context) async {
     try {
       final response =
-          await http.get(Constant.baseUrl + Constant.election, headers: {
+          await http.get(Constant.baseUrl() + Constant.election, headers: {
         'Content-Type': 'application/json',
         "Accept": "application/json",
         "Authorization": "Bearer ${model.user.token}",
@@ -93,7 +93,8 @@ mixin ElectionService on Model {
 
     var body = json.encode(voteElection);
     try {
-      var response = await http.post(Constant.baseUrl + Constant.scrutinyVotes,
+      var response = await http.post(
+          Constant.baseUrl() + Constant.scrutinyVotes,
           body: body,
           headers: {
             'Content-Type': 'application/json',
@@ -152,7 +153,7 @@ mixin ElectionService on Model {
           lookupMimeType(imageNewFile.path, headerBytes: [0xFF, 0xD8])
               .split('/');
 
-      var postUri = Uri.parse(Constant.baseUrl + Constant.scrutinyfile);
+      var postUri = Uri.parse(Constant.baseUrl() + Constant.scrutinyfile);
       var request = http.MultipartRequest("POST", postUri);
       http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
           'scrutinyImage', imageNewFile.path,

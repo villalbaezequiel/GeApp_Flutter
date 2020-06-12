@@ -75,7 +75,7 @@ mixin MeService on Model {
           ? launch(url)
           : commonWidgest.showToast("Fallo al abrir WhatsApp");
     } else {
-      commonWidgest.showToast("Help phone not available");
+      commonWidgest.showToast("No hay un número de whatsapp disponible");
     }
   }
 

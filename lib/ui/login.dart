@@ -47,7 +47,7 @@ class LoginState extends State<Login> {
       };
 
       var body = json.encode(params);
-      final res = await http.post(Constant.baseUrl + Constant.login,
+      final res = await http.post(Constant.baseUrl() + Constant.login,
           body: body, headers: Constant.headers);
 
       Navigator.of(context).pop();
@@ -59,7 +59,7 @@ class LoginState extends State<Login> {
           await widget.model.savePersonToSharedPref(json.encode(user));
           widget.model.setUser(user);
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          widget.model.loadOtherData(prefs,widget.model);
+          widget.model.loadOtherData(prefs, widget.model);
           _goToHome();
           break;
         case 401:
