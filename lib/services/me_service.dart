@@ -68,11 +68,15 @@ mixin MeService on Model {
     prefs.setString("user", userData);
   }
 
-  void openWhatsApp(MainModel model) async {
-    String url = Constant.whatsAppUrl + model.user.helpPhone;
-    await canLaunch(url)
-        ? launch(url)
-        : commonWidgest.showToast("Fallo al abrir WhatsApp");
+  void openWhatsApp() async {
+    if (_me != null && _me.helpPhone != null && _me.helpPhone.isNotEmpty) {
+      String url = Constant.whatsAppUrl + _me.helpPhone;
+      await canLaunch(url)
+          ? launch(url)
+          : commonWidgest.showToast("Fallo al abrir WhatsApp");
+    } else {
+      commonWidgest.showToast("Help phone not available");
+    }
   }
 
   void openTermsUrl() async {

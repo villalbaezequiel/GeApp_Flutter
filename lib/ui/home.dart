@@ -52,7 +52,8 @@ class HomeState extends State<Home> {
                 height: 150,
               ),
               SizedBox(height: 30),
-              homeButton('Consulta de Distrito', '/scpl/fetch_client', Icons.search),
+              homeButton(
+                  'Consulta de Distrito', '/scpl/fetch_client', Icons.search),
               homeButton('Agregar amigo', '/add_friend', Icons.person_add),
               homeButton('Mis amigos', '/friends_list', Icons.group),
               homeButton('Mi mesa', '/my_voting_table_list', Icons.list),
@@ -102,7 +103,7 @@ class HomeState extends State<Home> {
 
   void navigateToPath(String path) {
     if (path == "/help") {
-      widget.model.openWhatsApp(widget.model);
+      widget.model.openWhatsApp();
     } else {
       Navigator.of(context).pushNamed(path);
     }

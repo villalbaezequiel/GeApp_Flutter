@@ -154,7 +154,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                 break;
 
               case "/help":
-                widget.model.openWhatsApp(widget.model);
+                widget.model.openWhatsApp();
                 break;
 
               default:
