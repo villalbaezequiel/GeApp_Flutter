@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -70,7 +71,13 @@ mixin MeService on Model {
 
   void openWhatsApp() async {
     if (_me != null && _me.helpPhone != null && _me.helpPhone.isNotEmpty) {
-      String url = Constant.whatsAppUrl + _me.helpPhone;
+      String url;
+
+      if (Platform.isIOS) {
+        url = "whatsapp://wa.me/${_me.helpPhone}/";
+      } else {
+        url = Constant.whatsAppUrl + _me.helpPhone;
+      }
       await canLaunch(url)
           ? launch(url)
           : commonWidgest.showToast("Fallo al abrir WhatsApp");
