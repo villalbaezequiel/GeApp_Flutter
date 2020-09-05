@@ -65,4 +65,6 @@ class Constant {
   // SCPL / section query
   static const String scplFetchClient = "scpl/client/fetch";
   static const String scplAvalClient = "scpl/client";
+
+  static const String resetPassword = "http://dashboard.geapp.com.ar/password/email";
 }

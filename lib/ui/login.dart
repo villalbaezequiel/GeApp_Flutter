@@ -142,6 +142,18 @@ class LoginState extends State<Login> {
                 ),
                 FlatButton(
                   child: Text(
+                    'Recuperar Contraseña',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontFamily: 'Dosis',
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/reset_password");
+                  },
+                ),
+                FlatButton(
+                  child: Text(
                     'Registrarse',
                     style: TextStyle(
                       color: Colors.black54,

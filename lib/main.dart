@@ -16,6 +16,7 @@ import 'ui/help.dart';
 import 'ui/home.dart';
 import 'ui/login.dart';
 import 'ui/my_voting_table.dart';
+import 'ui/reset_password.dart';
 import 'ui/sign_up.dart';
 import 'ui/voter_citizen_details.dart';
 
@@ -65,6 +66,7 @@ class _MyAppState extends State<MyApp> {
           '/escrutinio': (context) => Escrutinio(model),
           '/help': (context) => Help(),
           '/login': (context) => Login(model),
+          '/reset_password': (context) => ResetPassword(model),
           '/sign_up': (context) => SignUp(model),
           '/splash_screen': (context) => SplashScreen(model),
         },
