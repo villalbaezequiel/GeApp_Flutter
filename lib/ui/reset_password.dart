@@ -22,7 +22,10 @@ class ResetPassword extends StatefulWidget {
 class ResetPasswordState extends State<ResetPassword> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
-  String _email; //optional
+  String _email;
+  String _nationalId;
+  String _password;
+
   CommonWidgest commonWidgests = CommonWidgest();
 
   void _submit() {
@@ -38,21 +41,21 @@ class ResetPasswordState extends State<ResetPassword> {
     try {
       var params = {
         "email": _email,
-        "_token": "MNx1IIe4fsQgb89mnAKIc8DavdQJnHiZwlEWhxeo"
+        "dni": _nationalId,
+        "password": _password
       };
 
       var body = json.encode(params);
+
       final res = await http
-          .post(Constant.resetPassword, body: body, headers: {
-        'Content-Type': 'application/json',
-        "Accept": "application/json",
-      });
+          .post(Constant.baseUrl() + Constant.resetPassword,
+          body: body, headers: Constant.headers);
 
       Navigator.of(context).pop();
 
       switch (res.statusCode) {
         case 200:
-          commonWidgests.showToast("Se ha enviado un Email para Recuperar Contraseña ");
+          commonWidgests.showToast("Contraseña actualizada con exito");
           Navigator.of(context).pop();
           break;
         default:
@@ -60,6 +63,7 @@ class ResetPasswordState extends State<ResetPassword> {
           Errors errors = new Errors.fromJson(mapResponse['errors']);
           commonWidgests.showToast(errors.message);
       }
+
     } catch (e) {
       if (e is SocketException) {
         commonWidgests.showToast('Sin conexión, por favor intente luego');
@@ -94,6 +98,20 @@ class ResetPasswordState extends State<ResetPassword> {
                     child: Column(
                       children: <Widget>[
                         TextFormField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            WhitelistingTextInputFormatter.digitsOnly
+                          ],
+                          decoration: InputDecoration(
+                            hintText: "Ejemplo: 30123456",
+                            labelText: "DNI",
+                          ),
+                          validator: (val) => !val.contains(RegExp('[0-9]*'))
+                              ? 'Sólo números para el DNI.'
+                              : null,
+                          onSaved: (val) => _nationalId = val,
+                        ),
+                        TextFormField(
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             hintText: "",
@@ -101,6 +119,14 @@ class ResetPasswordState extends State<ResetPassword> {
                           ),
                           validator: validateEmail,
                           onSaved: (val) => _email = val,
+                        ),
+                        TextFormField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            hintText: "",
+                            labelText: "Contraseña",
+                          ),
+                          onSaved: (val) => _password = val,
                         ),
                         Padding(padding: const EdgeInsets.only(top: 20.0)),
                         RaisedButton(
