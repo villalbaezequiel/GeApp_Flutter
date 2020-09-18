@@ -36,7 +36,7 @@ mixin VotingService on Model {
       notifyListeners();
 
       final response =
-          await http.get(Constant.baseUrl + Constant.votingTable, headers: {
+          await http.get(Constant.baseUrl() + Constant.votingTable, headers: {
         'Content-Type': 'application/json',
         "Accept": "application/json",
         "Authorization": "Bearer ${model.user.token}",
@@ -88,7 +88,7 @@ mixin VotingService on Model {
 
       await setVoterAsVoted(voter);
 
-      final response = await http.put(Constant.baseUrl + url, headers: {
+      final response = await http.put(Constant.baseUrl() + url, headers: {
         'Content-Type': 'application/json',
         "Accept": "application/json",
         "Authorization": "Bearer ${model.user.token}",
@@ -134,7 +134,7 @@ mixin VotingService on Model {
       _isVotingOrReplenish = true;
       notifyListeners();
 
-      final response = await http.put(Constant.baseUrl + url, headers: {
+      final response = await http.put(Constant.baseUrl() + url, headers: {
         'Content-Type': 'application/json',
         "Accept": "application/json",
         "Authorization": "Bearer ${model.user.token}",

@@ -29,6 +29,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   Widget build(BuildContext context) {
     final List<DrawerItem> drawerItems = [
       DrawerItem("Inicio", Icons.dashboard, '/home'),
+      DrawerItem("Consulta de Distrito", Icons.search, '/scpl/fetch_client'),
       DrawerItem("Agregar Amigo", Icons.person_add, '/add_friend'),
       DrawerItem("Amigos", Icons.group, '/friends_list'),
       DrawerItem("Mi Mesa", Icons.list, '/my_voting_table_list'),
@@ -153,7 +154,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                 break;
 
               case "/help":
-                widget.model.openWhatsApp(widget.model);
+                widget.model.openWhatsApp();
                 break;
 
               default:

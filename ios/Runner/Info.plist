@@ -60,5 +60,17 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>youtube</string>
+    <string>whatsapp</string>
+    <string>instagram</string>
+    <string>fb</string>
+    <string>tel</string>
+    <string>mailto</string>
+		<string>whatsapp</string>
+	</array>
 </dict>
 </plist>

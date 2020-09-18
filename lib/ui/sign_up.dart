@@ -49,7 +49,7 @@ class SignUpState extends State<SignUp> {
 
       var body = json.encode(params);
       final res = await http
-          .post(Constant.baseUrl + Constant.createUser, body: body, headers: {
+          .post(Constant.baseUrl() + Constant.createUser, body: body, headers: {
         'Content-Type': 'application/json',
         "Accept": "application/json",
       });

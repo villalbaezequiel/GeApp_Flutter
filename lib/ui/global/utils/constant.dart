@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -30,8 +31,14 @@ class Constant {
     "Accept": "application/json",
   };
 
-  // API Endpoints base url
-  static const String baseUrl = 'http://api.geapp.com.ar/api/';
+  static String baseUrl() {
+    if (kReleaseMode) {
+      // is Release Mode ??
+      return 'http://api.geapp.com.ar/api/';
+    } else {
+      return 'http://api.geapp.com.ar:3000/api/';
+    }
+  }
 
   // user endpoints
   static const String login = 'user/login';
@@ -54,4 +61,10 @@ class Constant {
 
   // health check
   static const String halthCheck = "ping/";
+
+  // SCPL / section query
+  static const String scplFetchClient = "scpl/client/fetch";
+  static const String scplAvalClient = "scpl/client";
+
+  static const String resetPassword = "user/reset-password";
 }

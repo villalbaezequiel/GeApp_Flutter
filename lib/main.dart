@@ -5,6 +5,8 @@ import 'package:voting_app/ui/global/utils/text_style_utils.dart';
 import 'package:voting_app/ui/splash_screen.dart';
 
 import 'services/main_model.dart';
+import 'ui/scpl_client_fetch.dart';
+import 'ui/scpl_client_aval.dart';
 import 'ui/add_friend.dart';
 import 'ui/escrutinio.dart';
 import 'ui/friend_citizen_details.dart';
@@ -14,6 +16,7 @@ import 'ui/help.dart';
 import 'ui/home.dart';
 import 'ui/login.dart';
 import 'ui/my_voting_table.dart';
+import 'ui/reset_password.dart';
 import 'ui/sign_up.dart';
 import 'ui/voter_citizen_details.dart';
 
@@ -37,7 +40,7 @@ class _MyAppState extends State<MyApp> {
       model: model,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Chubut al Frente',
+        title: 'GeApp',
         theme: ThemeData(
           primaryColor: Constant.primary,
           accentColor: Constant.ascent,
@@ -53,6 +56,8 @@ class _MyAppState extends State<MyApp> {
         home: SplashScreen(model),
         routes: <String, WidgetBuilder>{
           '/home': (context) => Home(model),
+          '/scpl/fetch_client': (context) => ScplFetchClient(model),
+          '/scpl/aval_client': (context) => ScplAvalClient(),
           '/add_friend': (context) => AddFriend(model),
           '/friends_list': (context) => FriendsList(model),
           '/my_voting_table_list': (context) => MyVotingTableList(model),
@@ -61,6 +66,7 @@ class _MyAppState extends State<MyApp> {
           '/escrutinio': (context) => Escrutinio(model),
           '/help': (context) => Help(),
           '/login': (context) => Login(model),
+          '/reset_password': (context) => ResetPassword(model),
           '/sign_up': (context) => SignUp(model),
           '/splash_screen': (context) => SplashScreen(model),
         },
