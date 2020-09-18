@@ -55,7 +55,7 @@ class ResetPasswordState extends State<ResetPassword> {
 
       switch (res.statusCode) {
         case 200:
-          commonWidgests.showToast("Contraseña actualizada con exito");
+          commonWidgests.showToast("Se ha enviado un Email para Aprobar el cambio de Contraseña!");
           Navigator.of(context).pop();
           break;
         default:
@@ -124,7 +124,7 @@ class ResetPasswordState extends State<ResetPassword> {
                           obscureText: true,
                           decoration: InputDecoration(
                             hintText: "",
-                            labelText: "Contraseña",
+                            labelText: "Nueva Contraseña",
                           ),
                           onSaved: (val) => _password = val,
                         ),
