@@ -4,16 +4,16 @@ App móvil Flutter (Android e iOS) para gestión de mesas de votación: login y 
 
 ## Stack
 
-| Área | Tecnología |
-|------|-----------|
-| Framework | Flutter 3.47 / Dart 3 (null safety) |
-| Estado | `scoped_model` |
-| HTTP | `http` |
-| Persistencia local | `shared_preferences` |
-| UI | `flutter_slidable`, `fluttertoast`, `cupertino_icons`, fuente Dosis |
-| Dispositivo | `image_picker`, `path_provider`, `url_launcher`, `mime`, `intl` |
-| Android | Gradle 9.3, AGP 9.1, Kotlin DSL, embedding v2, JDK 17 |
-| iOS | CocoaPods, deployment target 13.0 |
+| Área               | Tecnología                                                          |
+| ------------------ | ------------------------------------------------------------------- |
+| Framework          | Flutter 3.47 / Dart 3 (null safety)                                 |
+| Estado             | `scoped_model`                                                      |
+| HTTP               | `http`                                                              |
+| Persistencia local | `shared_preferences`                                                |
+| UI                 | `flutter_slidable`, `fluttertoast`, `cupertino_icons`, fuente Dosis |
+| Dispositivo        | `image_picker`, `path_provider`, `url_launcher`, `mime`, `intl`     |
+| Android            | Gradle 9.3, AGP 9.1, Kotlin DSL, embedding v2, JDK 17               |
+| iOS                | CocoaPods, deployment target 13.0                                   |
 
 ## Estructura
 
@@ -53,5 +53,4 @@ La versión se define en `pubspec.yaml` (`version: x.y.z+build`).
 
 ## Notas
 
-- `android/key.properties` contiene credenciales del keystore: no debería estar en git.
 - Historial y decisiones del último upgrade: [docs/upgrade-flutter-3.md](docs/upgrade-flutter-3.md).

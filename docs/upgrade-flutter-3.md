@@ -8,12 +8,12 @@ Sacar el proyecto del stack de 2020 (Dart <3.0, sin null safety, Gradle 4.10, AG
 
 ## Estado
 
-| Parte | Estado |
-|-------|--------|
-| Dart (`lib/`) | `flutter analyze` sin errores; 19 avisos menores |
-| Android | Migrado, **sin compilar** (no hay Android SDK en la máquina del upgrade) |
-| iOS | Migrado, **sin compilar** (no hay Xcode ni CocoaPods) |
-| Pruebas manuales | Pendientes |
+| Parte            | Estado                                                                   |
+| ---------------- | ------------------------------------------------------------------------ |
+| Dart (`lib/`)    | `flutter analyze` sin errores; 19 avisos menores                         |
+| Android          | Migrado, **sin compilar** (no hay Android SDK en la máquina del upgrade) |
+| iOS              | Migrado, **sin compilar** (no hay Xcode ni CocoaPods)                    |
+| Pruebas manuales | Pendientes                                                               |
 
 ## Cambios en Dart
 
@@ -62,7 +62,3 @@ Sacar el proyecto del stack de 2020 (Dart <3.0, sin null safety, Gradle 4.10, AG
 - Los `!` agregados son mecánicos: un dato nulo del backend sigue crasheando; conviene endurecer los modelos más adelante.
 - Los line endings de los archivos tocados se restauraron a CRLF para minimizar el diff.
 - Flutter marca como deprecado el soporte de builds en Macs Intel.
-
-## Seguridad
-
-`android/key.properties` (contraseñas y alias del keystore) está versionado en git. Sacarlo del repo (`git rm --cached`, agregarlo a `.gitignore`) y rotar las claves.
