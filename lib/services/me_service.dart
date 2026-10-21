@@ -11,14 +11,14 @@ import 'package:voting_app/ui/global/utils/constant.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 
 mixin MeService on Model {
-  Person _me;
+  Person? _me;
   CommonWidgest commonWidgest = CommonWidgest();
 
-  Person get user => _me;
+  Person? get user => _me;
 
   loadUserAndOtherData(MainModel model) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userString = prefs.getString('user');
+    String userString = prefs.getString('user')!;
     if (userString != null) {
       _me = Person.fromString(json.decode(userString));
       loadOtherData(prefs, model);
@@ -28,7 +28,7 @@ mixin MeService on Model {
 
   loadUser(MainModel model) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userString = prefs.getString('user');
+    String userString = prefs.getString('user')!;
     if (userString != null) {
       _me = Person.fromString(json.decode(userString));
     }
@@ -70,16 +70,17 @@ mixin MeService on Model {
   }
 
   void openWhatsApp() async {
-    if (_me != null && _me.helpPhone != null && _me.helpPhone.isNotEmpty) {
+    if (_me != null && _me!.helpPhone != null && _me!.helpPhone!.isNotEmpty) {
       String url;
 
       if (Platform.isIOS) {
-        url = "whatsapp://wa.me/${_me.helpPhone}/";
+        url = "whatsapp://wa.me/${_me!.helpPhone}/";
       } else {
-        url = Constant.whatsAppUrl + _me.helpPhone;
+        url = Constant.whatsAppUrl + _me!.helpPhone!;
       }
-      await canLaunch(url)
-          ? launch(url)
+      final uri = Uri.parse(url);
+      await canLaunchUrl(uri)
+          ? launchUrl(uri, mode: LaunchMode.externalApplication)
           : commonWidgest.showToast("Fallo al abrir WhatsApp");
     } else {
       commonWidgest.showToast("No hay un número de whatsapp disponible");
@@ -87,8 +88,9 @@ mixin MeService on Model {
   }
 
   void openTermsUrl() async {
-    await canLaunch(Constant.termsUrl)
-        ? launch(Constant.termsUrl)
+    final uri = Uri.parse(Constant.termsUrl);
+    await canLaunchUrl(uri)
+        ? launchUrl(uri, mode: LaunchMode.externalApplication)
         : commonWidgest.showToast("Failed to open Términos y Condiciones url");
   }
 }

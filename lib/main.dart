@@ -6,10 +6,8 @@ import 'package:voting_app/ui/splash_screen.dart';
 
 import 'services/main_model.dart';
 import 'ui/scpl_client_fetch.dart';
-import 'ui/scpl_client_aval.dart';
 import 'ui/add_friend.dart';
 import 'ui/escrutinio.dart';
-import 'ui/friend_citizen_details.dart';
 import 'ui/friends_list.dart';
 import 'ui/global/utils/constant.dart';
 import 'ui/help.dart';
@@ -18,7 +16,6 @@ import 'ui/login.dart';
 import 'ui/my_voting_table.dart';
 import 'ui/reset_password.dart';
 import 'ui/sign_up.dart';
-import 'ui/voter_citizen_details.dart';
 
 void main() async {
   runApp(MyApp());
@@ -43,12 +40,12 @@ class _MyAppState extends State<MyApp> {
         title: 'GeApp',
         theme: ThemeData(
           primaryColor: Constant.primary,
-          accentColor: Constant.ascent,
           scaffoldBackgroundColor: Constant.bgColor,
+          colorScheme: ColorScheme.fromSwatch().copyWith(
+            secondary: Constant.ascent,
+          ),
           appBarTheme: AppBarTheme(
-            textTheme: TextTheme(
-              title: TextStyleUtils.bottonAndAppBarStyle,
-            ),
+            titleTextStyle: TextStyleUtils.bottonAndAppBarStyle,
           ),
           floatingActionButtonTheme:
               FloatingActionButtonThemeData(foregroundColor: Colors.white),
@@ -57,12 +54,9 @@ class _MyAppState extends State<MyApp> {
         routes: <String, WidgetBuilder>{
           '/home': (context) => Home(model),
           '/scpl/fetch_client': (context) => ScplFetchClient(model),
-          '/scpl/aval_client': (context) => ScplAvalClient(),
           '/add_friend': (context) => AddFriend(model),
           '/friends_list': (context) => FriendsList(model),
           '/my_voting_table_list': (context) => MyVotingTableList(model),
-          '/friend_citizen_details': (context) => FriendCitizenDetails(),
-          '/voter_citizen_details': (context) => VoterCitizenDetails(),
           '/escrutinio': (context) => Escrutinio(model),
           '/help': (context) => Help(),
           '/login': (context) => Login(model),

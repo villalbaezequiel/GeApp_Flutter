@@ -1,15 +1,15 @@
 class Person {
-  int id;
-  String nationalId;
-  String token;
-  String firstName; //extra on login as first
-  String lastName; //extra on login ast last
-  String role;
-  bool approved;
-  bool isOwner;
-  String helpPhone;
-  String email;
-  String phone;
+  int? id;
+  String? nationalId;
+  String? token;
+  String? firstName; //extra on login as first
+  String? lastName; //extra on login ast last
+  String? role;
+  bool? approved;
+  bool? isOwner;
+  String? helpPhone;
+  String? email;
+  String? phone;
 
   Person({
     this.id,

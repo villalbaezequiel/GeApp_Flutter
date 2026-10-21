@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -31,11 +32,11 @@ mixin FriendService on Model {
       _isLoadingFriends = true;
       notifyListeners();
 
-      var response =
-          await http.get(Constant.baseUrl() + Constant.friends, headers: {
+      var response = await http
+          .get(Uri.parse(Constant.baseUrl() + Constant.friends), headers: {
         'Content-Type': 'application/json',
         "Accept": "application/json",
-        "Authorization": "Bearer ${model.user.token}",
+        "Authorization": "Bearer ${model.user!.token}",
       });
 
       if (!model.isLoadingSavedService && model.savedRuestsList.length > 0)
@@ -87,12 +88,14 @@ mixin FriendService on Model {
       _isLoadingFriends = true;
       notifyListeners();
 
-      var response = await http
-          .post(Constant.baseUrl() + Constant.friends, body: body, headers: {
-        'Content-Type': 'application/json',
-        "Accept": "application/json",
-        "Authorization": "Bearer ${model.user.token}",
-      });
+      var response = await http.post(
+          Uri.parse(Constant.baseUrl() + Constant.friends),
+          body: body,
+          headers: {
+            'Content-Type': 'application/json',
+            "Accept": "application/json",
+            "Authorization": "Bearer ${model.user!.token}",
+          });
 
       if (!model.isLoadingSavedService && model.savedRuestsList.length > 0)
         model.callSavedRequests(model);
@@ -115,7 +118,7 @@ mixin FriendService on Model {
       } else {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         Errors errors = new Errors.fromJson(mapResponse['errors']);
-        commonWidgests.showToast(errors.message);
+        commonWidgests.showToast(errors.message!);
         _isLoadingFriends = false;
         notifyListeners();
         return false;
@@ -150,11 +153,12 @@ mixin FriendService on Model {
       removeFromFriendsList(friend);
 
       var response = await http.delete(
-          Constant.baseUrl() + Constant.friends + friend.id.toString(),
+          Uri.parse(
+              Constant.baseUrl() + Constant.friends + friend.id.toString()),
           headers: {
             'Content-Type': 'application/json',
             "Accept": "application/json",
-            "Authorization": "Bearer ${model.user.token}",
+            "Authorization": "Bearer ${model.user!.token}",
           });
 
       if (response.statusCode == 401 || response.statusCode == 403) {
@@ -170,7 +174,7 @@ mixin FriendService on Model {
       } else {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         Errors errors = new Errors.fromJson(mapResponse['errors']);
-        commonWidgests.showToast(errors.message);
+        commonWidgests.showToast(errors.message!);
         _isLoadingFriends = false;
         notifyListeners();
         // throw Exception('failed to load data');
@@ -204,9 +208,8 @@ mixin FriendService on Model {
   }
 
   addToFriendsList(Friend friend) {
-    var existingItem = _friendsList.firstWhere(
-        (itemToCheck) => (itemToCheck.id == friend.id),
-        orElse: () => null);
+    var existingItem = _friendsList
+        .firstWhereOrNull((itemToCheck) => (itemToCheck.id == friend.id));
     if (existingItem == null) {
       this._friendsList.add(friend);
       this.saveFriendsToSharedPref();
@@ -214,9 +217,8 @@ mixin FriendService on Model {
   }
 
   addToList(Friend friend) {
-    var existingItem = _friendsList.firstWhere(
-        (itemToCheck) => (itemToCheck.id == friend.id),
-        orElse: () => null);
+    var existingItem = _friendsList
+        .firstWhereOrNull((itemToCheck) => (itemToCheck.id == friend.id));
     if (existingItem == null) {
       this._friendsList.add(friend);
     }
@@ -224,9 +226,8 @@ mixin FriendService on Model {
 
   /// Remove the entry and save to disk.
   removeFromFriendsList(Friend friend) {
-    var existingItem = _friendsList.firstWhere(
-        (itemToCheck) => (itemToCheck.id == friend.id),
-        orElse: () => null);
+    var existingItem = _friendsList
+        .firstWhereOrNull((itemToCheck) => (itemToCheck.id == friend.id));
     if (existingItem != null) {
       this._friendsList.remove(existingItem);
       this.saveFriendsToSharedPref();

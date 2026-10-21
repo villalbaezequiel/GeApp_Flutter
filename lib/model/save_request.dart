@@ -1,8 +1,8 @@
 class SaveRequest {
-  int id;
-  String url;
-  String body;
-  String requestType;
+  int? id;
+  String? url;
+  String? body;
+  String? requestType;
 
   SaveRequest({
     this.id,

@@ -1,7 +1,7 @@
 class ScrutinyParty {
-  int id;
-  String name;
-  int scrutinycategoryId;
+  int? id;
+  String? name;
+  int? scrutinycategoryId;
 
   ScrutinyParty({this.id, this.name, this.scrutinycategoryId});
 

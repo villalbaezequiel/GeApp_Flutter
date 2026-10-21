@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:voting_app/ui/global/gradient_app_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/voter.dart';
 import 'package:voting_app/services/main_model.dart';
@@ -23,8 +23,8 @@ class MyVotingTableState extends State<MyVotingTableList>
     with SingleTickerProviderStateMixin {
   CommonWidgest commonWidgest = CommonWidgest();
   int currentItemIndex = 0;
-  Animation<double> _animation;
-  AnimationController _controller;
+  late Animation<double> _animation;
+  late AnimationController _controller;
   bool validateReplesh = false;
   bool validateVote = false;
 
@@ -57,7 +57,7 @@ class MyVotingTableState extends State<MyVotingTableList>
             title: titleForVotingTable(),
             gradient: Constant.appBarGradient,
           ),
-          drawer: NavigationDrawer(model: widget.model),
+          drawer: AppNavigationDrawer(model: widget.model),
           floatingActionButton: ExpandedAnimationFab(
             items: [
               FabItem(
@@ -97,7 +97,7 @@ class MyVotingTableState extends State<MyVotingTableList>
                   child: widget.model.isLoadingVotingTable
                       ? Center(child: CircularProgressIndicator())
                       : (widget.model.votingTable != null &&
-                              widget.model.votingTable.voters.length > 0)
+                              widget.model.votingTable!.voters!.length > 0)
                           ? Container(
                               child: buildVoters(),
                             )
@@ -128,23 +128,23 @@ class MyVotingTableState extends State<MyVotingTableList>
   }
 
   Widget buildVoters() {
-    int totalLength = widget.model.votingTable.voters.length + 1;
+    int totalLength = widget.model.votingTable!.voters!.length + 1;
     return ListView.builder(
       itemCount: totalLength,
       itemBuilder: (context, index) {
-        if (index >= widget.model.votingTable.voters.length) {
+        if (index >= widget.model.votingTable!.voters!.length) {
           return Container(height: 50);
         } else {
-          var voter = widget.model.votingTable.voters[index];
+          var voter = widget.model.votingTable!.voters![index];
           return voterListItem(voter);
         }
       },
     );
   }
 
-  Future<String> _asyncInputDialogVote(BuildContext context) async {
+  Future<String?> _asyncInputDialogVote(BuildContext context) async {
     final voteFormKey = GlobalKey<FormState>();
-    String orderNumber;
+    late String orderNumber;
     return showDialog<String>(
       context: context,
       barrierDismissible:
@@ -157,11 +157,13 @@ class MyVotingTableState extends State<MyVotingTableList>
               Expanded(
                 child: Form(
                   key: voteFormKey,
-                  autovalidate: validateVote,
+                  autovalidateMode: validateVote
+                      ? AutovalidateMode.always
+                      : AutovalidateMode.disabled,
                   child: TextFormField(
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
-                      WhitelistingTextInputFormatter.digitsOnly
+                      FilteringTextInputFormatter.digitsOnly
                     ],
                     autofocus: true,
                     decoration: InputDecoration(
@@ -171,14 +173,14 @@ class MyVotingTableState extends State<MyVotingTableList>
                     validator: (val) => (val == null || val.isEmpty)
                         ? 'Ingrese un número válido'
                         : null,
-                    onSaved: (value) => orderNumber = value,
+                    onSaved: (value) => orderNumber = value!,
                   ),
                 ),
               )
             ],
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Ok', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
                 setState(() {
@@ -186,9 +188,9 @@ class MyVotingTableState extends State<MyVotingTableList>
                 });
 
                 var voteForm = voteFormKey.currentState;
-                voteForm.save();
-                if (voteForm.validate()) {
-                  Voter voter =
+                voteForm!.save();
+                if (voteForm!.validate()) {
+                  Voter? voter =
                       widget.model.validateVoterOrder(int.parse(orderNumber));
                   if (voter != null) {
                     showConfirmationDialog(voter, context);
@@ -199,7 +201,7 @@ class MyVotingTableState extends State<MyVotingTableList>
                 }
               },
             ),
-            FlatButton(
+            TextButton(
               child:
                   Text('Cancelar', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
@@ -212,7 +214,7 @@ class MyVotingTableState extends State<MyVotingTableList>
     );
   }
 
-  Future<String> _asyncInputDialogReplenish(BuildContext context) async {
+  Future<String?> _asyncInputDialogReplenish(BuildContext context) async {
     final repleshFormKey = GlobalKey<FormState>();
     String teamName = '';
     return showDialog<String>(
@@ -227,11 +229,13 @@ class MyVotingTableState extends State<MyVotingTableList>
               Expanded(
                 child: Form(
                   key: repleshFormKey,
-                  autovalidate: validateReplesh,
+                  autovalidateMode: validateReplesh
+                      ? AutovalidateMode.always
+                      : AutovalidateMode.disabled,
                   child: TextFormField(
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
-                      WhitelistingTextInputFormatter.digitsOnly
+                      FilteringTextInputFormatter.digitsOnly
                     ],
                     autofocus: true,
                     decoration: InputDecoration(
@@ -241,7 +245,7 @@ class MyVotingTableState extends State<MyVotingTableList>
                         ? 'Ingrese un número válido'
                         : null,
                     onSaved: (value) {
-                      teamName = value;
+                      teamName = value!;
                     },
                   ),
                 ),
@@ -249,20 +253,20 @@ class MyVotingTableState extends State<MyVotingTableList>
             ],
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Ok', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
                 setState(() {
                   validateReplesh = true;
                 });
                 var repleshForm = repleshFormKey.currentState;
-                repleshForm.save();
-                if (repleshForm.validate()) {
+                repleshForm!.save();
+                if (repleshForm!.validate()) {
                   callAprForReplenish(teamName);
                 }
               },
             ),
-            FlatButton(
+            TextButton(
               child:
                   Text('Cancelar', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
@@ -286,7 +290,7 @@ class MyVotingTableState extends State<MyVotingTableList>
       );
     } else if (widget.model.votingTable != null) {
       return Text(
-          "Mi Mesa (${widget.model.votingTable.sumVotes}/${widget.model.votingTable.voters.length})");
+          "Mi Mesa (${widget.model.votingTable!.sumVotes}/${widget.model.votingTable!.voters!.length})");
     } else {
       return Text("Mi Mesa");
     }
@@ -304,15 +308,15 @@ class MyVotingTableState extends State<MyVotingTableList>
         children: <Widget>[
           Container(
             padding: EdgeInsets.all(10),
-            child: (voter.voted)
+            child: (voter.voted == true)
                 ? Icon(Icons.brightness_1, color: Colors.green, size: 14)
                 : Icon(Icons.brightness_low,
                     color: Colors.transparent, size: 14),
           ),
           Expanded(
             child: ListTile(
-              title: Text('${voter.citizen.first} ${voter.citizen.last}'),
-              subtitle: Text('DNI: ${voter.citizen.nationalId}'),
+              title: Text('${voter.citizen!.first} ${voter.citizen!.last}'),
+              subtitle: Text('DNI: ${voter.citizen!.nationalId}'),
               trailing: Text(voter.order.toString()),
               isThreeLine: false,
               dense: false,
@@ -344,17 +348,17 @@ class MyVotingTableState extends State<MyVotingTableList>
           title: Text('Confirmar voto'),
           content: Container(
             child: Text(
-              "¿Votó ${voter.citizen.first.toString()} ${voter.citizen.last.toString()} , nro de orden: ${voter.order}?",
+              "¿Votó ${voter.citizen!.first.toString()} ${voter.citizen!.last.toString()} , nro de orden: ${voter.order}?",
             ),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Si', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
                 callApiForVote(voter);
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text('No', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
                 Navigator.popUntil(

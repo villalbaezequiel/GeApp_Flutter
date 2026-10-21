@@ -1,10 +1,10 @@
 import 'scrutiny_party.dart';
 
 class ScrutinyCategory {
-  int id;
-  String name;
-  int electionId;
-  List<ScrutinyParty> scrutinyparties;
+  int? id;
+  String? name;
+  int? electionId;
+  List<ScrutinyParty>? scrutinyparties;
 
   ScrutinyCategory({this.id, this.name, this.electionId, this.scrutinyparties});
 
@@ -13,9 +13,9 @@ class ScrutinyCategory {
     name = json['name'];
     electionId = json['electionId'];
     if (json['scrutinyparties'] != null) {
-      scrutinyparties = List<ScrutinyParty>();
+      scrutinyparties = <ScrutinyParty>[];
       json['scrutinyparties'].forEach((v) {
-        scrutinyparties.add(ScrutinyParty.fromJson(v));
+        scrutinyparties!.add(ScrutinyParty.fromJson(v));
       });
     }
   }
@@ -27,7 +27,7 @@ class ScrutinyCategory {
     data['electionId'] = this.electionId;
     if (this.scrutinyparties != null) {
       data['scrutinyparties'] =
-          this.scrutinyparties.map((v) => v.toJson()).toList();
+          this.scrutinyparties!.map((v) => v.toJson()).toList();
     }
     return data;
   }

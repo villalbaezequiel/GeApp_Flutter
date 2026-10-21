@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:voting_app/ui/global/gradient_app_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/text_style_utils.dart';
@@ -41,7 +41,7 @@ class HomeState extends State<Home> {
             title: Text('Inicio'),
             gradient: Constant.appBarGradient,
           ),
-          drawer: NavigationDrawer(model: widget.model),
+          drawer: AppNavigationDrawer(model: widget.model),
           backgroundColor: Colors.white,
           // floatingActionButton: floatingAction,
           body: ListView(

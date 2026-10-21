@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:voting_app/ui/global/gradient_app_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/friend.dart';
 import 'package:voting_app/services/main_model.dart';
@@ -48,7 +48,7 @@ class FriendsListState extends State<FriendsList> {
             //   )
             // ],
           ),
-          drawer: NavigationDrawer(model: model),
+          drawer: AppNavigationDrawer(model: model),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.of(context).pushNamed('/add_friend');
@@ -115,19 +115,22 @@ class FriendsListState extends State<FriendsList> {
   Widget friendListItem(Friend friend) {
     return Slidable(
       key: Key(friend.id.toString()),
-      actionPane: SlidableDrawerActionPane(),
-      actionExtentRatio: 0.25,
       closeOnScroll: false,
-      secondaryActions: <Widget>[
-        IconSlideAction(
-          caption: 'Eliminar',
-          color: Colors.red,
-          icon: Icons.delete,
-          onTap: () {
-            confirmDeletion(friend, context);
-          },
-        ),
-      ],
+      endActionPane: ActionPane(
+        motion: const DrawerMotion(),
+        extentRatio: 0.25,
+        children: <Widget>[
+          SlidableAction(
+            label: 'Eliminar',
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            onPressed: (_) {
+              confirmDeletion(friend, context);
+            },
+          ),
+        ],
+      ),
       child: Container(
         decoration: BoxDecoration(
             border: Border(
@@ -135,8 +138,8 @@ class FriendsListState extends State<FriendsList> {
         )),
         child: ListTile(
           title: Text(
-              '${friend.citizen.first} ${friend.citizen.last}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black),*/),
-          subtitle: Text('DNI: ${friend.citizen.nationalId}'),
+              '${friend.citizen!.first} ${friend.citizen!.last}' /*, style: TextStyle(color: (_person.id==24)?Colors.red:Colors.black),*/),
+          subtitle: Text('DNI: ${friend.citizen!.nationalId}'),
           // trailing: Text(friend.id.toString()),
           isThreeLine: false,
           dense: false,
@@ -175,13 +178,13 @@ class FriendsListState extends State<FriendsList> {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Si', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
                 deleteFriend(friend);
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text('No', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
                 Navigator.popUntil(

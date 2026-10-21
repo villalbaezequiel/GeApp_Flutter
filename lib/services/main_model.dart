@@ -43,9 +43,9 @@ class MainModel extends Model
   checkEnablity(String path) {
     if (path == "/my_voting_table_list" || path == '/escrutinio') {
       if (user != null &&
-          user.isOwner &&
+          user!.isOwner == true &&
           votingTable != null &&
-          votingTable.isOpen) {
+          votingTable!.isOpen == true) {
         return true;
       } else {
         return false;
@@ -63,7 +63,7 @@ class MainModel extends Model
   }
 
   getVotingTableTimeFromSharedPref(SharedPreferences prefs) async {
-    String votingTableTime = prefs.getString(VOTING_TABLE_TIME_KEY);
+    String votingTableTime = prefs.getString(VOTING_TABLE_TIME_KEY)!;
     if (votingTableTime != null) {
       this._votingTableFetchedTime = DateTime.parse(votingTableTime);
     }
@@ -77,7 +77,7 @@ class MainModel extends Model
   }
 
   getFriendListTimeFromSharedPref(SharedPreferences prefs) async {
-    String friendListTime = prefs.getString(FRIEND_LIST_TIME_KEY);
+    String friendListTime = prefs.getString(FRIEND_LIST_TIME_KEY)!;
     if (friendListTime != null) {
       this._lastFetchedTime = DateTime.parse(friendListTime);
     }

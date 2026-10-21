@@ -1,5 +1,5 @@
 class Errors {
-  String message;
+  String? message;
 
   Errors({this.message});
 

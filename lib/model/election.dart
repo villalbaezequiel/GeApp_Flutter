@@ -1,14 +1,14 @@
 import 'package:voting_app/model/scrutiny_category.dart';
 
 class Election {
-  int id;
-  String name;
-  String year;
-  String description;
-  bool isActive;
-  String createdAt;
-  String updatedAt;
-  List<ScrutinyCategory> scrutinycategories;
+  int? id;
+  String? name;
+  String? year;
+  String? description;
+  bool? isActive;
+  String? createdAt;
+  String? updatedAt;
+  List<ScrutinyCategory>? scrutinycategories;
 
   Election({
     this.id,
@@ -30,9 +30,9 @@ class Election {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     if (json['scrutinycategories'] != null) {
-      scrutinycategories = new List<ScrutinyCategory>();
+      scrutinycategories = <ScrutinyCategory>[];
       json['scrutinycategories'].forEach((v) {
-        scrutinycategories.add(new ScrutinyCategory.fromJson(v));
+        scrutinycategories!.add(new ScrutinyCategory.fromJson(v));
       });
     }
   }
@@ -48,7 +48,7 @@ class Election {
     data['updatedAt'] = this.updatedAt;
     if (this.scrutinycategories != null) {
       data['scrutinycategories'] =
-          this.scrutinycategories.map((v) => v.toJson()).toList();
+          this.scrutinycategories!.map((v) => v.toJson()).toList();
     }
     return data;
   }

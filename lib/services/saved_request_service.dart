@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -10,7 +11,6 @@ import 'package:voting_app/model/save_request.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/constant.dart';
 
-import 'main_model.dart';
 
 mixin SavedRequestService on Model {
   static const String SAVE_REQUEST_KEY = "save_request";
@@ -24,9 +24,8 @@ mixin SavedRequestService on Model {
   List<SaveRequest> get savedRuestsList => _savedRuestsList;
 
   addToSavedRequestsList(SaveRequest saveRequest) {
-    var existingItem = _savedRuestsList.firstWhere(
-        (itemToCheck) => (itemToCheck.id == saveRequest.id),
-        orElse: () => null);
+    var existingItem = _savedRuestsList
+        .firstWhereOrNull((itemToCheck) => (itemToCheck.id == saveRequest.id));
     if (existingItem == null) {
       this._savedRuestsList.add(saveRequest);
       this.saveRequestToSharedPref();
@@ -35,9 +34,8 @@ mixin SavedRequestService on Model {
 
   /// Remove the entry and save to disk.
   removeFromSavedRequestsList(SaveRequest saveRequest) {
-    var existingItem = _savedRuestsList.firstWhere(
-        (itemToCheck) => (itemToCheck.id == saveRequest.id),
-        orElse: () => null);
+    var existingItem = _savedRuestsList
+        .firstWhereOrNull((itemToCheck) => (itemToCheck.id == saveRequest.id));
     if (existingItem != null) {
       this._savedRuestsList.remove(existingItem);
       this.saveRequestToSharedPref();
@@ -45,7 +43,7 @@ mixin SavedRequestService on Model {
   }
 
   clearSavedRequestsList() {
-    this._savedRuestsList = null;
+    this._savedRuestsList = [];
   }
 
   saveRequestToSharedPref() async {
@@ -97,11 +95,11 @@ mixin SavedRequestService on Model {
 
   deleteRequest(SaveRequest saveRequest, MainModel model) async {
     try {
-      var response =
-          await http.delete(Constant.baseUrl() + saveRequest.url, headers: {
+      var response = await http
+          .delete(Uri.parse(Constant.baseUrl() + saveRequest.url!), headers: {
         'Content-Type': 'application/json',
         "Accept": "application/json",
-        "Authorization": "Bearer ${model.user.token}",
+        "Authorization": "Bearer ${model.user!.token}",
       });
 
       if (response.statusCode == 401 || response.statusCode == 403) {
@@ -112,18 +110,19 @@ mixin SavedRequestService on Model {
         this.removeFromSavedRequestsList(saveRequest);
       }
     } catch (error) {
-      print(error.message);
+      print(error);
     }
   }
 
   postRequest(SaveRequest savedRequest, MainModel model) async {
     try {
-      var response = await http.post(Constant.baseUrl() + savedRequest.url,
+      var response = await http.post(
+          Uri.parse(Constant.baseUrl() + savedRequest.url!),
           body: savedRequest.body,
           headers: {
             'Content-Type': 'application/json',
             "Accept": "application/json",
-            "Authorization": "Bearer ${model.user.token}",
+            "Authorization": "Bearer ${model.user!.token}",
           });
       if (response.statusCode == 401 || response.statusCode == 403) {
         model.clearAllData(model);
@@ -132,18 +131,19 @@ mixin SavedRequestService on Model {
         this.removeFromSavedRequestsList(savedRequest);
       }
     } catch (error) {
-      print(error.message);
+      print(error);
     }
   }
 
   putRequest(SaveRequest savedRequest, MainModel model) async {
     try {
-      var response = await http.put(Constant.baseUrl() + savedRequest.url,
+      var response = await http.put(
+          Uri.parse(Constant.baseUrl() + savedRequest.url!),
           body: savedRequest.body,
           headers: {
             'Content-Type': 'application/json',
             "Accept": "application/json",
-            "Authorization": "Bearer ${model.user.token}",
+            "Authorization": "Bearer ${model.user!.token}",
           });
       if (response.statusCode == 401 || response.statusCode == 403) {
         model.clearAllData(model);
@@ -152,15 +152,15 @@ mixin SavedRequestService on Model {
         this.removeFromSavedRequestsList(savedRequest);
       }
     } catch (error) {
-      print(error.message);
+      print(error);
     }
   }
 
   uploadFileRequest(SaveRequest savedRequest, MainModel model) async {
     try {
-      File imageNewFile = File(savedRequest.body);
+      File imageNewFile = File(savedRequest.body!);
       final mimeTypeData =
-          lookupMimeType(imageNewFile.path, headerBytes: [0xFF, 0xD8])
+          lookupMimeType(imageNewFile.path, headerBytes: [0xFF, 0xD8])!
               .split('/');
 
       var postUri = Uri.parse(Constant.baseUrl() + Constant.scrutinyfile);
@@ -172,7 +172,7 @@ mixin SavedRequestService on Model {
 
       request.files.add(multipartFile);
       request.headers.addAll({
-        "Authorization": "Bearer ${model.user.token}",
+        "Authorization": "Bearer ${model.user!.token}",
         'Content-Type': 'multipart/form-data;',
         "Accept": "application/json",
       });
@@ -186,7 +186,7 @@ mixin SavedRequestService on Model {
         model.updateVotingTableIsOpen(false);
       }
     } catch (error) {
-      print(error.message);
+      print(error);
     }
   }
 }
