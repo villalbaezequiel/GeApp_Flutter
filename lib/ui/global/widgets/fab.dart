@@ -4,12 +4,12 @@ import 'package:voting_app/ui/global/utils/constant.dart';
 class FabItem {
   const FabItem(this.title, this.icon, {this.onPress});
   final IconData icon;
-  final Function onPress;
+  final VoidCallback? onPress;
   final String title;
 }
 
 class FabMenuItem extends StatelessWidget {
-  const FabMenuItem(this.item, {Key key}) : super(key: key);
+  const FabMenuItem(this.item, {Key? key}) : super(key: key);
   final FabItem item;
   @override
   Widget build(BuildContext context) {
@@ -17,8 +17,8 @@ class FabMenuItem extends StatelessWidget {
       shape: StadiumBorder(),
       padding: EdgeInsets.only(top: 8, bottom: 8, left: 24, right: 16),
       color: Constant.ascent,
-      splashColor: Colors.grey.withOpacity(0.1),
-      highlightColor: Colors.grey.withOpacity(0.1),
+      splashColor: Colors.grey.withValues(alpha: 0.1),
+      highlightColor: Colors.grey.withValues(alpha: 0.1),
       elevation: 0,
       highlightElevation: 2,
       disabledColor: Colors.white,
@@ -44,12 +44,12 @@ class FabMenuItem extends StatelessWidget {
 
 class ExpandedAnimationFab extends AnimatedWidget {
   const ExpandedAnimationFab({
-    @required this.items,
+    required this.items,
     this.onPress,
-    Animation animation,
+    required Animation<double> animation,
   }) : super(listenable: animation);
   final List<FabItem> items;
-  final Function onPress;
+  final VoidCallback? onPress;
   get _animation => listenable;
   Widget buildItem(BuildContext context, int index) {
     final screenWidth = MediaQuery.of(context).size.width;

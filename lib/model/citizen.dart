@@ -1,13 +1,13 @@
 class Citizen {
-  int id;
-  String nationalId;
-  String first;
-  String last;
-  String birthday;
-  int friendsQty;
-  String createdAt;
-  String updatedAt;
-  int age;
+  int? id;
+  String? nationalId;
+  String? first;
+  String? last;
+  String? birthday;
+  int? friendsQty;
+  String? createdAt;
+  String? updatedAt;
+  int? age;
 
   Citizen(
       {this.id,

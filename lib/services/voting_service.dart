@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -19,7 +20,7 @@ mixin VotingService on Model {
   bool _isLoadingVotingTable = false;
   bool _isVotingOrReplenish = false;
 
-  VotingTable _votingTable;
+  VotingTable? _votingTable;
 
   CommonWidgest commonWidgests = CommonWidgest();
 
@@ -27,19 +28,19 @@ mixin VotingService on Model {
 
   bool get isVotingOrReplenish => _isVotingOrReplenish;
 
-  VotingTable get votingTable => _votingTable;
+  VotingTable? get votingTable => _votingTable;
 
-  Future<VotingTable> fetchVotingTable(
+  Future<VotingTable?> fetchVotingTable(
       MainModel model, BuildContext context) async {
     try {
       _isLoadingVotingTable = true;
       notifyListeners();
 
-      final response =
-          await http.get(Constant.baseUrl() + Constant.votingTable, headers: {
+      final response = await http
+          .get(Uri.parse(Constant.baseUrl() + Constant.votingTable), headers: {
         'Content-Type': 'application/json',
         "Accept": "application/json",
-        "Authorization": "Bearer ${model.user.token}",
+        "Authorization": "Bearer ${model.user!.token}",
       });
 
       if (!model.isLoadingSavedService && model.savedRuestsList.length > 0)
@@ -61,7 +62,7 @@ mixin VotingService on Model {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         Errors errors = new Errors.fromJson(mapResponse['errors']);
 
-        commonWidgests.showToast(errors.message);
+        commonWidgests.showToast(errors.message!);
         _isLoadingVotingTable = false;
         notifyListeners();
         return null;
@@ -73,10 +74,9 @@ mixin VotingService on Model {
     }
   }
 
-  Voter validateVoterOrder(int order) {
-    return _votingTable.voters.firstWhere(
-        (voter) => (voter.order == order && voter.voted == false),
-        orElse: () => null);
+  Voter? validateVoterOrder(int order) {
+    return _votingTable!.voters!.firstWhereOrNull(
+        (voter) => (voter.order == order && voter.voted == false));
   }
 
   Future vote(MainModel model, Voter voter, BuildContext context) async {
@@ -88,10 +88,11 @@ mixin VotingService on Model {
 
       await setVoterAsVoted(voter);
 
-      final response = await http.put(Constant.baseUrl() + url, headers: {
+      final response =
+          await http.put(Uri.parse(Constant.baseUrl() + url), headers: {
         'Content-Type': 'application/json',
         "Accept": "application/json",
-        "Authorization": "Bearer ${model.user.token}",
+        "Authorization": "Bearer ${model.user!.token}",
       });
 
       if (!model.isLoadingSavedService && model.savedRuestsList.length > 0)
@@ -105,7 +106,7 @@ mixin VotingService on Model {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         Errors errors = new Errors.fromJson(mapResponse['errors']);
 
-        commonWidgests.showToast(errors.message);
+        commonWidgests.showToast(errors.message!);
       }
       _isVotingOrReplenish = false;
       notifyListeners();
@@ -134,10 +135,11 @@ mixin VotingService on Model {
       _isVotingOrReplenish = true;
       notifyListeners();
 
-      final response = await http.put(Constant.baseUrl() + url, headers: {
+      final response =
+          await http.put(Uri.parse(Constant.baseUrl() + url), headers: {
         'Content-Type': 'application/json',
         "Accept": "application/json",
-        "Authorization": "Bearer ${model.user.token}",
+        "Authorization": "Bearer ${model.user!.token}",
       });
 
       if (!model.isLoadingSavedService && model.savedRuestsList.length > 0)
@@ -156,7 +158,7 @@ mixin VotingService on Model {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         Errors errors = new Errors.fromJson(mapResponse['errors']);
 
-        commonWidgests.showToast(errors.message);
+        commonWidgests.showToast(errors.message!);
         _isVotingOrReplenish = false;
         notifyListeners();
       }
@@ -185,7 +187,7 @@ mixin VotingService on Model {
 
   saveVotingTableToSharedPref() async {
     SharedPreferences.getInstance().then((SharedPreferences prefs) {
-      String votingTable = json.encode(this._votingTable.toJson());
+      String votingTable = json.encode(this._votingTable!.toJson());
       prefs.setString(VOTING_TABLE_KEY, votingTable);
     });
   }
@@ -205,7 +207,7 @@ mixin VotingService on Model {
   }
 
   updateVotingTableIsOpen(bool isOpen) {
-    this._votingTable.isOpen = isOpen;
+    this._votingTable!.isOpen = isOpen;
     this.saveVotingTableToSharedPref();
   }
 
@@ -219,23 +221,23 @@ mixin VotingService on Model {
   }
 
   setVoterAsVoted(Voter voter) {
-    _votingTable.voters.remove(voter);
+    _votingTable!.voters!.remove(voter);
     _isVotingOrReplenish = false;
     _isLoadingVotingTable = true;
     notifyListeners();
 
     voter.voted = true;
-    _votingTable.voters.add(voter);
-    _votingTable.voters.sort((a, b) {
+    _votingTable!.voters!.add(voter);
+    _votingTable!.voters!.sort((a, b) {
       if (a.order == b.order) {
         return 0;
-      } else if (a.order > b.order) {
+      } else if (a.order! > b.order!) {
         return 1;
       } else {
         return -1;
       }
     });
-    this._votingTable.sumVotes++;
+    this._votingTable!.sumVotes = this._votingTable!.sumVotes! + 1;
 
     _isLoadingVotingTable = false;
     notifyListeners();

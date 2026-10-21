@@ -1,15 +1,15 @@
 import 'citizen.dart';
 
 class Friend {
-  int id;
-  String phone;
-  String email;
-  String createdAt;
-  String updatedAt;
-  Null deletedAt;
-  int userId;
-  int citizenId;
-  Citizen citizen;
+  int? id;
+  String? phone;
+  String? email;
+  String? createdAt;
+  String? updatedAt;
+  String? deletedAt;
+  int? userId;
+  int? citizenId;
+  Citizen? citizen;
 
   Friend(
       {this.id,
@@ -46,7 +46,7 @@ class Friend {
     data['userId'] = this.userId;
     data['citizenId'] = this.citizenId;
     if (this.citizen != null) {
-      data['citizen'] = this.citizen.toJson();
+      data['citizen'] = this.citizen!.toJson();
     }
     return data;
   }

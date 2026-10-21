@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:voting_app/ui/global/gradient_app_bar.dart';
 
 import 'global/utils/constant.dart';
 

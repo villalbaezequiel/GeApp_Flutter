@@ -6,15 +6,15 @@ import 'package:voting_app/ui/global/utils/text_style_utils.dart';
 
 import '../utils/constant.dart';
 
-class NavigationDrawer extends StatefulWidget {
+class AppNavigationDrawer extends StatefulWidget {
   final MainModel model;
-  const NavigationDrawer({Key key, this.model}) : super(key: key);
+  const AppNavigationDrawer({Key? key, required this.model}) : super(key: key);
 
   @override
   _NavigationDrawerState createState() => _NavigationDrawerState();
 }
 
-class _NavigationDrawerState extends State<NavigationDrawer> {
+class _NavigationDrawerState extends State<AppNavigationDrawer> {
   @override
   void initState() {
     super.initState();
@@ -43,25 +43,25 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     //   key: Key("geapp_nav_drawer"),
     //   decoration: BoxDecoration(gradient: Constant.appBarGradient),
     //   accountName: Text(
-    //     (widget.model.user == null || widget.model.user.firstName == null)
+    //     (widget.model.user == null || widget.model.user!.firstName == null)
     //         ? "GeApp"
-    //         : (widget.model.user.firstName.toString() +
+    //         : (widget.model.user!.firstName.toString() +
     //             " " +
-    //             widget.model.user.lastName.toString()),
+    //             widget.model.user!.lastName.toString()),
     //   ),
     //   accountEmail: Text(
     //     (widget.model.user == null)
     //         ? "DNI: 1234567890"
-    //         : "DNI: ${widget.model.user.nationalId.toString()}",
+    //         : "DNI: ${widget.model.user!.nationalId.toString()}",
     //   ),
     //   currentAccountPicture: CircleAvatar(
     //     backgroundColor: Colors.blue,
     //     child: Container(
     //       margin: EdgeInsets.all(10),
     //       child: Text(
-    //         (widget.model.user == null || widget.model.user.firstName == null)
+    //         (widget.model.user == null || widget.model.user!.firstName == null)
     //             ? "G"
-    //             : widget.model.user.firstName[0].toUpperCase(),
+    //             : widget.model.user!.firstName![0].toUpperCase(),
     //         style: TextStyle(fontSize: 30.0),
     //       ),
     //     ),
@@ -81,20 +81,20 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
             child: Container(
               child: Text(
                 (widget.model.user == null ||
-                        widget.model.user.firstName == null)
+                        widget.model.user!.firstName == null)
                     ? "G"
-                    : widget.model.user.firstName[0].toUpperCase(),
+                    : widget.model.user!.firstName![0].toUpperCase(),
                 style: TextStyle(fontSize: 30.0),
               ),
             ),
           ),
           SizedBox(height: 10),
           Text(
-            (widget.model.user == null || widget.model.user.firstName == null)
+            (widget.model.user == null || widget.model.user!.firstName == null)
                 ? "GeApp"
-                : (widget.model.user.firstName.toString() +
+                : (widget.model.user!.firstName.toString() +
                     " " +
-                    widget.model.user.lastName.toString()),
+                    widget.model.user!.lastName.toString()),
             style: TextStyle(
               color: Colors.white,
             ),
@@ -103,7 +103,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           Text(
             (widget.model.user == null)
                 ? "DNI: 1234567890"
-                : "DNI: ${widget.model.user.nationalId.toString()}",
+                : "DNI: ${widget.model.user!.nationalId.toString()}",
             style: TextStyle(
               color: Colors.white,
               fontSize: 14,
@@ -118,7 +118,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     String currentRoute(context) {
       String currentRoute = '';
       Navigator.popUntil(context, (route) {
-        currentRoute = route.settings.name;
+        currentRoute = route.settings.name!;
         return true;
       });
       return currentRoute;
@@ -140,7 +140,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           selected: (currentDrawerItem.route == currentRoute(context)),
           onTap: () {
             Navigator.of(context).pop();
-            if (currentDrawerItem.route == currentRoute(context)) return true;
+            if (currentDrawerItem.route == currentRoute(context)) return;
 
             switch (currentDrawerItem.route) {
               case "/home":
@@ -160,7 +160,6 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
               default:
                 Navigator.of(context).pushNamed(currentDrawerItem.route);
             }
-            return true;
           },
         ),
       );

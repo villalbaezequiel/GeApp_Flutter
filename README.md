@@ -1,16 +1,57 @@
-# geapp_flutter
+# GeApp (voting_app)
 
-A new Flutter application.
+App móvil Flutter (Android e iOS) para gestión de mesas de votación: login y registro, lista de amigos, mesa de votación, escrutinio con carga de acta (foto) y consulta/aval de clientes SCPL.
 
-## Getting Started
+## Stack
 
-This project is a starting point for a Flutter application.
+| Área | Tecnología |
+|------|-----------|
+| Framework | Flutter 3.47 / Dart 3 (null safety) |
+| Estado | `scoped_model` |
+| HTTP | `http` |
+| Persistencia local | `shared_preferences` |
+| UI | `flutter_slidable`, `fluttertoast`, `cupertino_icons`, fuente Dosis |
+| Dispositivo | `image_picker`, `path_provider`, `url_launcher`, `mime`, `intl` |
+| Android | Gradle 9.3, AGP 9.1, Kotlin DSL, embedding v2, JDK 17 |
+| iOS | CocoaPods, deployment target 13.0 |
 
-A few resources to get you started if this is your first Flutter project:
+## Estructura
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+```
+lib/
+  main.dart      # entrada, tema y rutas
+  model/         # modelos y (de)serialización JSON
+  services/      # mixins de MainModel: llamadas HTTP y estado
+  ui/            # pantallas y widgets (ui/global: utils y widgets comunes)
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Requisitos
+
+- Flutter stable (`brew install --cask flutter`) y `flutter doctor` sin errores
+- Android: Android SDK y JDK 17
+- iOS: Xcode completo y CocoaPods
+
+## Correr
+
+```bash
+flutter pub get
+flutter run
+```
+
+## Build
+
+```bash
+# Android (requiere android/key.properties con el keystore de release)
+flutter build appbundle --release
+
+# iOS
+cd ios && pod install && cd ..
+flutter build ipa --release
+```
+
+La versión se define en `pubspec.yaml` (`version: x.y.z+build`).
+
+## Notas
+
+- `android/key.properties` contiene credenciales del keystore: no debería estar en git.
+- Historial y decisiones del último upgrade: [docs/upgrade-flutter-3.md](docs/upgrade-flutter-3.md).

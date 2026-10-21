@@ -22,16 +22,16 @@ class ResetPassword extends StatefulWidget {
 class ResetPasswordState extends State<ResetPassword> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
-  String _email;
-  String _nationalId;
-  String _password;
+  late String _email;
+  late String _nationalId;
+  late String _password;
 
   CommonWidgest commonWidgests = CommonWidgest();
 
   void _submit() {
     final form = formKey.currentState;
-    if (form.validate()) {
-      form.save();
+    if (form!.validate()) {
+      form!.save();
       performSubmit();
     }
   }
@@ -39,36 +39,33 @@ class ResetPasswordState extends State<ResetPassword> {
   Future performSubmit() async {
     commonWidgests.progressDialog(context);
     try {
-      var params = {
-        "email": _email,
-        "dni": _nationalId,
-        "password": _password
-      };
+      var params = {"email": _email, "dni": _nationalId, "password": _password};
 
       var body = json.encode(params);
 
-      final res = await http
-          .post(Constant.baseUrl() + Constant.resetPassword,
-          body: body, headers: Constant.headers);
+      final res = await http.post(
+          Uri.parse(Constant.baseUrl() + Constant.resetPassword),
+          body: body,
+          headers: Constant.headers);
 
       Navigator.of(context).pop();
 
       switch (res.statusCode) {
         case 200:
-          commonWidgests.showToast("Se ha enviado un Email para Aprobar el cambio de Contraseña!");
+          commonWidgests.showToast(
+              "Se ha enviado un Email para Aprobar el cambio de Contraseña!");
           Navigator.of(context).pop();
           break;
         default:
           Map<String, dynamic> mapResponse = json.decode(res.body);
           Errors errors = new Errors.fromJson(mapResponse['errors']);
-          commonWidgests.showToast(errors.message);
+          commonWidgests.showToast(errors.message!);
       }
-
     } catch (e) {
       if (e is SocketException) {
         commonWidgests.showToast('Sin conexión, por favor intente luego');
       } else {
-        commonWidgests.showToast(e.message);
+        commonWidgests.showToast(e.toString());
       }
       Navigator.pop(context);
     }
@@ -100,16 +97,16 @@ class ResetPasswordState extends State<ResetPassword> {
                         TextFormField(
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
-                            WhitelistingTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly
                           ],
                           decoration: InputDecoration(
                             hintText: "Ejemplo: 30123456",
                             labelText: "DNI",
                           ),
-                          validator: (val) => !val.contains(RegExp('[0-9]*'))
+                          validator: (val) => !val!.contains(RegExp('[0-9]*'))
                               ? 'Sólo números para el DNI.'
                               : null,
-                          onSaved: (val) => _nationalId = val,
+                          onSaved: (val) => _nationalId = val!,
                         ),
                         TextFormField(
                           keyboardType: TextInputType.emailAddress,
@@ -118,7 +115,7 @@ class ResetPasswordState extends State<ResetPassword> {
                             labelText: "Correo electrónico",
                           ),
                           validator: validateEmail,
-                          onSaved: (val) => _email = val,
+                          onSaved: (val) => _email = val!,
                         ),
                         TextFormField(
                           obscureText: true,
@@ -126,12 +123,14 @@ class ResetPasswordState extends State<ResetPassword> {
                             hintText: "",
                             labelText: "Nueva Contraseña",
                           ),
-                          onSaved: (val) => _password = val,
+                          onSaved: (val) => _password = val!,
                         ),
                         Padding(padding: const EdgeInsets.only(top: 20.0)),
-                        RaisedButton(
-                          color: Theme.of(context).accentColor,
-                          textColor: Colors.white,
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              foregroundColor: Colors.white),
                           child: Text(
                             'Recuperar Contraseña',
                             style: TextStyleUtils.bottonAndAppBarStyle,
@@ -150,9 +149,9 @@ class ResetPasswordState extends State<ResetPassword> {
     );
   }
 
-  String validateEmail(String value) {
+  String? validateEmail(String? value) {
     if (value != null && value.isNotEmpty) {
-      Pattern pattern =
+      String pattern =
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
       RegExp regex = new RegExp(pattern);
       if (!regex.hasMatch(value))

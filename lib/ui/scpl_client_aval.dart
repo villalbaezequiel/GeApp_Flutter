@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:voting_app/ui/global/gradient_app_bar.dart';
 import 'package:voting_app/model/scpl_client.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/text_style_utils.dart';
@@ -11,7 +11,7 @@ class ScplAvalClient extends StatelessWidget {
   final MainModel model;
   final ScplClient client;
 
-  ScplAvalClient({this.model, this.client});
+  ScplAvalClient({required this.model, required this.client});
 
   final CommonWidgest commonWidgests = CommonWidgest();
 
@@ -72,9 +72,11 @@ class ScplAvalClient extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    color: Theme.of(context).accentColor,
-                    textColor: Colors.white,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
+                        foregroundColor: Colors.white),
                     child:
                         Text('SI', style: TextStyleUtils.bottonAndAppBarStyle),
                     onPressed: () {
@@ -84,9 +86,10 @@ class ScplAvalClient extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    textColor: Colors.white,
-                    color: Colors.red,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white),
                     child: Text('NO', style: TextStyle(fontSize: 18)),
                     onPressed: () {
                       commonWidgests.showToast('No se registró la Firma!');

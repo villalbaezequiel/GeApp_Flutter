@@ -1,8 +1,9 @@
+import 'package:collection/collection.dart';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:voting_app/ui/global/gradient_app_bar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:voting_app/model/save_request.dart';
@@ -30,19 +31,21 @@ class _EscrutinioState extends State<Escrutinio> {
   CommonWidgest commonWidgest = CommonWidgest();
   String notes = '';
 
-  File scrutinyImage;
+  File? scrutinyImage;
 
   bool autoValidateForm = false;
 
   Future getImageFromGallery() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final image = picked == null ? null : File(picked.path);
     setState(() {
       scrutinyImage = image;
     });
   }
 
   Future getImageFromCamera() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    final picked = await ImagePicker().pickImage(source: ImageSource.camera);
+    final image = picked == null ? null : File(picked.path);
 
     setState(() {
       scrutinyImage = image;
@@ -70,26 +73,30 @@ class _EscrutinioState extends State<Escrutinio> {
             title: Text('Escrutinio'),
             gradient: Constant.appBarGradient,
           ),
-          drawer: NavigationDrawer(model: widget.model),
+          drawer: AppNavigationDrawer(model: widget.model),
           body: model.isloadingElection
               ? Center(child: CircularProgressIndicator())
               : (model.election != null)
                   ? Form(
                       key: formKey,
-                      autovalidate: autoValidateForm,
+                      autovalidateMode: autoValidateForm
+                          ? AutovalidateMode.always
+                          : AutovalidateMode.disabled,
                       child: ListView.builder(
                         itemCount:
-                            widget.model.election.scrutinycategories.length + 2,
+                            widget.model.election!.scrutinycategories!.length +
+                                2,
                         itemBuilder: (context, index) {
                           if (index == 0) {
                             return headerView();
                           } else if (index >=
-                              widget.model.election.scrutinycategories.length +
+                              widget.model.election!.scrutinycategories!
+                                      .length +
                                   1) {
                             return footerViewWithNoteAndSubmitButton();
                           } else {
                             return oneCategory(
-                                model.election.scrutinycategories[index - 1]);
+                                model.election!.scrutinycategories![index - 1]);
                           }
                         },
                       ),
@@ -108,7 +115,7 @@ class _EscrutinioState extends State<Escrutinio> {
       Container(
         padding: EdgeInsets.all(10),
         child: Text(
-          scrutinyCategory.name,
+          scrutinyCategory.name!,
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
@@ -134,12 +141,12 @@ class _EscrutinioState extends State<Escrutinio> {
       margin: EdgeInsets.all(10),
       elevation: 3,
       child: ExpansionTile(
-        title: Text(widget.model.election.name),
+        title: Text(widget.model.election!.name ?? ''),
         children: <Widget>[
           Container(
             width: double.infinity,
             padding: EdgeInsets.all(10),
-            child: Text(widget.model.election.description),
+            child: Text(widget.model.election!.description ?? ''),
           ),
         ],
       ),
@@ -161,8 +168,9 @@ class _EscrutinioState extends State<Escrutinio> {
                 children: <Widget>[
                   Flexible(
                     flex: 1,
-                    child: FlatButton.icon(
-                      color: Constant.ascent,
+                    child: TextButton.icon(
+                      style: TextButton.styleFrom(
+                          backgroundColor: Constant.ascent),
                       icon: Icon(Icons.add_a_photo, color: Colors.white),
                       label: Text(
                         'Cámara',
@@ -175,8 +183,9 @@ class _EscrutinioState extends State<Escrutinio> {
                   ),
                   Flexible(
                     flex: 1,
-                    child: FlatButton.icon(
-                      color: Constant.ascent,
+                    child: TextButton.icon(
+                      style: TextButton.styleFrom(
+                          backgroundColor: Constant.ascent),
                       icon: Icon(Icons.add_to_photos, color: Colors.white),
                       label: Text(
                         'Galería',
@@ -196,7 +205,7 @@ class _EscrutinioState extends State<Escrutinio> {
                         child: Text('No hay imagen seleccionada'),
                       )
                     : Image.file(
-                        scrutinyImage,
+                        scrutinyImage!,
                         height: 200,
                         width: double.infinity,
                         fit: BoxFit.cover,
@@ -225,9 +234,10 @@ class _EscrutinioState extends State<Escrutinio> {
           ),
         ),
         SizedBox(height: 20),
-        RaisedButton(
-          color: Theme.of(context).accentColor,
-          textColor: Colors.white,
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              foregroundColor: Colors.white),
           child: Text(
             'Enviar',
             style: TextStyleUtils.bottonAndAppBarStyle,
@@ -244,8 +254,8 @@ class _EscrutinioState extends State<Escrutinio> {
       autoValidateForm = true;
     });
     final form = formKey.currentState;
-    form.save();
-    bool isFormValid = form.validate();
+    form!.save();
+    bool isFormValid = form!.validate();
 
     if (scrutinyImage == null) {
       commonWidgest.showToast("Por favor, seleccionar imagen");
@@ -268,13 +278,13 @@ class _EscrutinioState extends State<Escrutinio> {
             child: Text("Está seguro que desea enviar la información?"),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Si', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
                 performSubmit();
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text('No', style: TextStyleUtils.dialogButtonTextStyle),
               onPressed: () {
                 Navigator.popUntil(context, ModalRoute.withName('/escrutinio'));
@@ -289,7 +299,7 @@ class _EscrutinioState extends State<Escrutinio> {
   void performSubmit() {
     commonWidgest.progressDialog(context);
     widget.model
-        .uploadScrutinyImage(widget.model, scrutinyImage, context)
+        .uploadScrutinyImage(widget.model, scrutinyImage!, context)
         .then((onValue) {
       if (onValue) {
         submitData();
@@ -303,7 +313,7 @@ class _EscrutinioState extends State<Escrutinio> {
           SaveRequest(
             id: DateTime.now().millisecond,
             url: Constant.scrutinyfile,
-            body: widget.model.imageNewFile.path,
+            body: widget.model.imageNewFile!.path,
             requestType: 'send',
           ),
         );
@@ -327,7 +337,7 @@ class _EscrutinioState extends State<Escrutinio> {
   }
 
   otherInputsbyParty(ScrutinyCategory scrutinyCategory) {
-    return scrutinyCategory.scrutinyparties
+    return scrutinyCategory.scrutinyparties!
         .map((party) =>
             PartyInputTextField(widget.model, party, scrutinyCategory))
         .toList();
@@ -354,7 +364,7 @@ class PartyInputTextField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            child: Text(party.name),
+            child: Text(party.name!),
           ),
           TextFormField(
             key: PageStorageKey<ScrutinyParty>(party),
@@ -362,7 +372,7 @@ class PartyInputTextField extends StatelessWidget {
             keyboardType:
                 TextInputType.numberWithOptions(signed: false, decimal: false),
             inputFormatters: <TextInputFormatter>[
-              WhitelistingTextInputFormatter.digitsOnly
+              FilteringTextInputFormatter.digitsOnly
             ],
             decoration: InputDecoration(
               hintText: "Cantidad: 12",
@@ -381,12 +391,11 @@ class PartyInputTextField extends StatelessWidget {
 
   String getValue() {
     if (model.voteElection == null ||
-        model.voteElection.quantities.length == 0) {
+        model.voteElection.quantities!.length == 0) {
       return "";
     }
-    var existingItem = model.voteElection.quantities.firstWhere(
-        (itemToCheck) => (itemToCheck.scrutinyPartyId == party.id),
-        orElse: () => null);
+    var existingItem = model.voteElection.quantities!.firstWhereOrNull(
+        (itemToCheck) => (itemToCheck.scrutinyPartyId == party.id));
     if (existingItem == null) {
       return "";
     } else {

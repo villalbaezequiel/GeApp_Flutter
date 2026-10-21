@@ -14,16 +14,16 @@ import 'package:voting_app/ui/global/widgets/common_widgets.dart';
 mixin ScplClientService on Model {
   static const String SCPL_CLIENT_KEY = "client";
 
-  ScplClient _client;
+  ScplClient? _client;
 
   bool _isLoadingScplClients = false;
   bool get isLoadingScplClients => _isLoadingScplClients;
 
   CommonWidgest commonWidgests = CommonWidgest();
 
-  ScplClient get client => _client;
+  ScplClient? get client => _client;
 
-  Future<ScplClient> fetchClient(
+  Future<ScplClient?> fetchClient(
       MainModel model, String dni, BuildContext context) async {
     var params = {"dni": dni};
 
@@ -34,12 +34,12 @@ mixin ScplClientService on Model {
       notifyListeners();
 
       var response = await http.post(
-          Constant.baseUrl() + Constant.scplFetchClient,
+          Uri.parse(Constant.baseUrl() + Constant.scplFetchClient),
           body: body,
           headers: {
             'Content-Type': 'application/json',
             "Accept": "application/json",
-            "Authorization": "Bearer ${model.user.token}",
+            "Authorization": "Bearer ${model.user!.token}",
           });
 
       if (!model.isLoadingSavedService && model.savedRuestsList.length > 0) {
@@ -61,7 +61,7 @@ mixin ScplClientService on Model {
       } else {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         Errors errors = new Errors.fromJson(mapResponse['errors']);
-        commonWidgests.showToast(errors.message);
+        commonWidgests.showToast(errors.message!);
         _isLoadingScplClients = false;
         notifyListeners();
 
@@ -80,17 +80,17 @@ mixin ScplClientService on Model {
       _isLoadingScplClients = true;
       notifyListeners();
 
-      var params = {"referrerId": model.user.id};
+      var params = {"referrerId": model.user!.id};
 
       var body = json.encode(params);
 
       var response = await http.put(
-          Constant.baseUrl() + Constant.scplAvalClient + '/' + id,
+          Uri.parse(Constant.baseUrl() + Constant.scplAvalClient + '/' + id),
           body: body,
           headers: {
             'Content-Type': 'application/json',
             "Accept": "application/json",
-            "Authorization": "Bearer ${model.user.token}",
+            "Authorization": "Bearer ${model.user!.token}",
           });
 
       if (!model.isLoadingSavedService && model.savedRuestsList.length > 0) {
@@ -112,7 +112,7 @@ mixin ScplClientService on Model {
       } else {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         Errors errors = new Errors.fromJson(mapResponse['errors']);
-        commonWidgests.showToast(errors.message);
+        commonWidgests.showToast(errors.message!);
         _isLoadingScplClients = false;
         notifyListeners();
 
@@ -127,7 +127,7 @@ mixin ScplClientService on Model {
 
   saveClientToSharedPref() async {
     SharedPreferences.getInstance().then((SharedPreferences prefs) {
-      String client = json.encode(this._client.toJson());
+      String client = json.encode(this._client!.toJson());
       prefs.setString(SCPL_CLIENT_KEY, client);
     });
   }

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -26,11 +27,11 @@ mixin ElectionService on Model {
 
   bool _isloadingElection = false;
 
-  Election _election;
+  Election? _election;
 
   int _numberOfElectionVote = 0;
 
-  File imageNewFile;
+  File? imageNewFile;
 
   VoteElection voteElection = VoteElection(quantities: [], notes: "");
 
@@ -38,15 +39,15 @@ mixin ElectionService on Model {
 
   bool get isloadingElection => _isloadingElection;
 
-  Election get election => _election;
+  Election? get election => _election;
 
-  Future<Election> fetchElection(MainModel model, BuildContext context) async {
+  Future<Election?> fetchElection(MainModel model, BuildContext context) async {
     try {
-      final response =
-          await http.get(Constant.baseUrl() + Constant.election, headers: {
+      final response = await http
+          .get(Uri.parse(Constant.baseUrl() + Constant.election), headers: {
         'Content-Type': 'application/json',
         "Accept": "application/json",
-        "Authorization": "Bearer ${model.user.token}",
+        "Authorization": "Bearer ${model.user!.token}",
       });
 
       if (!model.isLoadingSavedService && model.savedRuestsList.length > 0)
@@ -68,7 +69,7 @@ mixin ElectionService on Model {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         Errors errors = new Errors.fromJson(mapResponse['errors']);
 
-        commonWidgests.showToast(errors.message);
+        commonWidgests.showToast(errors.message!);
         _isloadingElection = false;
         notifyListeners();
         return null;
@@ -81,9 +82,9 @@ mixin ElectionService on Model {
   }
 
   setNumberOfElectionVote() {
-    _election.scrutinycategories.forEach((category) {
+    _election!.scrutinycategories!.forEach((category) {
       _numberOfElectionVote =
-          _numberOfElectionVote + category.scrutinyparties.length;
+          _numberOfElectionVote + category.scrutinyparties!.length;
     });
   }
 
@@ -94,12 +95,12 @@ mixin ElectionService on Model {
     var body = json.encode(voteElection);
     try {
       var response = await http.post(
-          Constant.baseUrl() + Constant.scrutinyVotes,
+          Uri.parse(Constant.baseUrl() + Constant.scrutinyVotes),
           body: body,
           headers: {
             'Content-Type': 'application/json',
             "Accept": "application/json",
-            "Authorization": "Bearer ${model.user.token}",
+            "Authorization": "Bearer ${model.user!.token}",
           });
 
       if (!model.isLoadingSavedService && model.savedRuestsList.length > 0)
@@ -119,7 +120,7 @@ mixin ElectionService on Model {
       } else {
         Map<String, dynamic> mapResponse = json.decode(response.body);
         Errors errors = new Errors.fromJson(mapResponse['errors']);
-        commonWidgests.showToast(errors.message);
+        commonWidgests.showToast(errors.message!);
         _isloadingElection = false;
         notifyListeners();
         return false;
@@ -150,19 +151,19 @@ mixin ElectionService on Model {
 
     try {
       final mimeTypeData =
-          lookupMimeType(imageNewFile.path, headerBytes: [0xFF, 0xD8])
+          lookupMimeType(imageNewFile!.path, headerBytes: [0xFF, 0xD8])!
               .split('/');
 
       var postUri = Uri.parse(Constant.baseUrl() + Constant.scrutinyfile);
       var request = http.MultipartRequest("POST", postUri);
       http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
-          'scrutinyImage', imageNewFile.path,
+          'scrutinyImage', imageNewFile!.path,
           contentType: MediaType(mimeTypeData[0],
               mimeTypeData[1])); //returns a Future<MultipartFile>
 
       request.files.add(multipartFile);
       request.headers.addAll({
-        "Authorization": "Bearer ${model.user.token}",
+        "Authorization": "Bearer ${model.user!.token}",
         'Content-Type': 'multipart/form-data;',
         "Accept": "application/json",
       });
@@ -200,7 +201,7 @@ mixin ElectionService on Model {
 
   saveElectionToSharedPref() async {
     SharedPreferences.getInstance().then((SharedPreferences prefs) {
-      String election = json.encode(this._election.toJson());
+      String election = json.encode(this._election!.toJson());
       prefs.setString(ELECTION_KEY, election);
     });
   }
@@ -225,15 +226,14 @@ mixin ElectionService on Model {
   }
 
   addVote(Vote vote) {
-    var existingItem = voteElection.quantities.firstWhere(
-        (itemToCheck) => (itemToCheck.scrutinyPartyId == vote.scrutinyPartyId),
-        orElse: () => null);
+    var existingItem = voteElection.quantities!.firstWhereOrNull(
+        (itemToCheck) => (itemToCheck.scrutinyPartyId == vote.scrutinyPartyId));
     if (existingItem == null) {
-      voteElection.quantities.add(vote);
+      voteElection.quantities!.add(vote);
     } else {
       existingItem.qty = vote.qty;
-      voteElection.quantities.remove(existingItem);
-      voteElection.quantities.add(vote);
+      voteElection.quantities!.remove(existingItem);
+      voteElection.quantities!.add(vote);
     }
   }
 
@@ -249,7 +249,7 @@ mixin ElectionService on Model {
 
   Future<File> moveFileToAppDir(File scrutinyImage) async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
-    String fileName = scrutinyImage?.path?.split("/")?.last;
+    String fileName = scrutinyImage.path.split("/").last;
     File newFile = scrutinyImage.copySync('${appDocDir.path}/$fileName');
     return newFile;
   }

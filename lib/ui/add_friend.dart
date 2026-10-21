@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:voting_app/ui/global/gradient_app_bar.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/text_style_utils.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
@@ -18,9 +18,9 @@ class AddFriend extends StatefulWidget {
 class AddFriendState extends State<AddFriend> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
-  String _nationalId;
-  String _email;
-  String _phoneNumber;
+  late String _nationalId;
+  late String _email;
+  late String _phoneNumber;
 
   CommonWidgest commonWidgest = CommonWidgest();
 
@@ -31,7 +31,7 @@ class AddFriendState extends State<AddFriend> {
         title: Text('Agregar Amigo'),
         gradient: Constant.appBarGradient,
       ),
-      drawer: NavigationDrawer(model: widget.model),
+      drawer: AppNavigationDrawer(model: widget.model),
       body: Container(
         padding: const EdgeInsets.all(20.0),
         child: ListView(
@@ -52,26 +52,26 @@ class AddFriendState extends State<AddFriend> {
                     TextFormField(
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly
+                        FilteringTextInputFormatter.digitsOnly
                       ],
                       decoration: InputDecoration(
                         hintText: "Ejemplo: 30154487",
                         labelText: "DNI",
                       ),
-                      validator: (val) => !val.contains(RegExp('[0-9]*'))
+                      validator: (val) => !val!.contains(RegExp('[0-9]*'))
                           ? 'Sólo números para el DNI.'
                           : null,
-                      onSaved: (val) => _nationalId = val,
+                      onSaved: (val) => _nationalId = val!,
                     ),
                     TextFormField(
                       keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
                           hintText: "+54-911-4567-4567",
                           labelText: "Número de teléfono"),
-                      validator: (val) => !val.contains(RegExp(r'[0-9]*'))
+                      validator: (val) => !val!.contains(RegExp(r'[0-9]*'))
                           ? 'Teléfono incorrecto.'
                           : null,
-                      onSaved: (val) => _phoneNumber = val,
+                      onSaved: (val) => _phoneNumber = val!,
                     ),
                     TextFormField(
                       keyboardType: TextInputType.emailAddress,
@@ -80,12 +80,14 @@ class AddFriendState extends State<AddFriend> {
                         labelText: "Correo Electrónico",
                       ),
                       validator: validateEmail,
-                      onSaved: (val) => _email = val,
+                      onSaved: (val) => _email = val!,
                     ),
                     SizedBox(height: 20),
-                    RaisedButton(
-                      color: Theme.of(context).accentColor,
-                      textColor: Colors.white,
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          foregroundColor: Colors.white),
                       child: Text(
                         'AGREGAR',
                         style: TextStyleUtils.bottonAndAppBarStyle,
@@ -102,9 +104,9 @@ class AddFriendState extends State<AddFriend> {
     );
   }
 
-  String validateEmail(String value) {
+  String? validateEmail(String? value) {
     if (value != null && value.isNotEmpty) {
-      Pattern pattern =
+      String pattern =
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
       RegExp regex = new RegExp(pattern);
       if (!regex.hasMatch(value))
@@ -118,8 +120,8 @@ class AddFriendState extends State<AddFriend> {
 
   void _submit() {
     final form = formKey.currentState;
-    if (form.validate()) {
-      form.save();
+    if (form!.validate()) {
+      form!.save();
       performSubmit();
     }
   }

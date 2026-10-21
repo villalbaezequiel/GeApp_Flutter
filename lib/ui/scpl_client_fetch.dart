@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:voting_app/ui/global/gradient_app_bar.dart';
 import 'package:voting_app/services/main_model.dart';
 import 'package:voting_app/ui/global/utils/text_style_utils.dart';
 import 'package:voting_app/ui/global/widgets/common_widgets.dart';
@@ -18,7 +18,7 @@ class ScplFetchClient extends StatefulWidget {
 
 class ScplFetchClientForm extends State<ScplFetchClient> {
   final formKey = GlobalKey<FormState>();
-  String dni;
+  late String dni;
 
   CommonWidgest commonWidgests = CommonWidgest();
 
@@ -29,7 +29,7 @@ class ScplFetchClientForm extends State<ScplFetchClient> {
         title: Text('Consulta de Distrito'),
         gradient: Constant.appBarGradient,
       ),
-      drawer: NavigationDrawer(model: widget.model),
+      drawer: AppNavigationDrawer(model: widget.model),
       body: Container(
         padding: const EdgeInsets.all(20.0),
         child: ListView(
@@ -47,21 +47,23 @@ class ScplFetchClientForm extends State<ScplFetchClient> {
                       TextFormField(
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
-                          WhitelistingTextInputFormatter.digitsOnly
+                          FilteringTextInputFormatter.digitsOnly
                         ],
                         decoration: InputDecoration(
                           hintText: "Ejemplo: 30154487",
                           labelText: "DNI",
                         ),
-                        validator: (val) => !val.contains(RegExp('[0-9]*'))
+                        validator: (val) => !val!.contains(RegExp('[0-9]*'))
                             ? 'Sólo números para el DNI.'
                             : null,
-                        onSaved: (val) => dni = val,
+                        onSaved: (val) => dni = val!,
                       ),
                       SizedBox(height: 20),
-                      RaisedButton(
-                        color: Theme.of(context).accentColor,
-                        textColor: Colors.white,
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
+                            foregroundColor: Colors.white),
                         child: Text(
                           'CONSULTAR',
                           style: TextStyleUtils.bottonAndAppBarStyle,
@@ -81,8 +83,8 @@ class ScplFetchClientForm extends State<ScplFetchClient> {
 
   void _submit() {
     final form = formKey.currentState;
-    if (form.validate()) {
-      form.save();
+    if (form!.validate()) {
+      form!.save();
       performSubmit();
     }
   }

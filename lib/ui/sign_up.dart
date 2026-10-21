@@ -22,17 +22,17 @@ class SignUp extends StatefulWidget {
 class SignUpState extends State<SignUp> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
-  String _nationalId; //mandatory
-  String _phone; //optional
-  String _email; //optional
-  String _password; //mandatory
+  late String _nationalId; //mandatory
+  late String _phone; //optional
+  late String _email; //optional
+  late String _password; //mandatory
   bool _isChecked = true;
   CommonWidgest commonWidgests = CommonWidgest();
 
   void _submit() {
     final form = formKey.currentState;
-    if (form.validate() && _isChecked == true) {
-      form.save();
+    if (form!.validate() && _isChecked == true) {
+      form!.save();
       performSubmit();
     }
   }
@@ -48,11 +48,13 @@ class SignUpState extends State<SignUp> {
       };
 
       var body = json.encode(params);
-      final res = await http
-          .post(Constant.baseUrl() + Constant.createUser, body: body, headers: {
-        'Content-Type': 'application/json',
-        "Accept": "application/json",
-      });
+      final res = await http.post(
+          Uri.parse(Constant.baseUrl() + Constant.createUser),
+          body: body,
+          headers: {
+            'Content-Type': 'application/json',
+            "Accept": "application/json",
+          });
 
       Navigator.of(context).pop();
 
@@ -64,13 +66,13 @@ class SignUpState extends State<SignUp> {
         default:
           Map<String, dynamic> mapResponse = json.decode(res.body);
           Errors errors = new Errors.fromJson(mapResponse['errors']);
-          commonWidgests.showToast(errors.message);
+          commonWidgests.showToast(errors.message!);
       }
     } catch (e) {
       if (e is SocketException) {
         commonWidgests.showToast('Sin conexión, por favor intente luego');
       } else {
-        commonWidgests.showToast(e.message);
+        commonWidgests.showToast(e.toString());
       }
       Navigator.pop(context);
     }
@@ -102,16 +104,16 @@ class SignUpState extends State<SignUp> {
                         TextFormField(
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
-                            WhitelistingTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly
                           ],
                           decoration: InputDecoration(
                             hintText: "Ejemplo: 30123456",
                             labelText: "DNI",
                           ),
-                          validator: (val) => !val.contains(RegExp('[0-9]*'))
+                          validator: (val) => !val!.contains(RegExp('[0-9]*'))
                               ? 'Sólo números para el DNI.'
                               : null,
-                          onSaved: (val) => _nationalId = val,
+                          onSaved: (val) => _nationalId = val!,
                         ),
                         TextFormField(
                           keyboardType: TextInputType.phone,
@@ -119,7 +121,7 @@ class SignUpState extends State<SignUp> {
                             hintText: "",
                             labelText: "Teléfono celular",
                           ),
-                          onSaved: (val) => _phone = val,
+                          onSaved: (val) => _phone = val!,
                         ),
                         TextFormField(
                           keyboardType: TextInputType.emailAddress,
@@ -128,7 +130,7 @@ class SignUpState extends State<SignUp> {
                             labelText: "Correo electrónico",
                           ),
                           validator: validateEmail,
-                          onSaved: (val) => _email = val,
+                          onSaved: (val) => _email = val!,
                         ),
                         TextFormField(
                           obscureText: true,
@@ -137,7 +139,7 @@ class SignUpState extends State<SignUp> {
                             labelText: "Contraseña",
                           ),
                           onChanged: (val) => _password = val,
-                          onSaved: (val) => _password = val,
+                          onSaved: (val) => _password = val!,
                         ),
                         TextFormField(
                           obscureText: true,
@@ -158,12 +160,12 @@ class SignUpState extends State<SignUp> {
                               value: _isChecked,
                               onChanged: (value) {
                                 setState(() {
-                                  this._isChecked = value;
+                                  this._isChecked = value ?? false;
                                 });
                               },
                             ),
                             Flexible(
-                              child: FlatButton(
+                              child: TextButton(
                                 onPressed: () {
                                   widget.model.openTermsUrl();
                                 },
@@ -178,9 +180,11 @@ class SignUpState extends State<SignUp> {
                           ],
                         ),
                         Padding(padding: const EdgeInsets.only(top: 20.0)),
-                        RaisedButton(
-                          color: Theme.of(context).accentColor,
-                          textColor: Colors.white,
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              foregroundColor: Colors.white),
                           child: Text(
                             'REGISTRARSE',
                             style: TextStyleUtils.bottonAndAppBarStyle,
@@ -199,9 +203,9 @@ class SignUpState extends State<SignUp> {
     );
   }
 
-  String validateEmail(String value) {
+  String? validateEmail(String? value) {
     if (value != null && value.isNotEmpty) {
-      Pattern pattern =
+      String pattern =
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
       RegExp regex = new RegExp(pattern);
       if (!regex.hasMatch(value))

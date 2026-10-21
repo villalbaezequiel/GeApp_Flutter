@@ -1,22 +1,22 @@
 import 'voter.dart';
 
 class VotingTable {
-  int id;
-  String table;
-  String address;
-  String establishment;
-  String section;
-  String circuit;
-  String district;
-  bool isOpen;
-  int replenishQty;
-  String notes;
-  String scrutinyPath;
-  int sumVotes;
-  String createdAt;
-  String updatedAt;
-  int electionId;
-  List<Voter> voters;
+  int? id;
+  String? table;
+  String? address;
+  String? establishment;
+  String? section;
+  String? circuit;
+  String? district;
+  bool? isOpen;
+  int? replenishQty;
+  String? notes;
+  String? scrutinyPath;
+  int? sumVotes;
+  String? createdAt;
+  String? updatedAt;
+  int? electionId;
+  List<Voter>? voters;
 
   VotingTable(
       {this.id,
@@ -53,9 +53,9 @@ class VotingTable {
     updatedAt = json['updatedAt'];
     electionId = json['electionId'];
     if (json['voters'] != null) {
-      voters = List<Voter>();
+      voters = <Voter>[];
       json['voters'].forEach((v) {
-        voters.add(Voter.fromJson(v));
+        voters!.add(Voter.fromJson(v));
       });
     }
   }
@@ -78,7 +78,7 @@ class VotingTable {
     data['updatedAt'] = this.updatedAt;
     data['electionId'] = this.electionId;
     if (this.voters != null) {
-      data['voters'] = this.voters.map((v) => v.toJson()).toList();
+      data['voters'] = this.voters!.map((v) => v.toJson()).toList();
     }
     return data;
   }

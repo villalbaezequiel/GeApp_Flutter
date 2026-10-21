@@ -1,16 +1,16 @@
 import 'citizen.dart';
 
 class Voter {
-  int id;
-  int order;
-  bool voted;
-  bool isOwner;
-  String createdAt;
-  String updatedAt;
-  int citizenId;
-  int votingtableId;
-  Citizen citizen;
-  String address;
+  int? id;
+  int? order;
+  bool? voted;
+  bool? isOwner;
+  String? createdAt;
+  String? updatedAt;
+  int? citizenId;
+  int? votingtableId;
+  Citizen? citizen;
+  String? address;
 
   Voter({
     this.id,
@@ -51,7 +51,7 @@ class Voter {
     data['votingtableId'] = this.votingtableId;
     data['address'] = this.address;
     if (this.citizen != null) {
-      data['citizen'] = this.citizen.toJson();
+      data['citizen'] = this.citizen!.toJson();
     }
     return data;
   }

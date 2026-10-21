@@ -25,15 +25,15 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
-  String _nationalId;
-  String _password;
+  late String _nationalId;
+  late String _password;
 
   CommonWidgest commonWidgests = CommonWidgest();
 
   void _submit() {
     final form = formKey.currentState;
-    if (form.validate()) {
-      form.save();
+    if (form!.validate()) {
+      form!.save();
       performSubmit();
     }
   }
@@ -47,8 +47,10 @@ class LoginState extends State<Login> {
       };
 
       var body = json.encode(params);
-      final res = await http.post(Constant.baseUrl() + Constant.login,
-          body: body, headers: Constant.headers);
+      final res = await http.post(
+          Uri.parse(Constant.baseUrl() + Constant.login),
+          body: body,
+          headers: Constant.headers);
 
       Navigator.of(context).pop();
 
@@ -68,13 +70,13 @@ class LoginState extends State<Login> {
         default:
           Map<String, dynamic> mapResponse = json.decode(res.body);
           Errors errors = new Errors.fromJson(mapResponse['errors']);
-          commonWidgests.showToast(errors.message);
+          commonWidgests.showToast(errors.message!);
       }
     } catch (e) {
       if (e is SocketException) {
         commonWidgests.showToast('Sin conexión, por favor intente luego');
       } else {
-        commonWidgests.showToast(e.message);
+        commonWidgests.showToast(e.toString());
       }
       Navigator.pop(context);
     }
@@ -107,16 +109,16 @@ class LoginState extends State<Login> {
                         TextFormField(
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
-                            WhitelistingTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly
                           ],
                           decoration: InputDecoration(
                             hintText: "Ejemplo: 30123456",
                             labelText: "DNI",
                           ),
-                          validator: (val) => !val.contains(RegExp('[0-9]*'))
+                          validator: (val) => !val!.contains(RegExp('[0-9]*'))
                               ? 'Sólo números para el DNI.'
                               : null,
-                          onSaved: (val) => _nationalId = val,
+                          onSaved: (val) => _nationalId = val!,
                         ),
                         TextFormField(
                           obscureText: true,
@@ -124,12 +126,14 @@ class LoginState extends State<Login> {
                             hintText: "",
                             labelText: "Contraseña",
                           ),
-                          onSaved: (val) => _password = val,
+                          onSaved: (val) => _password = val!,
                         ),
                         Padding(padding: const EdgeInsets.only(top: 20.0)),
-                        RaisedButton(
-                          color: Theme.of(context).accentColor,
-                          textColor: Colors.white,
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              foregroundColor: Colors.white),
                           child: Text(
                             'INGRESAR',
                             style: TextStyleUtils.bottonAndAppBarStyle,
@@ -140,7 +144,7 @@ class LoginState extends State<Login> {
                     ),
                   ),
                 ),
-                FlatButton(
+                TextButton(
                   child: Text(
                     'Recuperar Contraseña',
                     style: TextStyle(
@@ -152,7 +156,7 @@ class LoginState extends State<Login> {
                     Navigator.pushNamed(context, "/reset_password");
                   },
                 ),
-                FlatButton(
+                TextButton(
                   child: Text(
                     'Registrarse',
                     style: TextStyle(
